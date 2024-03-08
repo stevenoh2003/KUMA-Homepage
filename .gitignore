@@ -1,39 +1,49 @@
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+# Next.js
+.next/
+out/
+build/
 
-# dependencies
-/node_modules
-/.pnp
-.pnp.js
+# Dependency directories
+node_modules/
 
-# testing
-/coverage
-
-# next.js
-/.next/
-/out/
-
-# production
-/build
-
-# misc
-.DS_Store
-*.pem
-
-# debug
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-
-# local env files
-.env
+# Environment variables
 .env.local
 .env.development.local
 .env.test.local
 .env.production.local
 
-# vercel
-.vercel
-# public/robots.txt
-# public/sitemap.xml
+# Next.js cache
+.cache/
 
-/.firebase
+# Build output directory
+dist/
+
+# Production build files
+.next/
+
+# NPM debug log
+npm-debug.log*
+
+# Yarn Debug Log
+yarn-debug.log*
+
+# Yarn Error Log
+yarn-error.log*
+
+# System files
+.DS_Store
+Thumbs.db
+
+# IDE and editor directories
+.idea/
+.vscode/
+*.swp
+*.swo
+*.sublime-project
+*.sublime-workspace
+
+# Optional: Uncomment if you have a public directory with uploaded files or specific assets
+# !public/
+
+# Optional: Uncomment if you're ignoring the public folder but have static files you want to keep
+# !public/static
