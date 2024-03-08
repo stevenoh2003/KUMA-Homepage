@@ -10,7 +10,7 @@ type Props = {
 const MobileProfileCard: React.FC<Props> = () => {
   return (
     <StyledWrapper>
-      <div className="top">💻 Profile</div>
+      {/* <div className="top">💻 Profile</div>
       <div className="mid">
         <div className="wrapper">
           <Image
@@ -26,7 +26,7 @@ const MobileProfileCard: React.FC<Props> = () => {
             <div className="btm">{CONFIG.profile.bio}</div>
           </div>
         </div>
-      </div>
+      </div> */}
     </StyledWrapper>
   )
 }
