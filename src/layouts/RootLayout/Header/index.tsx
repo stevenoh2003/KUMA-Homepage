@@ -4,6 +4,8 @@ import ThemeToggle from "./ThemeToggle"
 import styled from "@emotion/styled"
 import { zIndexes } from "src/styles/zIndexes"
 
+import Nav from "src/layouts/RootLayout/Header/Nav.jsx"
+
 type Props = {
   fullWidth: boolean
 }
@@ -11,13 +13,7 @@ type Props = {
 const Header: React.FC<Props> = ({ fullWidth }) => {
   return (
     <StyledWrapper>
-      <div data-full-width={fullWidth} className="container">
-        <Logo />
-        <div className="nav">
-          <ThemeToggle />
-          <NavBar />
-        </div>
-      </div>
+      <Nav />
     </StyledWrapper>
   )
 }
