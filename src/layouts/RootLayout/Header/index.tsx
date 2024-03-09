@@ -1,10 +1,7 @@
-import NavBar from "./NavBar"
-import Logo from "./Logo"
-import ThemeToggle from "./ThemeToggle"
 import styled from "@emotion/styled"
 import { zIndexes } from "src/styles/zIndexes"
 
-import Nav from "src/layouts/RootLayout/Header/Nav.jsx"
+import Nav from "src/layouts/RootLayout/Header/Nav.tsx"
 
 type Props = {
   fullWidth: boolean
