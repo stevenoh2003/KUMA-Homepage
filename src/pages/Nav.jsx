@@ -11,7 +11,7 @@ const navigation = [
   { name: "Events", href: "#", current: false },
 ]
 
-function classNames(...classes: string[]) {
+function classNames(...classes) {
   return classes.filter(Boolean).join(" ")
 }
 
@@ -86,7 +86,7 @@ export default function Nav() {
                         />
                       </Menu.Button>
                     </div>
-                    <Transition
+                    {/* <Transition
                       as={Fragment}
                       enter="transition ease-out duration-100"
                       enterFrom="transform opacity-0 scale-95"
@@ -136,7 +136,7 @@ export default function Nav() {
                           )}
                         </Menu.Item>
                       </Menu.Items>
-                    </Transition>
+                    </Transition> */}
                   </Menu>
                 </div>
               </div>
