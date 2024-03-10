@@ -2,7 +2,7 @@ import Hero from "src/components/Hero"
 import { CONFIG } from "../../site.config"
 
 import MetaConfig from "src/components/Hero"
-import Nav from "src/pages/Nav.tsx"
+import Nav from "src/pages/Nav"
 
 const FeedPage = () => {
   const meta = {
