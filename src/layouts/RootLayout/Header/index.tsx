@@ -1,7 +1,7 @@
 import styled from "@emotion/styled"
 import { zIndexes } from "src/styles/zIndexes"
 
-import Nav from "src/layouts/RootLayout/Header/Nav.tsx"
+// import Nav from "src/layouts/RootLayout/Header/Nav"
 
 type Props = {
   fullWidth: boolean
@@ -10,7 +10,7 @@ type Props = {
 const Header: React.FC<Props> = ({ fullWidth }) => {
   return (
     <StyledWrapper>
-      <Nav />
+      {/* <Nav /> */}
     </StyledWrapper>
   )
 }
