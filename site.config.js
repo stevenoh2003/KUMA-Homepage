@@ -13,13 +13,13 @@ const CONFIG = {
   projects: [
     {
       name: `Waseda Robotics Blog`,
-      // href: "https://github.com/morethanmin/morethan-log",
+      href: "https://github.com/morethanmin/morethan-log",
     },
   ],
   // blog setting (required)
   blog: {
     title: "Waseda Robotics",
-    // description: "welcome to morethan-log!",
+    description: "welcome to morethan-log!",
   },
 
   // CONFIG configration (required)
