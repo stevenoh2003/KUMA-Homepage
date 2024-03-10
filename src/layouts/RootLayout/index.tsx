@@ -40,6 +40,8 @@ import 'prismjs/components/prism-wasm.js'
 import 'prismjs/components/prism-yaml.js'
 import "prismjs/components/prism-go.js"
 
+import Nav from "src/components/Nav"
+
 type Props = {
   children: ReactNode
 }
@@ -56,7 +58,8 @@ const RootLayout = ({ children }: Props) => {
       <Scripts />
       {/* // TODO: replace react query */}
       {/* {metaConfig.type !== "Paper" && <Header />} */}
-      <Header fullWidth={false} />
+      {/* <Header fullWidth={false} /> */}
+      <Nav />
       <StyledMain>{children}</StyledMain>
     </ThemeProvider>
   )

@@ -18,6 +18,6 @@
     "incremental": true,
     "baseUrl": "."
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "site.config.js", "src/pages/index.jsx", "src/pages/Nav.tsx"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "site.config.js", "src/pages/index.jsx", "src/components/Nav.tsx"],
   "exclude": ["node_modules"]
 }
