@@ -11,7 +11,7 @@ const navigation = [
   { name: "Events", href: "#", current: false },
 ]
 
-function classNames(...classes) {
+function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ")
 }
 
