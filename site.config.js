@@ -19,7 +19,7 @@ const CONFIG = {
   // blog setting (required)
   blog: {
     title: "Waseda Robotics",
-    description: "welcome to morethan-log!",
+    description: "welcome to our homepage",
   },
 
   // CONFIG configration (required)

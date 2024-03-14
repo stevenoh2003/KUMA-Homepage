@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react"
 import { useRouter } from "next/router"
 import Link from "next/link"
-import PostsCard from "src/routes/FeaturedPosts/PostList/PostsCard.tsx"
+import PostsCard from "src/routes/FeaturedPosts/PostList/PostsCard"
 import usePostsQuery from "src/hooks/usePostsQuery"
 import styled from "@emotion/styled"
 
