@@ -1,4 +1,5 @@
 import React, { ReactNode, useEffect } from "react"
+import { SpeedInsights } from "@vercel/speed-insights/next"
 import { ThemeProvider } from "./ThemeProvider"
 import useScheme from "src/hooks/useScheme"
 import Header from "./Header"
@@ -61,6 +62,7 @@ const RootLayout = ({ children }: Props) => {
       {/* <Header fullWidth={false} /> */}
       <Nav />
       <StyledMain>{children}</StyledMain>
+      <SpeedInsights />
     </ThemeProvider>
   )
 }
