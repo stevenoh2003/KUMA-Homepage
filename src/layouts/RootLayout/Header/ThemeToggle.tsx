@@ -9,7 +9,7 @@ const ThemeToggle: React.FC<Props> = () => {
   const [scheme, setScheme] = useScheme()
 
   const handleClick = () => {
-    setScheme(scheme === "light" ? "dark" : "light")
+    setScheme(scheme === "light" ? "light" : "light")
   }
 
   return (
