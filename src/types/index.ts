@@ -33,6 +33,8 @@ export type TPost = {
   createdTime: string
   fullWidth: boolean
   thumbnail?: string
+  featured: boolean
+
 }
 
 export type PostDetail = TPost & {
