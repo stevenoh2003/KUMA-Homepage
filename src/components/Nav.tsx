@@ -23,7 +23,7 @@ export default function Nav() {
       href: "/tutorial",
       current: router.pathname === "/tutorial",
     },
-    { name: "Events", href: "/events", current: router.pathname === "/events" },
+    { name: "Events", href: "/events", current: router.pathname === "/event" },
   ]
   return (
     <StyledWrapper>

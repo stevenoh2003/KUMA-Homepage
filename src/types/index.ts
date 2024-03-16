@@ -13,7 +13,7 @@ export type AppPropsWithLayout = AppProps & {
 }
 
 export type TPostStatus = "Private" | "Public" | "PublicOnDetail"
-export type TPostType = "Post" | "Paper" | "Page"
+export type TPostType = "Post" | "Paper" | "Page" | "Tutorial"
 
 export type TPost = {
   id: string

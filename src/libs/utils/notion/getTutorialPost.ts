@@ -7,7 +7,7 @@ export type FilterPostsOptions = {
 
 const initialOption: FilterPostsOptions = {
   acceptStatus: ["Public"],
-  acceptType: ["Post", "Tutorial"],
+  acceptType: ["Tutorial"],
 }
 const current = new Date()
 const tomorrow = new Date(current)
@@ -18,7 +18,7 @@ export function filterPosts(
   posts: TPosts,
   options: FilterPostsOptions = initialOption
 ) {
-  const { acceptStatus = ["Public"], acceptType = ["Post", "Tutorial"] } = options
+  const { acceptStatus = ["Public"], acceptType = ["Tutorial"] } = options
   const filteredPosts = posts
     // filter data
     .filter((post) => {

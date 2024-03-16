@@ -14,7 +14,7 @@ import { FilterPostsOptions } from "src/libs/utils/notion/filterPosts"
 
 const filter: FilterPostsOptions = {
   acceptStatus: ["Public", "PublicOnDetail"],
-  acceptType: ["Post"],
+  acceptType: ["Tutorial"],
 }
 
 export const getStaticPaths = async () => {
@@ -31,7 +31,6 @@ export const getStaticPaths = async () => {
     fallback: true,
   }
 }
-
 
 export const getStaticProps: GetStaticProps = async (context) => {
   const slug = context.params?.slug
