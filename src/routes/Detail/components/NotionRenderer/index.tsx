@@ -3,6 +3,7 @@ import Image from "next/image"
 import Link from "next/link"
 import { ExtendedRecordMap } from "notion-types"
 import useScheme from "src/hooks/useScheme"
+import Script from "next/script"
 
 // core styles shared by all of react-notion-x (required)
 import "react-notion-x/src/styles.css"
@@ -14,7 +15,10 @@ import "prismjs/themes/prism-tomorrow.css"
 
 import "katex/dist/katex.min.css"
 import { FC } from "react"
+import React, { useEffect } from "react"
+
 import styled from "@emotion/styled"
+
 
 const _NotionRenderer = dynamic(
   () => import("react-notion-x").then((m) => m.NotionRenderer),
@@ -31,7 +35,7 @@ const Collection = dynamic(() =>
   )
 )
 const Equation = dynamic(() =>
-  import("react-notion-x/build/third-party/equation").then((m) => m.Equation)
+  import("./Equation").then((m) => m.Equation)
 )
 const Pdf = dynamic(
   () => import("react-notion-x/build/third-party/pdf").then((m) => m.Pdf),
@@ -56,6 +60,7 @@ type Props = {
 
 const NotionRenderer: FC<Props> = ({ recordMap }) => {
   const [scheme] = useScheme()
+
   return (
     <StyledWrapper>
       <_NotionRenderer
@@ -85,5 +90,10 @@ const StyledWrapper = styled.div`
   }
   .notion-page {
     padding: 0;
+  }
+  .notion-equation-block {
+    display: block; /* Ensure block-level display */
+    text-align: center; /* Center content */
+    width: 100%; /* Take full width to allow centering */
   }
 `
