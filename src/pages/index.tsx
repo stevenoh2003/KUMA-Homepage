@@ -5,6 +5,7 @@ import MetaConfig from "src/components/Hero"
 import Feature from "src/components/Feature"
 import FeaturedPosts from "src/components/FeaturedPosts"
 import FeaturedTutorials from "src/components/FeaturedTutorials"
+import Team from "src/components/Team"
 import { getPosts } from "../apis"
 import { queryClient } from "src/libs/react-query"
 import { queryKey } from "src/constants/queryKey"
@@ -38,6 +39,7 @@ const FeedPage = () => {
       <Feature />
       <FeaturedPosts />
       <FeaturedTutorials />
+      <Team />
     </>
   )
 }
