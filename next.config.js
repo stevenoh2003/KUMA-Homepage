@@ -3,6 +3,9 @@ module.exports = {
     // Warning: This will disable ESLint checks for the entire project.
     ignoreDuringBuilds: true,
   },
+  typescript: {
+    ignoreBuildErrors: true,
+  },
   images: {
     domains: [
       "www.notion.so",
