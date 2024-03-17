@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react"
 import { useRouter } from "next/router"
 import Link from "next/link"
-import PostsCard from "src/routes/FeaturedPosts/PostList/PostsCard"
+import PostsCard from "src/routes/FeaturedTutorials/PostList/PostsCard"
 import usePostsQuery from "src/hooks/useTutorialQuery"
 import styled from "@emotion/styled"
 
