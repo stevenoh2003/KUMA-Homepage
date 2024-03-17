@@ -32,11 +32,7 @@ const PostCard: React.FC<Props> = ({ data }) => {
             />
           </div>
         )}
-        <div
-          data-thumb={!!data.thumbnail}
-          data-category={!!category}
-          className="content"
-        >
+        <div data-thumb={!!data.thumbnail} data-category={!!category} className="content">
           <header className="top">
             <h2>{data.title}</h2>
           </header>
@@ -47,6 +43,9 @@ const PostCard: React.FC<Props> = ({ data }) => {
                 CONFIG.lang
               )}
             </div>
+          </div>
+          <div className="summary">
+            <p>{data.summary}</p>
           </div>
           <div className="tags">
             {data.tags &&
@@ -68,22 +67,20 @@ const StyledWrapper = styled(Link)`
     position: relative;
     margin-bottom: 1.5rem;
     border-radius: 1rem;
-    background-color: "${({ theme }) =>
-      theme.scheme === "light" ? "white" : theme.colors.gray4}";
+    background-color: ${({ theme }) =>
+      theme.scheme === "light" ? "white" : theme.colors.gray4};
     transition-property: box-shadow;
     transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
     transition-duration: 300ms;
-    width: 300px; /* Set a fixed height here */
 
     @media (min-width: 768px) {
       margin-bottom: 2rem;
-      height: 300px; /* Adjust the height for larger screens if necessary */
     }
 
-
+    :hover {
       box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
         0 4px 6px -2px rgba(0, 0, 0, 0.05);
-    
+    }
     > .category {
       position: absolute;
       top: 1rem;

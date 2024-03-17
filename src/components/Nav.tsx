@@ -82,7 +82,7 @@ export default function Nav() {
                     <BellIcon className="h-6 w-6" aria-hidden="true" />
                   </button> */}
 
-                  {router.pathname === "/blog" ? <ThemeToggle /> : null}
+                  {/* {router.pathname === "/blog" ? <ThemeToggle /> : null} */}
 
                   {/* Profile dropdown */}
                   <Menu as="div" className="relative ml-3">

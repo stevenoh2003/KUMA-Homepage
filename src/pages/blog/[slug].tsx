@@ -21,7 +21,6 @@ export const getStaticPaths = async () => {
   const posts = await getPosts()
   const filteredPosts = filterPosts(posts, filter)
 
-  // Generate paths with the `/blog/` prefix
   const paths = filteredPosts.map((post) => ({
     params: { slug: post.slug },
   }))

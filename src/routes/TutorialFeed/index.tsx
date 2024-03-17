@@ -11,11 +11,11 @@ import ServiceCard from "./ServiceCard"
 import ContactCard from "./ContactCard"
 import PostList from "./PostList"
 
-const HEADER_HEIGHT = 73
+const HEADER_HEIGHT = 100
 
 type Props = {}
 
-const Feed: React.FC<Props> = () => {
+const TutorialFeed: React.FC<Props> = () => {
   const [q, setQ] = useState("")
 
   return (
@@ -57,7 +57,7 @@ const Feed: React.FC<Props> = () => {
   )
 }
 
-export default Feed
+export default TutorialFeed
 
 const StyledWrapper = styled.div`
   grid-template-columns: repeat(12, minmax(0, 1fr));

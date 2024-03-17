@@ -1,4 +1,4 @@
-import TutorialFeed from "src/routes/Feed"
+import TutorialFeed from "src/routes/TutorialFeed"
 import { CONFIG } from "../../../site.config"
 import { NextPageWithLayout } from "../../types"
 import { getPosts } from "../../apis"

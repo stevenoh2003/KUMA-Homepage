@@ -1,4 +1,4 @@
-import Feed from "src/routes/Feed"
+import BlogFeed from "src/routes/BlogFeed"
 import { CONFIG } from "../../../site.config"
 import { NextPageWithLayout } from "../../types"
 import { getPosts } from "../../apis"
@@ -7,7 +7,7 @@ import { queryClient } from "src/libs/react-query"
 import { queryKey } from "src/constants/queryKey"
 import { GetStaticProps } from "next"
 import { dehydrate } from "@tanstack/react-query"
-import { filterPosts } from "src/libs/utils/notion"
+import { filterPosts } from "src/libs/utils/notion/getBlogPost"
 import styled from "@emotion/styled"
 
 export const getStaticProps: GetStaticProps = async () => {
@@ -32,9 +32,8 @@ const FeedPage: NextPageWithLayout = () => {
 
   return (
     <StyledMain>
-        
       <MetaConfig {...meta} />
-      <Feed />
+      <BlogFeed />
     </StyledMain>
   )
 }
