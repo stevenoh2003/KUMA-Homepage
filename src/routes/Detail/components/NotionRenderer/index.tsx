@@ -96,4 +96,9 @@ const StyledWrapper = styled.div`
     text-align: center; /* Center content */
     width: 100%; /* Take full width to allow centering */
   }
+  .notion-equation-inline .katex-display,
+  .notion-equation-inline .katex {
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+  }
 `
