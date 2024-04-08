@@ -77,6 +77,18 @@ const NotionRenderer: FC<Props> = ({ recordMap }) => {
         }}
         mapPageUrl={mapPageUrl}
       />
+      <Script
+        src="https://utteranc.es/client.js"
+        strategy="afterInteractive"
+        {...{
+          repo: "stevenoh2003/KUMA-Homepage",
+          "issue-term": "pathname",
+          label: "blog",
+          theme: "github-light",
+          crossorigin: "anonymous",
+          async: "",
+        }}
+      />
     </StyledWrapper>
   )
 }
@@ -85,6 +97,7 @@ export default NotionRenderer
 
 const StyledWrapper = styled.div`
   /* // TODO: why render? */
+
   .notion-collection-page-properties {
     display: none !important;
   }
@@ -100,5 +113,14 @@ const StyledWrapper = styled.div`
   .notion-equation-inline .katex {
     margin-top: 0 !important;
     margin-bottom: 0 !important;
+  }
+  .utterances {
+    margin-top: 2rem !important; /* Increase top margin */
+    margin-bottom: 2rem !important; /* Increase bottom margin */
+  }
+
+  .utterances-frame {
+    margin-top: 2rem !important; /* Optional: in case the iframe itself needs adjustment */
+    margin-bottom: 2rem !important; /* Optional: in case the iframe itself needs adjustment */
   }
 `
