@@ -1,6 +1,10 @@
+import StyleSheet from 'react';
+import Image from 'next/image';
+import Logo from '../assets/pictures/logo.jpg';
+
 const Hero = () => {
   return (
-    <div className="bg-white">
+    <div style={{ backgroundColor: "#f2f3ef" }}>
       <div className="relative isolate px-6 pt-14 lg:px-8">
         {/* <div
           className="absolute inset-x-0 -top-40 -z-10 transform-gpu overflow-hidden blur-3xl sm:-top-80"
@@ -13,15 +17,20 @@ const Hero = () => {
             }}
           />
         </div> */}
-        <div className="mx-auto max-w-2xl py-32 sm:py-48 lg:py-56">
+        <div className="mx-auto max-w-2xl py-20 sm:py-15 lg:py-18">
           <div className="text-center">
+            <Image
+              className="mx-auto"
+              alt="Logo"
+              src={Logo}
+              width="250"
+              height="250"
+            />
             <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">
-              Join the Revolution: Innovate, Create, Roboticize.
+              Join the Robolution!
             </h1>
             <p className="mt-6 text-lg leading-8 text-gray-600">
-              Anim aute id magna aliqua ad ad non deserunt sunt. Qui irure qui
-              lorem cupidatat commodo. Elit sunt amet fugiat veniam occaecat
-              fugiat aliqua.
+              A Waseda University-based robotics community.
             </p>
             <div className="mt-10 flex items-center justify-center gap-x-6">
               <a
@@ -50,3 +59,8 @@ const Hero = () => {
 }
 
 export default Hero
+
+// const style = StyleSheet.create({
+
+
+// })242 243 239
