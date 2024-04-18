@@ -97,7 +97,8 @@ const StyledWrapper = styled.div`
       cursor: pointer;
 
       :hover {
-        background-color: ${({ theme }) => theme.colors.gray4};
+        background-color: #4f46e5;
+        color: #fff;
       }
       &[data-active="true"] {
         color: ${({ theme }) => theme.colors.gray12};

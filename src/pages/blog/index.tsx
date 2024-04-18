@@ -1,4 +1,4 @@
-import BlogFeed from "src/routes/BlogFeed"
+const BlogFeed = React.lazy(() => import("src/routes/BlogFeed"))
 import { CONFIG } from "../../../site.config"
 import { NextPageWithLayout } from "../../types"
 import { getPosts } from "../../apis"
@@ -9,6 +9,7 @@ import { GetStaticProps } from "next"
 import { dehydrate } from "@tanstack/react-query"
 import { filterPosts } from "src/libs/utils/notion/getBlogPost"
 import styled from "@emotion/styled"
+import React, { Suspense } from "react"
 
 
 export const getStaticProps: GetStaticProps = async () => {
@@ -39,12 +40,14 @@ const FeedPage: NextPageWithLayout = () => {
     >
       <StyledMain>
         <MetaConfig {...meta} />
+                <Suspense fallback={<div>Loading...</div>}>
+
         <BlogFeed />
+        </Suspense>
       </StyledMain>
     </div>
   )
 }
-
 
 export default FeedPage
 

@@ -4,6 +4,7 @@ import Link from "next/link"
 import PostsCard from "src/routes/FeaturedPosts/PostList/PostsCard"
 import usePostsQuery from "src/hooks/usePostsQuery"
 import styled from "@emotion/styled"
+import { useMemo } from "react"
 
 
 const GridWrapper = styled.div`
@@ -60,7 +61,7 @@ const PostList: React.FC<{ q: string }> = ({ q }) => {
     setFilteredPosts(() => {
       let newFilteredPosts = data.filter(
         (post) =>
-          // post.type.includes("Post") && // Assuming "Post" is the type for blogs
+          post.type.includes("Post") && // Assuming "Post" is the type for blogs
           post.title.toLowerCase().includes(q.toLowerCase())
       )
       newFilteredPosts.sort(
