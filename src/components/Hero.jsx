@@ -9,28 +9,29 @@ const Hero = () => {
   const router = useRouter()
 
 
-  const handleEmail = async (event) => {
-    event.preventDefault()
-    try {
-      const response = await fetch("/api/submitEmail", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email: email }),
-      })
-      const data = await response.json()
-      if (response.ok) {
-        console.log(data.message) // Or any action on success
-        setShowModal(false) // Close modal after successful submission
-        window.open("https://discord.gg/MgUg5sF7v8", "_blank") // Opens the Discord invite in a new tab
-      } else {
-        throw new Error(data.error || "Something went wrong.  ")
-      }
-    } catch (error) {
-      console.error("Failed to submit email:", error)
+const handleEmail = async (event) => {
+  event.preventDefault()
+  try {
+    const response = await fetch("/api/submitEmail", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email: email }),
+    })
+    const data = await response.json()
+    if (response.ok) {
+      console.log(data.message) // Log success message
+      setShowModal(false) // Close modal after successful submission
+      window.location.href = "https://discord.gg/MgUg5sF7v8" // Redirect to Discord in the same tab
+    } else {
+      throw new Error(data.error || "Something went wrong.")
     }
+  } catch (error) {
+    console.error("Failed to submit email:", error)
   }
+}
+
 
 
   return (
