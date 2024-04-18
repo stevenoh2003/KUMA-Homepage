@@ -31,10 +31,17 @@ const FeedPage: NextPageWithLayout = () => {
   }
 
   return (
-    <StyledMain>
-      <MetaConfig {...meta} />
-      <TutorialFeed />
-    </StyledMain>
+    <div
+      style={{
+        backgroundColor: "#f2f3ef",
+
+      }}
+    >
+      <StyledMain>
+        <MetaConfig {...meta} />
+        <TutorialFeed />
+      </StyledMain>
+    </div>
   )
 }
 

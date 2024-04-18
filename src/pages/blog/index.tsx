@@ -10,6 +10,7 @@ import { dehydrate } from "@tanstack/react-query"
 import { filterPosts } from "src/libs/utils/notion/getBlogPost"
 import styled from "@emotion/styled"
 
+
 export const getStaticProps: GetStaticProps = async () => {
   const posts = filterPosts(await getPosts())
   await queryClient.prefetchQuery(queryKey.posts(), () => posts)
@@ -31,10 +32,16 @@ const FeedPage: NextPageWithLayout = () => {
   }
 
   return (
-    <StyledMain>
-      <MetaConfig {...meta} />
-      <BlogFeed />
-    </StyledMain>
+    <div
+      style={{
+        backgroundColor: "#f2f3ef",
+      }}
+    >
+      <StyledMain>
+        <MetaConfig {...meta} />
+        <BlogFeed />
+      </StyledMain>
+    </div>
   )
 }
 

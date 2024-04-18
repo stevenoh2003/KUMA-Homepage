@@ -69,14 +69,15 @@ const StyledWrapper = styled(Link)`
   article {
     overflow: hidden;
     position: relative;
+    margin-top: 2.0rem;
     margin-bottom: 1.5rem;
-    border-radius: 1rem;
+    border-radius: 0.5rem;
     background-color: "${({ theme }) =>
       theme.scheme === "light" ? "white" : theme.colors.gray4}";
     transition-property: box-shadow;
     transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
     transition-duration: 300ms;
-    width: 300px; /* Set a fixed height here */
+    // width: 300px; /* Set a fixed height here */
 
     @media (min-width: 768px) {
       margin-bottom: 2rem;

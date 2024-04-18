@@ -5,29 +5,31 @@ import PostsCard from "src/routes/FeaturedPosts/PostList/PostsCard"
 import usePostsQuery from "src/hooks/usePostsQuery"
 import styled from "@emotion/styled"
 
-// Keep your styled components
+
 const GridWrapper = styled.div`
   display: grid;
   gap: 30px;
   margin-bottom: 2rem;
+  width: 100%; // Ensures full width
+  padding: 0 15px; // Add padding to handle edge spacing
 
-  /* Start with a 1-column layout for small screens */
-  grid-template-columns: 1fr;
+  grid-template-columns: 1fr; // Default to 1 column
 
-  /* Medium screens (>=768px) */
   @media (min-width: 768px) {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(1, 1fr); // 2 columns on medium screens
   }
 
-  /* Large screens (>=1024px) */
   @media (min-width: 1024px) {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(4, 1fr); // 3 columns on large screens
   }
 
-  /* Extra large screens (>=1280px) */
   @media (min-width: 1280px) {
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(4, 1fr); // 4 columns on extra large screens
   }
+`;
+const PostsCardWrapper = styled.div`
+  width: 100%; // Ensures that the card takes up all available width
+  box-sizing: border-box; // Makes sure padding and borders are included in the width calculation
 `
 
 
@@ -58,7 +60,7 @@ const PostList: React.FC<{ q: string }> = ({ q }) => {
     setFilteredPosts(() => {
       let newFilteredPosts = data.filter(
         (post) =>
-          post.type.includes("Post") && // Assuming "Post" is the type for blogs
+          // post.type.includes("Post") && // Assuming "Post" is the type for blogs
           post.title.toLowerCase().includes(q.toLowerCase())
       )
       newFilteredPosts.sort(
@@ -71,35 +73,33 @@ const PostList: React.FC<{ q: string }> = ({ q }) => {
   }, [q, data])
 
   return (
-    <div className="bg-white py-10 sm:py-32">
+    <div
+      className="bg-white py-10 sm:py-32"
+      style={{ backgroundColor: "#f2f3ef" }}
+    >
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
-        <div className="mx-auto max-w-7xl px-6 lg:px-8">
-          <div className="mx-auto max-w-2xl lg:mx-0">
-            <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
-                Recent blogs
-            </h2>
-            <p className="mt-6 text-lg leading-8 text-gray-600">
-              Read our cutting-edge tutorials on robotics.
-            </p>
-          </div>
-          {/* Use GridWrapper to apply the grid styling */}
-          <GridWrapper className="border-t border-gray-200 pt-10 mt-8 sm:mt-16">
-            {filteredPosts.map((post) => (
-              <PostsCard key={post.id} data={post} />
-            ))}
-            {/* Integrate ReadMoreColumn directly into the grid */}
-            <ReadMoreColumn>
-              <Link href="/blog" legacyBehavior>
-                <a
-                  href="#"
-                  className="rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                >
-                  Read More →
-                </a>
-              </Link>
-            </ReadMoreColumn>
-          </GridWrapper>
+        <div className="max-w-xl space-y-3">
+          <h3 className="text-indigo-600 font-semibold">BLOG</h3>
+          <p className="text-gray-800 text-3xl font-semibold sm:text-4xl">
+            Read our stories
+          </p>
+          <p>Learn from the latest posts by kuma members.</p>
         </div>
+        {/* Use GridWrapper to apply the grid styling */}
+        <GridWrapper className="border-t border-gray-200 pt-10 mt-8 sm:mt-16">
+          {filteredPosts.map((post) => (
+            <PostsCardWrapper key={post.id}>
+              <PostsCard data={post} />
+            </PostsCardWrapper>
+          ))}
+          <ReadMoreColumn>
+            <Link href="/blog" legacyBehavior>
+              <a className="rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+                Read More →
+              </a>
+            </Link>
+          </ReadMoreColumn>
+        </GridWrapper>
       </div>
     </div>
   )

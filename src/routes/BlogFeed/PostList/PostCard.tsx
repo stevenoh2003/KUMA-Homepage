@@ -32,12 +32,16 @@ const PostCard: React.FC<Props> = ({ data }) => {
             />
           </div>
         )}
-        <div data-thumb={!!data.thumbnail} data-category={!!category} className="content">
+        <div
+          data-thumb={!!data.thumbnail}
+          data-category={!!category}
+          className="content"
+        >
           <header className="top">
             <h2>{data.title}</h2>
           </header>
           <div className="date">
-            <div className="content">
+            <div className="content" >
               {formatDate(
                 data?.date?.start_date || data.createdTime,
                 CONFIG.lang
@@ -138,7 +142,6 @@ const StyledWrapper = styled(Link)`
         .content {
           font-size: 0.875rem;
           line-height: 1.25rem;
-          color: ${({ theme }) => theme.colors.gray10};
           @media (min-width: 768px) {
             margin-left: 0;
           }

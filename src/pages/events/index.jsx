@@ -2,6 +2,7 @@ import React from "react"
 import { Calendar, momentLocalizer } from "react-big-calendar"
 import moment from "moment"
 import "react-big-calendar/lib/css/react-big-calendar.css"
+import EventCards from "../../components/EventCards"
 
 const localizer = momentLocalizer(moment)
 
@@ -25,26 +26,13 @@ const events = [
 const MyCalendar = (props) => (
   <div
     style={{
-      display: "flex",
-      justifyContent: "center",
-      alignItems: "center",
-      height: "100vh",
-      padding: "20px",
+      backgroundColor: "#f2f3ef",
+      height: "calc(100vh - 110px)",
+      position: "relative",
+      overflow: "hidden",
     }}
   >
-    <div style={{ height: 700, width: "100%", maxWidth: 800 }}>
-      <Calendar
-        localizer={localizer}
-        events={events.map((event) => ({
-          ...event,
-          start: new Date(event.start),
-          end: new Date(event.end),
-        }))}
-        startAccessor="start"
-        endAccessor="end"
-        style={{ height: "100%", width: "100%" }}
-      />
-    </div>
+    <EventCards />
   </div>
 )
 

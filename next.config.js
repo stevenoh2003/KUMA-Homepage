@@ -12,6 +12,9 @@ module.exports = {
       "lh5.googleusercontent.com",
       "lh3.googleusercontent.com",
       "s3-us-west-2.amazonaws.com",
+      "images.unsplash.com",
+      "api.uifaces.co",
     ],
+    formats: ["image/avif", "image/webp"], // Optional: Enable modern image formats
   },
 }

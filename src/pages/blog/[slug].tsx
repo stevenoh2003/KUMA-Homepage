@@ -81,6 +81,7 @@ const DetailPage: NextPageWithLayout = () => {
     <>
       <MetaConfig {...meta} />
       <Detail />
+
     </>
   )
 }

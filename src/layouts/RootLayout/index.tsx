@@ -1,4 +1,4 @@
-import React, { ReactNode, useEffect } from "react"
+import React, { ReactNode, useEffect, useState } from "react"
 import { SpeedInsights } from "@vercel/speed-insights/next"
 import { ThemeProvider } from "./ThemeProvider"
 import useScheme from "src/hooks/useScheme"
@@ -54,13 +54,17 @@ const RootLayout = ({ children }: Props) => {
     Prism.highlightAll();
   }, []);
 
+  const [isHome, setIsHome] = useState(true);
+
   return (
     <ThemeProvider scheme={scheme}>
       <Scripts />
       {/* // TODO: replace react query */}
       {/* {metaConfig.type !== "Paper" && <Header />} */}
       {/* <Header fullWidth={false} /> */}
+
       <Nav />
+
       <StyledMain>{children}</StyledMain>
       <SpeedInsights />
     </ThemeProvider>
