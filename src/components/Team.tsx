@@ -37,8 +37,7 @@ export default () => {
             Meet our members
           </p>
           <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec
-            congue, nisl eget molestie varius
+Get to know our members!
           </p>
         </div>
         <div className="mt-12">
