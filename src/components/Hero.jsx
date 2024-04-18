@@ -8,12 +8,30 @@ const Hero = () => {
   const [email, setEmail] = useState("")
   const router = useRouter()
 
-  const handleSubmit = (event) => {
+
+  const handleEmail = async (event) => {
     event.preventDefault()
-    // Here you would handle the integration with your Discord or mailing system.
-    console.log(email) // For demonstration, logs email to console.
-    setShowModal(false) // Close modal after submission
+    try {
+      const response = await fetch("/api/submitEmail", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email: email }),
+      })
+      const data = await response.json()
+      if (response.ok) {
+        console.log(data.message) // Or any action on success
+        setShowModal(false) // Close modal after successful submission
+        window.open("https://discord.gg/MgUg5sF7v8", "_blank") // Opens the Discord invite in a new tab
+      } else {
+        throw new Error(data.error || "Something went wrong")
+      }
+    } catch (error) {
+      console.error("Failed to submit email:", error)
+    }
   }
+
 
   return (
     <>
@@ -26,7 +44,7 @@ const Hero = () => {
         }}
       >
         <div
-          className="flex items-center justify-center h-full relative z-10"
+          className="flex items-center justify-center h-full relative z-10 mx-10"
           style={{ maxWidth: "900px", margin: "0 auto" }}
         >
           <div className="flex justify-end w-2/5">
@@ -112,7 +130,7 @@ const Hero = () => {
             >
               &times; {/* HTML entity for the 'X' character */}
             </button>
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleEmail}>
               <div className="text-lg font-semibold text-gray-900 mb-4">
                 Join our Discord channel
               </div>

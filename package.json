@@ -30,6 +30,8 @@
     "mailgun.js": "^10.2.1",
     "mermaid": "^9.3.0",
     "moment": "^2.30.1",
+    "mongodb": "^6.5.0",
+    "mongoose": "^8.3.2",
     "next": "^13.4.9",
     "node-fetch": "^3.3.2",
     "notion-client": "^6.16.0",
