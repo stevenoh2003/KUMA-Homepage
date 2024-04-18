@@ -25,7 +25,7 @@ const Hero = () => {
         setShowModal(false) // Close modal after successful submission
         window.open("https://discord.gg/MgUg5sF7v8", "_blank") // Opens the Discord invite in a new tab
       } else {
-        throw new Error(data.error || "Something went wrong.")
+        throw new Error(data.error || "Something went wrong.  ")
       }
     } catch (error) {
       console.error("Failed to submit email:", error)
