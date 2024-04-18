@@ -44,7 +44,7 @@ const Hero = () => {
         }}
       >
         <div
-          className="flex items-center justify-center h-full relative z-10 mx-10"
+          className="flex items-center justify-center h-full relative z-10 px-10"
           style={{ maxWidth: "900px", margin: "0 auto" }}
         >
           <div className="flex justify-end w-2/5">
