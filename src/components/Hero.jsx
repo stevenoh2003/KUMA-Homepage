@@ -139,7 +139,7 @@ const handleEmail = async (event) => {
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="Enter your email"
+                placeholder="Enter your school email"
                 style={{
                   width: "100%",
                   padding: "10px",
