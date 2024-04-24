@@ -8,7 +8,9 @@ import { queryKey } from "src/constants/queryKey"
 import { GetStaticProps } from "next"
 import { dehydrate } from "@tanstack/react-query"
 import { filterPosts } from "src/libs/utils/notion/getTutorialPost"
-import styled from "@emotion/styled"
+import { useSession } from "next-auth/react";
+
+import ProjectList from '../../components/ProjectLlist'
 
 export const getStaticProps: GetStaticProps = async () => {
   const posts = filterPosts(await getPosts())
@@ -29,6 +31,8 @@ const FeedPage: NextPageWithLayout = () => {
     type: "website",
     url: CONFIG.link,
   }
+  const { data: session } = useSession();
+
 
   return (
     <div
@@ -37,19 +41,11 @@ const FeedPage: NextPageWithLayout = () => {
 
       }}
     >
-      <StyledMain>
         <MetaConfig {...meta} />
-        <TutorialFeed />
-      </StyledMain>
+        <ProjectList />
     </div>
   )
 }
 
 export default FeedPage
 
-const StyledMain = styled.main`
-  margin: 0 auto;
-  width: 100%;
-  max-width: 1120px;
-  padding: 2rem 0.5rem;
-`

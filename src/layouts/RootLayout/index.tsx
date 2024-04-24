@@ -1,12 +1,13 @@
-import React, { ReactNode, useEffect, useState } from "react"
-import { SpeedInsights } from "@vercel/speed-insights/next"
-import { ThemeProvider } from "./ThemeProvider"
-import useScheme from "src/hooks/useScheme"
-import Header from "./Header"
-import styled from "@emotion/styled"
-import Scripts from "src/layouts/RootLayout/Scripts"
-import useGtagEffect from "./useGtagEffect"
-import Prism from "prismjs/prism"
+import React, { ReactNode, useEffect, useState, startTransition } from "react";
+import { SpeedInsights } from "@vercel/speed-insights/next";
+import { ThemeProvider } from "./ThemeProvider";
+import useScheme from "src/hooks/useScheme";
+import Header from "./Header";
+import styled from "@emotion/styled";
+import Scripts from "src/layouts/RootLayout/Scripts";
+import useGtagEffect from "./useGtagEffect";
+import Prism from "prismjs/prism";
+
 import 'prismjs/components/prism-markup-templating.js'
 import 'prismjs/components/prism-markup.js'
 import 'prismjs/components/prism-bash.js'
@@ -55,15 +56,11 @@ const RootLayout = ({ children }: Props) => {
   }, []);
 
   const [isHome, setIsHome] = useState(true);
+  
 
   return (
     <ThemeProvider scheme={scheme}>
       <Scripts />
-
-      {/* // TODO: replace react query */}
-      {/* {metaConfig.type !== "Paper" && <Header />} */}
-      {/* <Header fullWidth={false} /> */}
-
       <Nav />
       <StyledMain>{children}</StyledMain>
       <Analytics />
