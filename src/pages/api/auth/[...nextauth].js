@@ -2,7 +2,7 @@ import NextAuth from "next-auth"
 import CredentialsProvider from "next-auth/providers/credentials"
 import dbConnect from "../../../libs/mongoose"
 import bcrypt from "bcryptjs"
-import User from "../../../libs/model/user" // Ensure this path is correct
+import User from "src/libs/model/User.js"
 
 export default NextAuth({
   providers: [

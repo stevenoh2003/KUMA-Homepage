@@ -1,6 +1,6 @@
 // pages/api/auth/signup.js
 import dbConnect from "../../../libs/mongoose"
-import User from "../../../libs/model/user"
+import User from "src/libs/model/User.js"
 import bcrypt from "bcryptjs"
 
 export default async function handler(req, res) {
