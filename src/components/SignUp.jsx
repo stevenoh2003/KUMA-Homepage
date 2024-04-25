@@ -11,25 +11,47 @@ function SignUp() {
 
   const router = useRouter() // Initialize useRouter for redirection
 
-  const handleChange = (event) => {
-    const { name, value } = event.target
+const handleChange = (event) => {
+  const { name, value, type, files } = event.target
+  if (type === "file") {
+    setFormData((prev) => ({
+      ...prev,
+      [name]: files[0],
+    }))
+  } else {
     setFormData((prev) => ({
       ...prev,
       [name]: value,
     }))
   }
+}
 
-  const handleSubmit = async (event) => {
-    event.preventDefault()
-    try {
-      const response = await axios.post("/api/auth/signup", formData)
-      alert(response.data.message)
-      // Redirect to login page upon successful registration
-      router.push("/auth/signin")
-    } catch (error) {
-      alert(error.response.data.message)
-    }
+const handleSubmit = async (event) => {
+  event.preventDefault()
+
+  // Create an instance of FormData
+  const data = new FormData()
+
+  // Append each form field to the FormData object
+  data.append("name", formData.name)
+  data.append("email", formData.email)
+  data.append("password", formData.password)
+  data.append("profilePic", formData.profilePic) // Ensure this is the file
+
+  try {
+    // Post the FormData to your API endpoint
+    const response = await axios.post("/api/auth/signup", data, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    })
+    alert(response.data.message)
+    // Redirect to login page upon successful registration
+    router.push("/auth/signin")
+  } catch (error) {
+    alert(error.response.data.message)
   }
+}
 
   return (
     <main className="w-full h-screen flex flex-col items-center justify-center px-4">
@@ -50,7 +72,12 @@ function SignUp() {
             </p>
           </div>
         </div>
-        <form onSubmit={handleSubmit} className="mt-8 space-y-5">
+        <form
+          onSubmit={handleSubmit}
+          method="POST"
+          enctype="multipart/form-data"
+          className="mt-8 space-y-5"
+        >
           <div>
             <label htmlFor="name" className="font-medium">
               Name
@@ -63,6 +90,19 @@ function SignUp() {
               onChange={handleChange}
               required
               className="w-full mt-2 px-3 py-2 border-gray-300 text-gray-500 bg-transparent outline-none border focus:border-gray-400 shadow-sm rounded-lg"
+            />
+          </div>
+          <div>
+            <label htmlFor="profilePic" className="font-medium">
+              Profile Picture
+            </label>
+            <input
+              id="profilePic"
+              name="profilePic"
+              type="file"
+              onChange={handleChange}
+              required
+              className="w-full mt-2 px-3 py-2 text-gray-500 bg-transparent outline-none border focus:border-gray-400 shadow-sm rounded-lg"
             />
           </div>
           <div>
