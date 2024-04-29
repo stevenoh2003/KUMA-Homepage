@@ -1,7 +1,7 @@
 const CONFIG = {
   // profile setting (required)
   profile: {
-    name: "Waseda Robotics",
+    name: "kuma",
     image: "", // If you want to create your own notion avatar, check out https://notion-avatar.vercel.app
     role: "",
     bio: "",
@@ -12,13 +12,13 @@ const CONFIG = {
   },
   projects: [
     {
-      name: `Waseda Robotics Blog`,
+      name: `kuma`,
       href: "",
     },
   ],
   // blog setting (required)
   blog: {
-    title: "Waseda Robotics",
+    title: "kuma",
     description: "welcome to our homepage",
   },
 

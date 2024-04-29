@@ -1,4 +1,3 @@
-// pages/api/create-channel.js
 import axios from "axios"
 
 export default async function handler(req, res) {
@@ -34,6 +33,9 @@ export default async function handler(req, res) {
           },
         }
       )
+
+      // Log the created channel ID to the console for debugging
+      console.log("Channel created with ID:", response.data.id)
 
       // Optionally set up permissions for the bot and other specifics here
 

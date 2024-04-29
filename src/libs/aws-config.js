@@ -1,14 +1,12 @@
-// lib/aws-config.js
-import AWS from "aws-sdk"
+// libs/aws-config.js
+import { S3Client } from "@aws-sdk/client-s3"
 
-const config = {
-  accessKeyId: process.env.S3_ACCESS_KEY,
-  secretAccessKey: process.env.S3_SECRET_ACCESS_KEY,
+const s3Client = new S3Client({
   region: process.env.S3_REGION,
-}
+  credentials: {
+    accessKeyId: process.env.S3_ACCESS_KEY,
+    secretAccessKey: process.env.S3_SECRET_ACCESS_KEY,
+  },
+})
 
-AWS.config.update(config)
-
-const s3 = new AWS.S3()
-
-export default s3
+export default s3Client

@@ -15,38 +15,52 @@ export default NextAuth({
       authorize: async (credentials) => {
         await dbConnect()
 
-        const user = await User.findOne({ email: credentials.email })
+        const email = credentials.email.toLowerCase()
+        const user = await User.findOne({ email })
         if (!user) {
-          throw new Error("No user found with the email")
+          return null // Or handle more gracefully
         }
 
-        const isValid = bcrypt.compareSync(credentials.password, user.password)
+        const isValid = await bcrypt.compare(
+          credentials.password,
+          user.password
+        )
         if (!isValid) {
-          throw new Error("Incorrect password")
+          return null // Or handle more gracefully
         }
 
-        return { id: user.id, name: user.name, email: user.email }
+        return {
+          id: user.id,
+          name: user.name,
+          email: user.email,
+          image: user.profilePicUrl,
+          discordId: user.discordId, // Include discordId here
+        }
       },
     }),
   ],
   pages: {
-    signIn: "/auth/signin", // A custom sign-in page
-    error: "/auth/error", // Error page
+    signIn: "/auth/signin",
+    error: "/auth/error",
   },
   callbacks: {
     jwt: async ({ token, user }) => {
-      // Assign user id to the token if the user object is available
       if (user) {
         token.id = user.id
+        token.name = user.name
+        token.email = user.email
+        token.image = user.image
+        token.discordId = user.discordId // Add discordId to the JWT
       }
       return token
     },
     session: async ({ session, token }) => {
-      // Ensure token has 'id' before attempting to assign it to session
-      if (token?.id) {
-        session.user.id = token.id
-      } else {
-        session.error = "Session token is missing ID"
+      session.user = {
+        id: token.id,
+        name: token.name,
+        email: token.email,
+        image: token.image,
+        discordId: token.discordId, // Add discordId to the session object
       }
       return session
     },

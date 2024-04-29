@@ -14,6 +14,7 @@ module.exports = {
       "s3-us-west-2.amazonaws.com",
       "images.unsplash.com",
       "api.uifaces.co",
+      "kuma2024.s3.ap-southeast-2.amazonaws.com",
     ],
     formats: ["image/avif", "image/webp"], // Optional: Enable modern image formats
   },

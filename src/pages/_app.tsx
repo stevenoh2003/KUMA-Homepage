@@ -3,6 +3,7 @@ import { Hydrate, QueryClientProvider } from "@tanstack/react-query";
 import { RootLayout } from "src/layouts";
 import { queryClient } from "src/libs/react-query";
 import "../styles/globals.css";
+import "../styles/styles.css"
 import { AuthProvider } from '../context/auth-context'; // Adjust the path as necessary
 import { SessionProvider } from "next-auth/react";
 import { useState, useEffect, startTransition } from 'react';

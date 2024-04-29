@@ -7,6 +7,7 @@ function SignUp() {
     name: "",
     email: "",
     password: "",
+    discordID: "",
   })
 
   const router = useRouter() // Initialize useRouter for redirection
@@ -37,14 +38,17 @@ const handleSubmit = async (event) => {
   data.append("email", formData.email)
   data.append("password", formData.password)
   data.append("profilePic", formData.profilePic) // Ensure this is the file
+  data.append("discordId", formData.discordId) // Ensure this is the file
 
   try {
     // Post the FormData to your API endpoint
+    console.log(formData) // Log formData to ensure it's correctly populated
     const response = await axios.post("/api/auth/signup", data, {
       headers: {
         "Content-Type": "multipart/form-data",
       },
     })
+
     alert(response.data.message)
     // Redirect to login page upon successful registration
     router.push("/auth/signin")
@@ -130,6 +134,19 @@ const handleSubmit = async (event) => {
               value={formData.password}
               onChange={handleChange}
               required
+              className="w-full mt-2 px-3 py-2 text-gray-500 bg-transparent outline-none border-gray-400 focus:border-gray-400 shadow-sm rounded-lg"
+            />
+          </div>
+          <div>
+            <label htmlFor="discordId" className="font-medium">
+              Discord ID
+            </label>
+            <input
+              id="discordId"
+              name="discordId"
+              type="discordId"
+              value={formData.discordId}
+              onChange={handleChange}
               className="w-full mt-2 px-3 py-2 text-gray-500 bg-transparent outline-none border-gray-400 focus:border-gray-400 shadow-sm rounded-lg"
             />
           </div>
