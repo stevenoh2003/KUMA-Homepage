@@ -60,7 +60,7 @@ const handleEmail = async (event) => {
                     color: "#4f46e5",
                   }}
                 >
-                  Kuma.
+                  kuma.
                 </span>
               </h1>
               <p className="mt-4 text-lg leading-8 text-gray-600">
