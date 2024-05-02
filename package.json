@@ -16,6 +16,8 @@
   "dependencies": {
     "@aws-sdk/client-s3": "^3.563.0",
     "@aws-sdk/lib-storage": "^3.563.0",
+    "@aws-sdk/s3-request-presigner": "^3.567.0",
+    "@aws-sdk/util-create-request": "^3.567.0",
     "@babel/runtime": "^7.24.0",
     "@blocknote/core": "^0.12.4",
     "@blocknote/react": "^0.12.4",
@@ -36,6 +38,7 @@
     "@tiptap/extension-highlight": "^2.3.0",
     "@tiptap/extension-text-align": "^2.3.0",
     "@tiptap/extension-text-style": "^2.3.0",
+    "@tiptap/html": "^2.3.1",
     "@tiptap/pm": "^2.3.0",
     "@tiptap/react": "^2.3.0",
     "@tiptap/starter-kit": "^2.3.0",

@@ -5,9 +5,11 @@ import { StyledButton, ButtonGroup } from "./StyledComponents"
 const MenuBar = () => {
   const { editor } = useCurrentEditor()
 
+
   if (!editor) {
     return null
   }
+
 
   return (
     <ButtonGroup>
