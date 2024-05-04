@@ -1,9 +1,13 @@
+// src/libs/model/BlogPost.js
 import mongoose from "mongoose"
 
 const blogPostSchema = new mongoose.Schema({
   title: { type: String, required: true },
   s3_key: { type: String, required: true },
+  thumbnail_url: { type: String },
   created_at: { type: Date, default: Date.now },
+  owner: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+  isPublic: { type: Boolean, default: false }, // New field
 })
 
 const BlogPost =

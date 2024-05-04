@@ -7,6 +7,7 @@ import "../styles/styles.css"
 import { AuthProvider } from '../context/auth-context'; // Adjust the path as necessary
 import { SessionProvider } from "next-auth/react";
 import { useState, useEffect, startTransition } from 'react';
+import Footer from "src/components/Footer";
 
 function App({ Component, pageProps }: AppPropsWithLayout) {
   const getLayout = Component.getLayout || ((page) => page);
@@ -29,11 +30,12 @@ function App({ Component, pageProps }: AppPropsWithLayout) {
         <Hydrate state={pageProps.dehydratedState}>
           <AuthProvider>
             <RootLayout>{getLayout(<Component {...pageProps} />)}</RootLayout>
+            <Footer />
           </AuthProvider>
         </Hydrate>
       </QueryClientProvider>
     </SessionProvider>
-  );
+  )
 }
 
 export default App;

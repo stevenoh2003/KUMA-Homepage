@@ -1,4 +1,15 @@
 const CONFIG = {
+  poweredByHeader: false,
+  reactStrictMode: true,
+  // Add this if your Next.js app is behind a proxy
+  async rewrites() {
+    return [
+      {
+        source: "/api/:path*",
+        destination: "https://localhost:3000/api/:path*", // Adjust accordingly
+      },
+    ]
+  },
   // profile setting (required)
   profile: {
     name: "kuma",

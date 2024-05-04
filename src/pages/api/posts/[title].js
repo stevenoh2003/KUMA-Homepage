@@ -1,3 +1,4 @@
+// src/pages/api/posts/[title].js
 import dbConnect from "src/libs/mongoose"
 import BlogPost from "src/libs/model/BlogPost"
 import { GetObjectCommand } from "@aws-sdk/client-s3"
@@ -30,13 +31,14 @@ export default async function handler(req, res) {
       Body.on("error", reject)
     })
 
-    res
-      .status(200)
-      .json({
-        title: post.title,
-        content: content,
-        created_at: post.created_at,
-      })
+    res.status(200).json({
+      title: post.title,
+      content: content,
+      created_at: post.created_at,
+      owner: post.owner,
+      thumbnail_url: post.thumbnail_url,
+      isPublic: post.isPublic, // Add isPublic to the response
+    })
   } catch (error) {
     console.error("Failed to fetch post data:", error)
     res

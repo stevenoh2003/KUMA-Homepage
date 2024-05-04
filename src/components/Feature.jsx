@@ -63,34 +63,40 @@ export default () => {
   ]
 
   return (
-    <section className="pt-12 pb-48" style={{ backgroundColor: "#f2f3ef" }}>
-      <div className="max-w-screen-xl mx-auto px-4 text-gray-600 md:px-8">
-        <div className="max-w-xl space-y-3">
-          <h3 className="text-indigo-600 font-semibold">Features</h3>
-          <p className="text-gray-800 text-3xl font-semibold sm:text-4xl">
-            Grow with us!
-          </p>
-          <p>Join our community. Ask questions. Exchange ideas. Grow.</p>
-        </div>
-        <div className="mt-12">
-          <ul className="grid gap-x-12 divide-y [&>.feature-1]:pl-0 sm:grid-cols-2 sm:gap-y-8 sm:divide-y-0 lg:divide-x lg:grid-cols-3 lg:gap-x-0">
-            {features.map((item, idx) => (
-              <li
-                key={idx}
-                className={`feature-${idx + 1} space-y-3 py-8 lg:px-12 sm:py-0`}
-              >
-                <div className="w-12 h-12 border text-indigo-600 rounded-full flex items-center justify-center">
-                  {item.icon}
-                </div>
-                <h4 className="text-lg text-gray-800 font-semibold">
-                  {item.title}
-                </h4>
-                <p>{item.desc}</p>
-              </li>
-            ))}
-          </ul>
-        </div>
+    <div style={{ backgroundColor: "#f2f3ef" }}>
+      <div className="mx-auto" style={{ width: "70%" }}>
+        <section className="pt-12 pb-48 ">
+          <div className="max-w-screen-xl mx-auto px-4 text-gray-600 md:px-8">
+            <div className="max-w-xl space-y-3">
+              <h3 className="text-indigo-600 font-semibold">Features</h3>
+              <p className="text-gray-800 text-3xl font-semibold sm:text-4xl">
+                Grow with us!
+              </p>
+              <p>Join our community. Ask questions. Exchange ideas. Grow.</p>
+            </div>
+            <div className="mt-12">
+              <ul className="grid gap-x-12 divide-y [&>.feature-1]:pl-0 sm:grid-cols-2 sm:gap-y-8 sm:divide-y-0 lg:divide-x lg:grid-cols-3 lg:gap-x-0">
+                {features.map((item, idx) => (
+                  <li
+                    key={idx}
+                    className={`feature-${
+                      idx + 1
+                    } space-y-3 py-8 lg:px-12 sm:py-0`}
+                  >
+                    <div className="w-12 h-12 border text-indigo-600 rounded-full flex items-center justify-center">
+                      {item.icon}
+                    </div>
+                    <h4 className="text-lg text-gray-800 font-semibold">
+                      {item.title}
+                    </h4>
+                    <p>{item.desc}</p>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </section>
       </div>
-    </section>
+    </div>
   )
 }

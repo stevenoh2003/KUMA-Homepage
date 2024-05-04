@@ -55,13 +55,15 @@ export default NextAuth({
       return token
     },
     session: async ({ session, token }) => {
+      console.log("JWT Token in session callback:", token) // Log to see the token details
       session.user = {
         id: token.id,
         name: token.name,
         email: token.email,
         image: token.image,
-        discordId: token.discordId, // Add discordId to the session object
+        discordId: token.discordId,
       }
+      console.log("Session created:", session) // Log to verify session object
       return session
     },
   },

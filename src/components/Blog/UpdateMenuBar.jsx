@@ -2,8 +2,9 @@ import React from "react"
 import { useCurrentEditor } from "@tiptap/react"
 import { StyledButton, ButtonGroup } from "./StyledComponents"
 
-const MenuBar = () => {
-  const { editor } = useCurrentEditor()
+const MenuBar = ({ editor: passedEditor }) => {
+  const currentEditor = useCurrentEditor()
+  const editor = passedEditor || currentEditor
 
   if (!editor) {
     return null

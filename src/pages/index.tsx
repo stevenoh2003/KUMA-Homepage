@@ -44,9 +44,8 @@ const FeedPage = () => {
       <Hero />
       <Feature />
       <LogoGrid />
-      <FeaturedPosts />
+      {/* <FeaturedPosts /> */}
       <Team />
-      <Footer />
     </>
   )
 }

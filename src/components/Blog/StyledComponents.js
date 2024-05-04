@@ -19,8 +19,8 @@ export const StyledButton = styled.button`
   }
 
   &.is-active {
-    background-color: #bada55;
-    border-color: #ada;
+    background-color: #4f46e5;
+    color: white
   }
 
   &:disabled {
@@ -30,7 +30,7 @@ export const StyledButton = styled.button`
   }
 `
 export const StyledEditor = styled.div`
-  width: 60%;
+  width: 70%;
   margin: auto;
   padding: 20px;
 
@@ -39,7 +39,6 @@ export const StyledEditor = styled.div`
   }
 
   .ProseMirror {
-    border: 2px solid #ccc;
     border-radius: 5px;
     padding: 20px;
   }
@@ -50,7 +49,19 @@ export const StyledEditor = styled.div`
 
   ul,
   ol {
-    padding: 0 1rem;
+    padding-left: 1.5rem; /* Indent the lists */
+  }
+
+  ul {
+    list-style-type: disc; /* Default bullet points */
+  }
+
+  ol {
+    list-style-type: decimal; /* Numbered list */
+  }
+
+  li {
+    margin-bottom: 0.5em; /* Add space between each list item */
   }
 
   h1 {
@@ -88,6 +99,7 @@ export const StyledEditor = styled.div`
     ); /* Smallest, for least important headings */
     line-height: 1.5;
   }
+
   code,
   pre {
     background-color: rgba(97, 97, 97, 0.1);
@@ -95,14 +107,15 @@ export const StyledEditor = styled.div`
   }
 
   pre {
-    overflow: auto; // Ensures that content does not overflow
-    white-space: pre-wrap; // Wraps text as needed
-    word-break: break-word; // Prevents long strings from overflowing
+    overflow: auto;
+    white-space: pre-wrap;
+    word-break: break-word;
     background: #0d0d0d;
     color: #fff;
     font-family: "JetBrainsMono", monospace;
     padding: 0.75rem 1rem;
     border-radius: 0.5rem;
+
     code {
       color: inherit;
       padding: 0;

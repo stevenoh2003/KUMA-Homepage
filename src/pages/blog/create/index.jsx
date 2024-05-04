@@ -2,9 +2,9 @@ import React from "react"
 import { StyledEditor } from "src/components/Blog/StyledComponents"
 import MenuBar from "src/components/Blog/MenuBar"
 import { extensions, content } from "src/components/Blog/editorSettings"
-
+import TextAlign from "@tiptap/extension-text-align"
 import { EditorProvider } from "@tiptap/react"
-import Output from "src/components/Blog/Output"
+import CreateBlog from "src/components/Blog/CreateBlog"
 import { useRouter } from "next/router"
 
 const Editor = () => {
@@ -13,15 +13,29 @@ const Editor = () => {
 
 
   return (
-    <StyledEditor>
-      <EditorProvider
-        slotBefore={<MenuBar />}
-        extensions={extensions}
-        content={content}
-      >
-      <Output />
-      </EditorProvider>
-    </StyledEditor>
+    <div style={{ backgroundColor: "#f2f3ef" }}>
+      <StyledEditor>
+        <div className="max-w-lg mx-auto space-y-3 sm:text-center">
+          <h3 className="text-indigo-600 font-semibold">Create a Blog Post</h3>
+          <p>Fill out the form below to share your ideas and stories!</p>
+        </div>
+        <hr
+          style={{
+            color: "black",
+            backgroundColor: "black",
+            height: 1,
+          }}
+        />
+        <EditorProvider
+          slotBefore={<MenuBar />}
+          extensions={extensions}
+          content={content}
+        >
+
+          <CreateBlog />
+        </EditorProvider>
+      </StyledEditor>
+    </div>
   )
 
 }
