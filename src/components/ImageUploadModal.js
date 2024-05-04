@@ -49,6 +49,7 @@ const ImageUploadModal = ({ onUpload, onClose }) => {
     return canvas.toDataURL("image/jpeg")
   }
 
+  
   // Handle form submission
   const handleSubmit = async (event) => {
     event.preventDefault()
