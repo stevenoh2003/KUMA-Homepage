@@ -40,8 +40,9 @@ export default async function handler(req, res) {
     const newTitle = Array.isArray(fields.newTitle)
       ? fields.newTitle[0]
       : fields.newTitle
-    const isPublic = fields.isPublic === "true" // Expecting string values ("true" or "false") for the checkbox
+    const isPublic = String(fields.isPublic).toLowerCase() === "true"
     const thumbnailFile = files.thumbnail
+    console.log("Updating isPublic value:", isPublic) // Confirm the boolean value
 
     try {
       await dbConnect()
