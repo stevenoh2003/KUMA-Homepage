@@ -1,0 +1,28 @@
+{
+  "name": "tiptap-imagresize",
+  "description": "image extension + resize function for tiptap",
+  "version": "1.1.0",
+  "homepage": "https://github.com/breakerh/ ",
+  "license": "MIT",
+  "keywords": [
+    "tiptap",
+    "tiptap extension"
+  ],
+  "peerDependencies": {
+    "@tiptap/core": "^2.0.0-beta.1",
+    "@tiptap/extension-image": "^2.0.0-beta.27",
+    "@tiptap/react": "^2.0.0-beta.109",
+    "react": "^17.0.2 || ^18"
+  },
+  "main": "src/index.ts",
+  "files": [
+    "src"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/breakerh/tiptap-image-resize"
+  },
+  "dependencies": {
+    "@types/react": "^18.0.38"
+  }
+}

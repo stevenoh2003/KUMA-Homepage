@@ -38,6 +38,7 @@ export default async function handler(req, res) {
       owner: post.owner,
       thumbnail_url: post.thumbnail_url,
       isPublic: post.isPublic, // Add isPublic to the response
+      created_at: post.created_at
     })
   } catch (error) {
     console.error("Failed to fetch post data:", error)

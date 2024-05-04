@@ -1,4 +1,3 @@
-// pages/blog/index.js
 import React, { useEffect, useState } from "react"
 import Link from "next/link"
 import { useRouter } from "next/router"
@@ -17,6 +16,7 @@ const BlogIndex = () => {
     setPosts(data.posts || [])
     setTotalPages(data.totalPages || 1)
     setCurrentPage(data.currentPage || page)
+    console.log(data)
   }
 
   useEffect(() => {
@@ -29,7 +29,6 @@ const BlogIndex = () => {
     }
   }
 
-  // Generates an array of page numbers for pagination links
   const generatePageList = () => {
     const pages = []
     for (let i = 1; i <= totalPages; i++) {
@@ -92,9 +91,14 @@ const BlogIndex = () => {
                       />
                     </div>
                     <div className="mt-3 space-y-2">
-                      <span className="block text-indigo-600 text-sm">
-                        {new Date(post.created_at).toLocaleDateString()}
-                      </span>
+                      <div className="flex justify-between items-center text-sm">
+                        <span className="block text-indigo-600">
+                          {new Date(post.created_at).toLocaleDateString()}
+                        </span>
+                        <span className="block text-gray-600">
+                          {post.ownerName || "Unknown Author"}
+                        </span>
+                      </div>
                       <h3 className="text-lg text-gray-800 duration-150 group-hover:text-indigo-600 font-semibold">
                         {post.title}
                       </h3>

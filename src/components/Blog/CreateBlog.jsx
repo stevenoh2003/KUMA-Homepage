@@ -1,16 +1,20 @@
-// src/pages/CreateBlog.js
 import { useSession } from "next-auth/react"
+import { useEditor, EditorContent } from "@tiptap/react"
 import { useCurrentEditor } from "@tiptap/react"
-import { useState } from "react"
+import { useState, useCallback } from "react"
+import { useRouter } from "next/router"
+import ImageUploadModal from "../../components/ImageUploadModal"
 
 const CreateBlog = () => {
   const { data: session } = useSession()
-  const { editor } = useCurrentEditor()
+  const router = useRouter()
+  const [isModalOpen, setIsModalOpen] = useState(false)
   const [s3Key, setS3Key] = useState(null)
   const [thumbnail, setThumbnail] = useState(null)
   const [title, setTitle] = useState("")
   const [isPublic, setIsPublic] = useState(false)
   const [errorMessage, setErrorMessage] = useState("")
+  const { editor } = useCurrentEditor()
 
   const handleThumbnailChange = (event) => {
     setThumbnail(event.target.files[0])
@@ -80,6 +84,7 @@ const CreateBlog = () => {
       if (isNew && data.s3_key) {
         setS3Key(data.s3_key)
         setErrorMessage("")
+        router.push("/blog") // Redirect to the blog page after successful post creation
       }
     } catch (error) {
       console.error("Error during fetch operation:", error)
@@ -140,6 +145,9 @@ const CreateBlog = () => {
               Create New Post
             </button>
           </form>
+          <div className="mt-10">
+            <EditorContent editor={editor} />
+          </div>
         </div>
       </div>
     </main>

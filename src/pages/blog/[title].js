@@ -8,8 +8,13 @@ import "katex/dist/katex.min.css"
 import Mathematics from "@tiptap-pro/extension-mathematics"
 import MenuBar from "src/components/Blog/UpdateMenuBar"
 import TextAlign from "@tiptap/extension-text-align"
+import Image from "@tiptap/extension-image"
+import Dropcursor from "@tiptap/extension-dropcursor"
+import ImageExtension from "src/components/tiptap-imagresize/src/index"
 
 const PostPage = () => {
+
+
   const router = useRouter()
   const { title } = router.query
   const [postContent, setPostContent] = useState({
@@ -18,6 +23,7 @@ const PostPage = () => {
     owner: "",
     thumbnail_url: "",
     isPublic: false, // Track existing `isPublic` value
+    created_at: ""
   })
   const [userInfo, setUserInfo] = useState(null)
   const { data: session } = useSession()
@@ -34,16 +40,29 @@ const PostPage = () => {
       TextAlign.configure({
         types: ["heading", "paragraph"],
       }),
+      Dropcursor.configure({
+        class: "",
+      }),
+      Image.configure({
+        HTMLAttributes: {
+          class: "tiptap-image"
+        },
+      }),
+      // ImageExtension,
     ],
     content: "",
     editable: false,
   })
 
-  useEffect(() => {
-    if (editor) {
-      editor.setEditable(editable)
-    }
-  }, [editor, editable])
+useEffect(() => {
+  // If editable is null, default to false
+  const canEdit = editable === null ? false : editable
+
+  if (editor) {
+    editor.setEditable(canEdit)
+  }
+}, [editor, editable])
+
 
   useEffect(() => {
     if (title && editor) {
@@ -162,7 +181,45 @@ const PostPage = () => {
           </div>
         </div>
       </div>
-      <div className="max-w-screen-xl mx-auto px-4 py-12 md:px-8 text-gray-600">
+      <div className="mt-8">
+        {userInfo ? (
+          <div className="flex items-center justify-between mt-4 mx-auto max-w-screen-md">
+            {/* Author Profile */}
+            <div className="flex items-center">
+              {userInfo.profilePicUrl ? (
+                <img
+                  src={userInfo.profilePicUrl}
+                  alt="Profile"
+                  className="w-24 h-24 rounded-full object-cover"
+                />
+              ) : (
+                <div className="w-24 h-24 bg-gray-200 rounded-full" />
+              )}
+              <div className="ml-4">
+                <h4 className="text-xl font-medium text-gray-700">
+                  {userInfo.name}
+                </h4>
+              </div>
+            </div>
+
+            {/* Created At (aligned to the right) */}
+            <div className="text-right">
+              <p className="text-sm text-gray-500">
+                {new Date(postContent.created_at).toLocaleDateString()}{" "}
+                {/* Date Format */}
+              </p>
+              <p className="text-sm text-gray-500">
+                {new Date(postContent.created_at).toLocaleTimeString()}{" "}
+                {/* Time Format */}
+              </p>
+            </div>
+          </div>
+        ) : (
+          <p className="mt-4 text-gray-600">No user information available.</p>
+        )}
+      </div>
+
+      <div className="max-w-screen-xl mx-auto px-4 py-4 md:px-8 text-gray-600">
         <StyledEditor>
           {editable && <MenuBar editor={editor} />}
           {editable && (
@@ -247,27 +304,6 @@ const PostPage = () => {
             </div>
           </div>
         )}
-        <div className="mt-8">
-          <h2 className="text-2xl font-semibold text-gray-800">Author</h2>
-          {userInfo ? (
-            <div className="mt-4 text-center">
-              {userInfo.profilePicUrl ? (
-                <img
-                  src={userInfo.profilePicUrl}
-                  alt="Profile"
-                  className="w-24 h-24 mx-auto rounded-full object-cover"
-                />
-              ) : (
-                <div className="w-24 h-24 mx-auto bg-gray-200 rounded-full" />
-              )}
-              <h4 className="mt-4 text-xl font-medium text-gray-700">
-                {userInfo.name}
-              </h4>
-            </div>
-          ) : (
-            <p className="mt-4 text-gray-600">No user information available.</p>
-          )}
-        </div>
       </div>
     </div>
   )

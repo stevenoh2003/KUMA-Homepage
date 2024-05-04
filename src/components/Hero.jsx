@@ -8,31 +8,28 @@ const Hero = () => {
   const [email, setEmail] = useState("")
   const router = useRouter()
 
-
-const handleEmail = async (event) => {
-  event.preventDefault()
-  try {
-    const response = await fetch("/api/submitEmail", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ email: email }),
-    })
-    const data = await response.json()
-    if (response.ok) {
-      console.log(data.message) // Log success message
-      setShowModal(false) // Close modal after successful submission
-      window.location.href = "https://discord.gg/MgUg5sF7v8" // Redirect to Discord in the same tab
-    } else {
-      throw new Error(data.error || "Something went wrong.")
+  const handleEmail = async (event) => {
+    event.preventDefault()
+    try {
+      const response = await fetch("/api/submitEmail", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email: email }),
+      })
+      const data = await response.json()
+      if (response.ok) {
+        console.log(data.message) // Log success message
+        setShowModal(false) // Close modal after successful submission
+        window.location.href = "https://discord.gg/MgUg5sF7v8" // Redirect to Discord in the same tab
+      } else {
+        throw new Error(data.error || "Something went wrong.")
+      }
+    } catch (error) {
+      console.error("Failed to submit email:", error)
     }
-  } catch (error) {
-    console.error("Failed to submit email:", error)
   }
-}
-
-
 
   return (
     <>
@@ -45,13 +42,13 @@ const handleEmail = async (event) => {
         }}
       >
         <div
-          className="flex items-center justify-center h-full relative z-10 px-10"
+          className="flex flex-col lg:flex-row items-center justify-center h-full relative z-10 px-10"
           style={{ maxWidth: "900px", margin: "0 auto" }}
         >
-          <div className="flex justify-end w-2/5">
+          <div className="flex justify-center lg:justify-end w-full lg:w-2/5 mb-6 lg:mb-0">
             <Image alt="Logo" src={Logo} width="320" height="320" priority />
           </div>
-          <div className="flex items-center justify-center w-3/5">
+          <div className="flex items-center justify-center w-full lg:w-3/5">
             <div className="text-center">
               <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">
                 Explore the Next Frontier with{" "}
@@ -63,7 +60,7 @@ const handleEmail = async (event) => {
                   kuma.
                 </span>
               </h1>
-              <p className="mt-4 text-lg leading-8 text-gray-600">
+              <p className="mt-4 text-lg leading-8 text-gray-600 hidden lg:block">
                 A Waseda University-based community.
               </p>
               <div className="mt-6">

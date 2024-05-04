@@ -1,5 +1,7 @@
 import React from 'react'
 import waseda from "../assets/pictures/waseda.png"
+import imperial from "../assets/pictures/imperial.png"
+import umich from "../assets/pictures/umich.png"
 import Image from "next/image"
 const LogoGrid = () => {
 return (
@@ -13,6 +15,12 @@ return (
           {/* LOGO 1 */}
           <li>
             <Image alt="Logo" src={waseda} className="w-28" priority />
+          </li>
+          <li>
+            <Image alt="Logo" src={imperial} className="w-40" priority />
+          </li>
+          <li>
+            <Image alt="Logo" src={umich} className="w-28" priority />
           </li>
 
           {/* LOGO 2 */}

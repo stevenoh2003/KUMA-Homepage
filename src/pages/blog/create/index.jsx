@@ -1,17 +1,12 @@
+// src/pages/Editor.js
 import React from "react"
 import { StyledEditor } from "src/components/Blog/StyledComponents"
 import MenuBar from "src/components/Blog/MenuBar"
 import { extensions, content } from "src/components/Blog/editorSettings"
-import TextAlign from "@tiptap/extension-text-align"
 import { EditorProvider } from "@tiptap/react"
 import CreateBlog from "src/components/Blog/CreateBlog"
-import { useRouter } from "next/router"
 
-const Editor = () => {
-    const router = useRouter()
-
-
-
+const EditorPage = () => {
   return (
     <div style={{ backgroundColor: "#f2f3ef" }}>
       <StyledEditor>
@@ -31,13 +26,11 @@ const Editor = () => {
           extensions={extensions}
           content={content}
         >
-
           <CreateBlog />
         </EditorProvider>
       </StyledEditor>
     </div>
   )
-
 }
 
-export default Editor
+export default EditorPage

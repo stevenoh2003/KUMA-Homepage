@@ -1,78 +1,107 @@
-import React from "react"
+import React, { useState, useCallback } from "react"
 import { useCurrentEditor } from "@tiptap/react"
 import { StyledButton, ButtonGroup } from "./StyledComponents"
+import ImageUploadModal from "../../components/ImageUploadModal" // Ensure the path matches your actual modal file location
 
 const MenuBar = ({ editor: passedEditor }) => {
   const currentEditor = useCurrentEditor()
   const editor = passedEditor || currentEditor
+  const [isModalOpen, setIsModalOpen] = useState(false)
 
+  const openModal = () => {
+    setIsModalOpen(true)
+  }
+
+  const closeModal = () => {
+    setIsModalOpen(false)
+  }
+
+  const handleImageUpload = useCallback(
+    (url) => {
+      editor.chain().focus().setImage({ src: url }).run()
+    },
+    [editor]
+  )
   if (!editor) {
     return null
   }
 
   return (
-    <ButtonGroup>
-      <StyledButton
-        onClick={() => editor.chain().focus().toggleBold().run()}
-        disabled={!editor.can().chain().focus().toggleBold().run()}
-        className={editor.isActive("bold") ? "is-active" : ""}
-      >
-        bold
-      </StyledButton>
-      <StyledButton
-        onClick={() => editor.chain().focus().toggleItalic().run()}
-        disabled={!editor.can().chain().focus().toggleItalic().run()}
-        className={editor.isActive("italic") ? "is-active" : ""}
-      >
-        italic
-      </StyledButton>
-      <StyledButton
-        onClick={() => editor.chain().focus().toggleStrike().run()}
-        disabled={!editor.can().chain().focus().toggleStrike().run()}
-        className={editor.isActive("strike") ? "is-active" : ""}
-      >
-        strike
-      </StyledButton>
-      <StyledButton
-        onClick={() => editor.chain().focus().toggleCode().run()}
-        disabled={!editor.can().chain().focus().toggleCode().run()}
-        className={editor.isActive("code") ? "is-active" : ""}
-      >
-        code
-      </StyledButton>
-      <StyledButton
-        onClick={() => editor.chain().focus().unsetAllMarks().run()}
-      >
-        clear marks
-      </StyledButton>
-      {/* <StyledButton onClick={() => editor.chain().focus().clearNodes().run()}>
+    <>
+      <ButtonGroup>
+        <StyledButton
+          onClick={() => editor.chain().focus().toggleBold().run()}
+          disabled={!editor.can().chain().focus().toggleBold().run()}
+          className={editor.isActive("bold") ? "is-active" : ""}
+        >
+          bold
+        </StyledButton>
+        <StyledButton
+          onClick={() => editor.chain().focus().toggleItalic().run()}
+          disabled={!editor.can().chain().focus().toggleItalic().run()}
+          className={editor.isActive("italic") ? "is-active" : ""}
+        >
+          italic
+        </StyledButton>
+        <StyledButton
+          onClick={() => editor.chain().focus().toggleStrike().run()}
+          disabled={!editor.can().chain().focus().toggleStrike().run()}
+          className={editor.isActive("strike") ? "is-active" : ""}
+        >
+          strike
+        </StyledButton>
+        <StyledButton
+          onClick={() => editor.chain().focus().toggleCode().run()}
+          disabled={!editor.can().chain().focus().toggleCode().run()}
+          className={editor.isActive("code") ? "is-active" : ""}
+        >
+          code
+        </StyledButton>
+        <StyledButton
+          onClick={() => editor.chain().focus().unsetAllMarks().run()}
+        >
+          clear marks
+        </StyledButton>
+        {/* <StyledButton onClick={() => editor.chain().focus().clearNodes().run()}>
         clear nodes
       </StyledButton> */}
-      <StyledButton
-        onClick={() => editor.chain().focus().setParagraph().run()}
-        className={editor.isActive("paragraph") ? "is-active" : ""}
-      >
-        paragraph
-      </StyledButton>
-      <StyledButton
-        onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
-        className={editor.isActive("heading", { level: 1 }) ? "is-active" : ""}
-      >
-        h1
-      </StyledButton>
-      <StyledButton
-        onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
-        className={editor.isActive("heading", { level: 2 }) ? "is-active" : ""}
-      >
-        h2
-      </StyledButton>
-      <StyledButton
-        onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
-        className={editor.isActive("heading", { level: 3 }) ? "is-active" : ""}
-      >
-        h3
-      </StyledButton>
-      {/* <StyledButton
+        <StyledButton
+          onClick={() => editor.chain().focus().setParagraph().run()}
+          className={editor.isActive("paragraph") ? "is-active" : ""}
+        >
+          paragraph
+        </StyledButton>
+        <StyledButton
+          onClick={() =>
+            editor.chain().focus().toggleHeading({ level: 1 }).run()
+          }
+          className={
+            editor.isActive("heading", { level: 1 }) ? "is-active" : ""
+          }
+        >
+          h1
+        </StyledButton>
+        <StyledButton
+          onClick={() =>
+            editor.chain().focus().toggleHeading({ level: 2 }).run()
+          }
+          className={
+            editor.isActive("heading", { level: 2 }) ? "is-active" : ""
+          }
+        >
+          h2
+        </StyledButton>
+        <StyledButton
+          onClick={() =>
+            editor.chain().focus().toggleHeading({ level: 3 }).run()
+          }
+          className={
+            editor.isActive("heading", { level: 3 }) ? "is-active" : ""
+          }
+        >
+          h3
+        </StyledButton>
+        {/* <StyledButton
         onClick={() => editor.chain().focus().toggleHeading({ level: 4 }).run()}
         className={editor.isActive("heading", { level: 4 }) ? "is-active" : ""}
       >
@@ -90,51 +119,51 @@ const MenuBar = ({ editor: passedEditor }) => {
       >
         h6
       </StyledButton> */}
-      <StyledButton
-        onClick={() => editor.chain().focus().toggleBulletList().run()}
-        className={editor.isActive("bulletList") ? "is-active" : ""}
-      >
-        bullet list
-      </StyledButton>
-      <StyledButton
-        onClick={() => editor.chain().focus().toggleOrderedList().run()}
-        className={editor.isActive("orderedList") ? "is-active" : ""}
-      >
-        ordered list
-      </StyledButton>
-      <StyledButton
-        onClick={() => editor.chain().focus().toggleCodeBlock().run()}
-        className={editor.isActive("codeBlock") ? "is-active" : ""}
-      >
-        code block
-      </StyledButton>
-      <StyledButton
-        onClick={() => editor.chain().focus().toggleBlockquote().run()}
-        className={editor.isActive("blockquote") ? "is-active" : ""}
-      >
-        blockquote
-      </StyledButton>
-      <StyledButton
-        onClick={() => editor.chain().focus().setHorizontalRule().run()}
-      >
-        horizontal rule
-      </StyledButton>
-      {/* <StyledButton onClick={() => editor.chain().focus().setHardBreak().run()}>
+        <StyledButton
+          onClick={() => editor.chain().focus().toggleBulletList().run()}
+          className={editor.isActive("bulletList") ? "is-active" : ""}
+        >
+          bullet list
+        </StyledButton>
+        <StyledButton
+          onClick={() => editor.chain().focus().toggleOrderedList().run()}
+          className={editor.isActive("orderedList") ? "is-active" : ""}
+        >
+          ordered list
+        </StyledButton>
+        <StyledButton
+          onClick={() => editor.chain().focus().toggleCodeBlock().run()}
+          className={editor.isActive("codeBlock") ? "is-active" : ""}
+        >
+          code block
+        </StyledButton>
+        <StyledButton
+          onClick={() => editor.chain().focus().toggleBlockquote().run()}
+          className={editor.isActive("blockquote") ? "is-active" : ""}
+        >
+          blockquote
+        </StyledButton>
+        <StyledButton
+          onClick={() => editor.chain().focus().setHorizontalRule().run()}
+        >
+          horizontal rule
+        </StyledButton>
+        {/* <StyledButton onClick={() => editor.chain().focus().setHardBreak().run()}>
         hard break
       </StyledButton> */}
-      <StyledButton
-        onClick={() => editor.chain().focus().undo().run()}
-        disabled={!editor.can().chain().focus().undo().run()}
-      >
-        undo
-      </StyledButton>
-      <StyledButton
-        onClick={() => editor.chain().focus().redo().run()}
-        disabled={!editor.can().chain().focus().redo().run()}
-      >
-        redo
-      </StyledButton>
-      {/* <StyledButton
+        <StyledButton
+          onClick={() => editor.chain().focus().undo().run()}
+          disabled={!editor.can().chain().focus().undo().run()}
+        >
+          undo
+        </StyledButton>
+        <StyledButton
+          onClick={() => editor.chain().focus().redo().run()}
+          disabled={!editor.can().chain().focus().redo().run()}
+        >
+          redo
+        </StyledButton>
+        {/* <StyledButton
         onClick={() => editor.chain().focus().setColor("#958DF1").run()}
         className={
           editor.isActive("textStyle", { color: "#958DF1" }) ? "is-active" : ""
@@ -142,13 +171,22 @@ const MenuBar = ({ editor: passedEditor }) => {
       >
         purple
       </StyledButton> */}
-      <StyledButton
-        onClick={() => editor.chain().focus().setTextAlign("center").run()}
-        className={editor.isActive({ textAlign: "center" }) ? "is-active" : ""}
-      >
-        center
-      </StyledButton>
-    </ButtonGroup>
+        <StyledButton
+          onClick={() => editor.chain().focus().setTextAlign("center").run()}
+          className={
+            editor.isActive({ textAlign: "center" }) ? "is-active" : ""
+          }
+        >
+          center
+        </StyledButton>
+        <StyledButton onClick={openModal} className="">
+          Upload Image
+        </StyledButton>
+      </ButtonGroup>
+      {isModalOpen && (
+        <ImageUploadModal onUpload={handleImageUpload} onClose={closeModal} />
+      )}
+    </>
   )
 }
 

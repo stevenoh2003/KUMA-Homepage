@@ -86,3 +86,48 @@
         margin: 2rem 0;
     }
 }
+.image-resizer {
+    position: relative;
+    /* display: inline-block; */
+}
+
+.resize-trigger {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    width: 10px;
+    height: 10px;
+    background-color: grey;
+    cursor: se-resize;
+}
+
+.image-resizer:hover .resize-trigger {
+    opacity: 1;
+}
+
+/* Ensure the images inside .tiptap are centered horizontally */
+.tiptap img {
+    
+    display: block;
+    /* Makes margin auto effective */
+    margin-left: auto;
+    /* Centers the image horizontally */
+    margin-right: auto;
+    /* Centers the image horizontally */
+    max-width: 100%;
+    /* Prevents the image from overflowing */
+    height: auto;
+    /* Keeps the aspect ratio */
+}
+img.tiptap-image::after {
+    content: "\n";
+    /* Adds a visible content block */
+    display: block;
+    /* Make it take a full line */
+    min-height: 1em;
+    /* Set a minimum height for the empty row */
+    border-top: 1px solid #ddd;
+    /* Optional: Adds a visible horizontal line */
+    margin-top: 5px;
+    /* Adds space between the image and row */
+}

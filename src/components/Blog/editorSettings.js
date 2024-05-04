@@ -4,6 +4,9 @@ import { Color } from "@tiptap/extension-color"
 import ListItem from "@tiptap/extension-list-item"
 import TextStyle from "@tiptap/extension-text-style"
 import { Mathematics } from "@tiptap-pro/extension-mathematics"
+import Image from "@tiptap/extension-image"
+import Dropcursor from "@tiptap/extension-dropcursor"
+
 import "katex/dist/katex.min.css"
 
 
@@ -21,6 +24,8 @@ export const extensions = [
     types: ["heading", "paragraph"],
   }),
   Mathematics,
+  Image,
+  Dropcursor,
 ]
 
 export const content = `

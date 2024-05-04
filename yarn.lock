@@ -1973,10 +1973,10 @@
   resolved "https://registry.npmjs.org/@tiptap/extension-document/-/extension-document-2.3.0.tgz"
   integrity sha512-WC55SMrtlsNOnHXpzbXDzJOp7eKmZV0rXooKmvCDqoiLO/DKpyQXyF+0UHfcRPmUAi2GWFPaer7+p1H9xzcjXg==
 
-"@tiptap/extension-dropcursor@^2.0.3", "@tiptap/extension-dropcursor@^2.3.0":
-  version "2.3.0"
-  resolved "https://registry.npmjs.org/@tiptap/extension-dropcursor/-/extension-dropcursor-2.3.0.tgz"
-  integrity sha512-WWxxGQPWdbzxyYP6jtBYSq4wMRhINhI0wBC8pgkxTVwCIWftMuYj++FP4LLIpuWgj78PWApuoM0QQxk4Lj7FOw==
+"@tiptap/extension-dropcursor@^2.0.3", "@tiptap/extension-dropcursor@^2.3.0", "@tiptap/extension-dropcursor@^2.3.1":
+  version "2.3.1"
+  resolved "https://registry.npmjs.org/@tiptap/extension-dropcursor/-/extension-dropcursor-2.3.1.tgz"
+  integrity sha512-xDG1Z01ftRI4mIOY+bPuG53xZ9FfVd6hzjNchwFHRlU3E+/2O+DsEBy/pJuHmpnFx1B/1ANbssoidGvK3LIPYw==
 
 "@tiptap/extension-floating-menu@^2.3.0":
   version "2.3.0"
@@ -2014,6 +2014,11 @@
   version "2.3.0"
   resolved "https://registry.npmjs.org/@tiptap/extension-horizontal-rule/-/extension-horizontal-rule-2.3.0.tgz"
   integrity sha512-4DB8GU3uuDzzyqUmONIb3CHXcQ6Nuy4mHHkFSmUyEjg1i5eMQU5H7S6mNvZbltcJB2ImgCSwSMlj1kVN3MLIPg==
+
+"@tiptap/extension-image@^2.3.1":
+  version "2.3.1"
+  resolved "https://registry.npmjs.org/@tiptap/extension-image/-/extension-image-2.3.1.tgz"
+  integrity sha512-3RhVBySQA2LbftWhtZ0p2Mqf9lihNAYs3uQ3iyaB+BYViQiHyVpui09Wny0BwNy0oV6ryUWjBifko2Z1AZgANw==
 
 "@tiptap/extension-italic@^2.0.3", "@tiptap/extension-italic@^2.3.0":
   version "2.3.0"
@@ -2273,13 +2278,12 @@
   dependencies:
     "@types/react" "*"
 
-"@types/react@*", "@types/react@^18.0.26", "@types/react@>=16.9.11":
-  version "18.0.26"
-  resolved "https://registry.npmjs.org/@types/react/-/react-18.0.26.tgz"
-  integrity sha512-hCR3PJQsAIXyxhTNSiDFY//LhnMZWpNNr5etoCqx/iUfGc5gXWtQR2Phl908jVR6uPXacojQWTg4qRpkxTuGug==
+"@types/react@*", "@types/react@^18.0.26", "@types/react@^18.0.38", "@types/react@>=16.9.11":
+  version "18.3.1"
+  resolved "https://registry.npmjs.org/@types/react/-/react-18.3.1.tgz"
+  integrity sha512-V0kuGBX3+prX+DQ/7r2qsv1NsdfnCLnTgnRJ1pYnxykBhGMz+qj+box5lq7XsO5mtZsBqpjwwTu/7wszPfMBcw==
   dependencies:
     "@types/prop-types" "*"
-    "@types/scheduler" "*"
     csstype "^3.0.2"
 
 "@types/responselike@*", "@types/responselike@^1.0.0":
@@ -2288,11 +2292,6 @@
   integrity sha512-85Y2BjiufFzaMIlvJDvTTB8Fxl2xfLo4HgmHzVBz08w4wDePCTjYw66PdrolO0kzli3yam/YCgRufyo1DdQVTA==
   dependencies:
     "@types/node" "*"
-
-"@types/scheduler@*":
-  version "0.16.2"
-  resolved "https://registry.npmjs.org/@types/scheduler/-/scheduler-0.16.2.tgz"
-  integrity sha512-hppQEBDmlwhFAXKJX2KnWLYu5yMfi91yazPb2l+lbJiwW+wdo1gNeRA+3RgNSO39WYX2euey41KEwnqesU2Jew==
 
 "@types/stylis@4.2.0":
   version "4.2.0"
@@ -7651,6 +7650,13 @@ tippy.js@^6.3.7:
   integrity sha512-E1d3oP2emgJ9dRQZdf3Kkn0qJgI6ZLpyS5z6ZkY1DF3kaQaBsGZsndEpHwx+eC+tYM41HaSNvNtLx8tU57FzTQ==
   dependencies:
     "@popperjs/core" "^2.9.0"
+
+tiptap-imagresize@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.npmjs.org/tiptap-imagresize/-/tiptap-imagresize-1.1.0.tgz"
+  integrity sha512-lX3rIhyDzO17ngZALLj5dg3QG1jXqLg3rsOp4AU30m4i553u572z+uas1GIhODYWDrFU9cywOwNhu1HhgAaggw==
+  dependencies:
+    "@types/react" "^18.0.38"
 
 titleize@^3.0.0:
   version "3.0.0"
