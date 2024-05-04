@@ -30,7 +30,10 @@ function App({ Component, pageProps }: AppPropsWithLayout) {
         <Hydrate state={pageProps.dehydratedState}>
           <AuthProvider>
             <RootLayout>{getLayout(<Component {...pageProps} />)}</RootLayout>
-            <Footer />
+            <div style={{ backgroundColor: "#f2f3ef" }}>
+              {" "}
+              <Footer />
+            </div>
           </AuthProvider>
         </Hydrate>
       </QueryClientProvider>

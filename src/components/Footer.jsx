@@ -24,8 +24,8 @@ export default () => {
 
   return (
     <footer
-      className="text-gray-500 bg-white px-4 py-5 max-w-screen-xl mx-auto md:px-8"
-      style={{ backgroundColor: "#f2f3ef" }}
+      className="text-gray-500 px-4 py-5 max-w-screen-xl mx-auto md:px-8"
+      style={{ backgroundColor: "#f2f3ef"}}
     >
       <div className="max-w-lg sm:mx-auto sm:text-center">
         <Image alt="Logo" src={Logo} className="w-32 sm:mx-auto" />
