@@ -53,7 +53,7 @@ const handleSubmit = async (event) => {
     // Redirect to login page upon successful registration
     router.push("/auth/signin")
   } catch (error) {
-    alert(error.response.data.message)
+    console.log(error.response.data.message)
   }
 }
 
