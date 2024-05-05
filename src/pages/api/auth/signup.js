@@ -1,10 +1,10 @@
 import dbConnect from "../../../libs/mongoose"
-import User from "src/libs/model/User.js" // Verify the path
+import User from "src/libs/model/User.js" // Ensure the path is correct
 import bcrypt from "bcryptjs"
 import { IncomingForm } from "formidable"
 import fs from "fs"
 import path from "path"
-import { Upload } from "@aws-sdk/lib-storage"
+import { PutObjectCommand } from "@aws-sdk/client-s3"
 import s3Client from "../../../libs/aws-config"
 
 export const config = {
@@ -34,9 +34,7 @@ export default async function handler(req, res) {
         .json({ message: "File upload error", error: err.toString() })
     }
 
-    console.log(fields) // Debugging: Ensure correct form data is received
-
-    // Extract form fields and sanitize
+    // Extract form fields and sanitize them
     const { name, email, password, discordId } = fields
     const cleanName = Array.isArray(name) ? name[0] : name
     const cleanEmail =
@@ -58,23 +56,20 @@ export default async function handler(req, res) {
         return res.status(409).json({ message: "Email already in use" })
       }
 
-      // Define the S3 upload parameters
-      const params = {
+      // Set up the S3 upload parameters
+      const s3Key = `${Date.now()}_${file.originalFilename}`
+      const uploadCommand = new PutObjectCommand({
         Bucket: process.env.S3_BUCKET_NAME,
-        Key: `${Date.now()}_${file.originalFilename}`,
+        Key: s3Key,
         Body: fs.createReadStream(file.filepath),
         ContentType: file.mimetype,
         ACL: "public-read",
-      }
-
-      // Upload to S3 using the Upload class from lib-storage
-      const upload = new Upload({
-        client: s3Client,
-        params,
       })
-      await upload.done()
 
-      // Remove the local file after uploading to S3
+      // Upload the file to S3 using the imported s3Client
+      await s3Client.send(uploadCommand)
+
+      // Delete the local file after uploading to S3
       fs.unlink(file.filepath, (unlinkErr) => {
         if (unlinkErr) {
           console.error("Error deleting local file:", unlinkErr)
@@ -90,11 +85,8 @@ export default async function handler(req, res) {
         email: cleanEmail,
         password: hashedPassword,
         discordId: cleanDiscordId,
-        profilePicUrl: `https://${process.env.S3_BUCKET_NAME}.s3.${process.env.S3_REGION}.amazonaws.com/${params.Key}`,
+        profilePicUrl: `https://${process.env.S3_BUCKET_NAME}.s3.${process.env.S3_REGION}.amazonaws.com/${s3Key}`,
       })
-
-      // Log the new user for debugging purposes
-      console.log(newUser)
 
       // Respond with the created user (excluding sensitive info)
       res.status(201).json({
