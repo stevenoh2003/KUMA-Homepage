@@ -1,8 +1,5 @@
-// src/pages/api/posts/uploadThumbnail.js
 import { IncomingForm } from "formidable"
-import fs from "fs"
-import path from "path"
-import { PutObjectCommand } from "@aws-sdk/client-s3"
+import { createPresignedPost } from "@aws-sdk/s3-presigned-post"
 import s3Client from "src/libs/aws-config"
 
 export const config = {
@@ -16,62 +13,56 @@ export default async function handler(req, res) {
     return res.status(405).json({ message: "Method Not Allowed" })
   }
 
-  // Ensure the upload directory exists
-  const uploadDir = path.join(process.cwd(), "uploads")
-  if (!fs.existsSync(uploadDir)) {
-    fs.mkdirSync(uploadDir, { recursive: true })
-  }
+  const form = new IncomingForm()
 
-  // Configure formidable to handle file uploads
-  const form = new IncomingForm({ uploadDir, keepExtensions: true })
-
-  form.parse(req, async (err, fields, files) => {
+  form.parse(req, async (err, fields) => {
     if (err) {
       console.error("Error while parsing form:", err)
       return res
         .status(500)
-        .json({ message: "File upload error", error: err.toString() })
+        .json({ message: "Form parsing error", error: err.toString() })
     }
 
-    // Retrieve the uploaded file
-    const file = files.thumbnail && files.thumbnail[0]
-    if (!file) {
-      return res.status(400).json({ message: "No thumbnail file provided" })
-    }
+    // Extract desired image filename and type
+    const { filename, filetype } = fields
+    const cleanFilename = Array.isArray(filename) ? filename[0] : filename
+    const cleanFiletype = Array.isArray(filetype) ? filetype[0] : filetype
 
-    const fileStream = fs.createReadStream(file.filepath)
-    const s3Key = `thumbnails/${Date.now()}_${file.originalFilename}`
-
-    // Set up S3 parameters
-    const params = {
-      Bucket: process.env.S3_BUCKET_NAME,
-      Key: s3Key,
-      Body: fileStream,
-      ContentType: file.mimetype,
-      ACL: "public-read", // Make the uploaded file public
+    // Validate the fields
+    if (!cleanFilename || !cleanFiletype) {
+      return res
+        .status(400)
+        .json({ message: "Filename and filetype are required." })
     }
 
     try {
-      // Upload to S3
-      await s3Client.send(new PutObjectCommand(params))
-
-      // Delete the locally uploaded file
-      fs.unlink(file.filepath, (unlinkErr) => {
-        if (unlinkErr) {
-          console.error("Error deleting local file:", unlinkErr)
-        }
+      // Generate a pre-signed POST URL for direct upload to S3
+      const s3Key = `thumbnails/${Date.now()}_${cleanFilename}`
+      const presignedPost = await createPresignedPost(s3Client, {
+        Bucket: process.env.S3_BUCKET_NAME,
+        Key: s3Key,
+        Fields: { "Content-Type": cleanFiletype, ACL: "public-read" },
+        Conditions: [
+          ["content-length-range", 0, 5000000], // Limit to 5MB
+          { "Content-Type": cleanFiletype },
+          { ACL: "public-read" },
+        ],
+        Expires: 60, // URL expires in 60 seconds
       })
 
       // Create the public URL to the uploaded file
       const thumbnailUrl = `https://${process.env.S3_BUCKET_NAME}.s3.${process.env.S3_REGION}.amazonaws.com/${s3Key}`
 
-      // Send back the thumbnail URL
-      res.status(200).json({ url: thumbnailUrl })
+      // Send back the pre-signed URL info and thumbnail URL
+      res.status(200).json({ presignedPost, thumbnailUrl })
     } catch (error) {
-      console.error("Error uploading to S3:", error)
+      console.error("Error creating presigned post:", error)
       res
         .status(500)
-        .json({ message: "Failed to upload thumbnail", error: error.message })
+        .json({
+          message: "Failed to generate presigned URL",
+          error: error.message,
+        })
     }
   })
 }

@@ -112,39 +112,59 @@ useEffect(() => {
       })
       .catch((error) => console.error("Error updating post:", error))
   }
+const updateTitleAndThumbnail = async () => {
+  updatePost()
+  const response = await fetch(`/api/posts/updateTitleAndThumbnail`, {
+    method: "POST",
+    body: new URLSearchParams({
+      currentTitle: postContent.title,
+      newTitle: newTitle,
+      isPublic: String(isPublic),
+      thumbnailName: newThumbnail ? newThumbnail.name : "",
+      thumbnailType: newThumbnail ? newThumbnail.type : "",
+    }),
+  })
 
-  const updateTitleAndThumbnail = async () => {
-    updatePost();
+  const result = await response.json()
+
+  if (response.ok && result.presignedPost) {
+    // Use the pre-signed URL to upload the new thumbnail
     const formData = new FormData()
-    formData.append("currentTitle", postContent.title)
-    formData.append("newTitle", newTitle)
-    formData.append("isPublic", isPublic) // Add new checkbox value
+    Object.keys(result.presignedPost.fields).forEach((key) => {
+      formData.append(key, result.presignedPost.fields[key])
+    })
+    formData.append("file", newThumbnail)
 
-    if (newThumbnail) {
-      formData.append("thumbnail", newThumbnail)
-    }
-
-    const response = await fetch(`/api/posts/updateTitleAndThumbnail`, {
+    const s3Response = await fetch(result.presignedPost.url, {
       method: "POST",
       body: formData,
     })
 
-    const result = await response.json()
-
-    if (response.ok) {
-      console.log(isPublic)
-      setPostContent((prev) => ({
-        ...prev,
-        title: result.title,
-        thumbnail_url: result.thumbnail_url,
-        isPublic: result.isPublic, // Update the local state to reflect changes
-      }))
-      console.log(postContent)
-      setShowModal(false)
-    } else {
-      console.error("Error updating title and thumbnail:", result.error)
+    if (!s3Response.ok) {
+      console.error("Error uploading thumbnail to S3")
+      return
     }
+
+    setPostContent((prev) => ({
+      ...prev,
+      title: result.title,
+      thumbnail_url: result.thumbnailUrl,
+      isPublic: result.isPublic,
+    }))
+    setShowModal(false)
+  } else if (response.ok) {
+    // Update post without changing the thumbnail
+    setPostContent((prev) => ({
+      ...prev,
+      title: result.title,
+      thumbnail_url: result.thumbnail_url,
+      isPublic: result.isPublic,
+    }))
+    setShowModal(false)
+  } else {
+    console.error("Error updating title and thumbnail:", result.error)
   }
+}
 
   if (!editor) return null
 

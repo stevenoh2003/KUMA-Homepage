@@ -39,58 +39,86 @@ const CreateBlog = () => {
     return true
   }
 
-  const handlePost = async (isNew) => {
-    const isFormValid = await validateForm()
-    if (!isFormValid || !editor || !session) {
-      return
-    }
+const handlePost = async (isNew) => {
+  const isFormValid = await validateForm()
+  if (!isFormValid || !editor || !session) {
+    return
+  }
 
-    const htmlContent = editor.getHTML()
-    let thumbnailUrl = ""
+  const htmlContent = editor.getHTML()
+  let thumbnailUrl = ""
 
-    if (thumbnail) {
+  if (thumbnail) {
+    try {
+      // Request a presigned URL from the API
+      const presignedResponse = await fetch("/api/posts/uploadThumbnail", {
+        method: "POST",
+        body: new URLSearchParams({
+          filename: thumbnail.name,
+          filetype: thumbnail.type,
+        }),
+      })
+
+      const presignedData = await presignedResponse.json()
+
+      // Upload the thumbnail directly to S3
       const formData = new FormData()
-      formData.append("thumbnail", thumbnail)
+      Object.keys(presignedData.presignedPost.fields).forEach((key) => {
+        formData.append(key, presignedData.presignedPost.fields[key])
+      })
+      formData.append("file", thumbnail)
 
-      const thumbnailResponse = await fetch("/api/posts/uploadThumbnail", {
+      const s3Response = await fetch(presignedData.presignedPost.url, {
         method: "POST",
         body: formData,
       })
 
-      const thumbnailData = await thumbnailResponse.json()
-      thumbnailUrl = thumbnailData.url
-    }
-
-    const response = await fetch("/api/posts/postHandler", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${session.accessToken}`,
-      },
-      credentials: "include",
-      body: JSON.stringify({
-        title,
-        content: htmlContent,
-        s3Key,
-        isNew,
-        userId: session.user.id,
-        thumbnailUrl,
-        isPublic,
-      }),
-    })
-
-    try {
-      const data = await response.json()
-      if (isNew && data.s3_key) {
-        setS3Key(data.s3_key)
-        setErrorMessage("")
-        router.push("/blog") // Redirect to the blog page after successful post creation
+      if (s3Response.ok) {
+        thumbnailUrl = presignedData.thumbnailUrl
+      } else {
+        console.error("Thumbnail upload failed to S3")
+        setErrorMessage("Thumbnail upload failed")
+        return
       }
     } catch (error) {
-      console.error("Error during fetch operation:", error)
-      setErrorMessage("An unexpected error occurred while creating the post.")
+      console.error("Error getting presigned URL or uploading to S3:", error)
+      setErrorMessage("Error getting presigned URL or uploading")
+      return
     }
   }
+
+  // Continue with creating the post as before
+  const response = await fetch("/api/posts/postHandler", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${session.accessToken}`,
+    },
+    credentials: "include",
+    body: JSON.stringify({
+      title,
+      content: htmlContent,
+      s3Key,
+      isNew,
+      userId: session.user.id,
+      thumbnailUrl,
+      isPublic,
+    }),
+  })
+
+  try {
+    const data = await response.json()
+    if (isNew && data.s3_key) {
+      setS3Key(data.s3_key)
+      setErrorMessage("")
+      router.push("/blog") // Redirect to the blog page after successful post creation
+    }
+  } catch (error) {
+    console.error("Error during fetch operation:", error)
+    setErrorMessage("An unexpected error occurred while creating the post.")
+  }
+}
+
 
   return (
     <main className="py-1">

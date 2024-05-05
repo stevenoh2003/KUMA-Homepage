@@ -1,15 +1,12 @@
-// src/pages/api/posts/updateTitleAndThumbnail.js
 import dbConnect from "src/libs/mongoose"
 import BlogPost from "src/libs/model/BlogPost"
-import { PutObjectCommand } from "@aws-sdk/client-s3"
+import { IncomingForm } from "formidable"
+import { createPresignedPost } from "@aws-sdk/s3-presigned-post"
 import s3Client from "src/libs/aws-config"
-import { Formidable } from "formidable"
-import fs from "fs"
-import path from "path"
 
 export const config = {
   api: {
-    bodyParser: false,
+    bodyParser: false, // Disable automatic body parsing by Next.js
   },
 }
 
@@ -18,22 +15,17 @@ export default async function handler(req, res) {
     return res.status(405).json({ message: "Method Not Allowed" })
   }
 
-  const uploadDir = path.join(process.cwd(), "uploads")
-  if (!fs.existsSync(uploadDir)) {
-    fs.mkdirSync(uploadDir, { recursive: true })
-  }
+  const form = new IncomingForm()
 
-  const form = new Formidable({ uploadDir, keepExtensions: true })
-
-  form.parse(req, async (err, fields, files) => {
+  form.parse(req, async (err, fields) => {
     if (err) {
-      console.error("File upload error:", err)
+      console.error("Error while parsing form:", err)
       return res
         .status(500)
-        .json({ message: "File upload error", error: err.toString() })
+        .json({ message: "Form parsing error", error: err.toString() })
     }
 
-    // Ensure that title and isPublic are correctly parsed
+    // Extract relevant data from form fields
     const currentTitle = Array.isArray(fields.currentTitle)
       ? fields.currentTitle[0]
       : fields.currentTitle
@@ -41,65 +33,60 @@ export default async function handler(req, res) {
       ? fields.newTitle[0]
       : fields.newTitle
     const isPublic = String(fields.isPublic).toLowerCase() === "true"
-    const thumbnailFile = files.thumbnail
-    console.log("Updating isPublic value:", isPublic) // Confirm the boolean value
+    const thumbnailName = Array.isArray(fields.thumbnailName)
+      ? fields.thumbnailName[0]
+      : fields.thumbnailName
+    const thumbnailType = Array.isArray(fields.thumbnailType)
+      ? fields.thumbnailType[0]
+      : fields.thumbnailType
+
+    // Ensure all required fields are provided
+    if (!currentTitle || !newTitle || !thumbnailName || !thumbnailType) {
+      return res.status(400).json({ message: "Required fields are missing." })
+    }
 
     try {
+      // Connect to the database
       await dbConnect()
-      // Find the post by the current title
       const post = await BlogPost.findOne({ title: currentTitle })
 
       if (!post) {
-        console.error("Post not found:", currentTitle)
         return res.status(404).json({ message: "Post not found" })
       }
 
-      let thumbnailUrl = post.thumbnail_url
+      // Generate a presigned URL if a new thumbnail is to be uploaded
+      const s3Key = `thumbnails/${Date.now()}_${thumbnailName}`
+      const presignedPost = await createPresignedPost(s3Client, {
+        Bucket: process.env.S3_BUCKET_NAME,
+        Key: s3Key,
+        Fields: { "Content-Type": thumbnailType, ACL: "public-read" },
+        Conditions: [
+          ["content-length-range", 0, 5000000], // Limit to 5MB
+          { "Content-Type": thumbnailType },
+          { ACL: "public-read" },
+        ],
+        Expires: 60, // URL expires in 60 seconds
+      })
 
-      // If a new thumbnail is uploaded, update the URL
-      if (thumbnailFile && Array.isArray(thumbnailFile)) {
-        const file = thumbnailFile[0] // Get the first file from the array
-
-        const fileStream = fs.createReadStream(file.filepath)
-        const s3Key = `thumbnails/${Date.now()}_${file.originalFilename}`
-
-        const params = {
-          Bucket: process.env.S3_BUCKET_NAME,
-          Key: s3Key,
-          Body: fileStream,
-          ContentType: file.mimetype,
-          ACL: "public-read",
-        }
-
-        await s3Client.send(new PutObjectCommand(params))
-
-        // Delete the local file after uploading to S3
-        fs.unlink(file.filepath, (unlinkErr) => {
-          if (unlinkErr) {
-            console.error("Error deleting local file:", unlinkErr)
-          }
-        })
-
-        thumbnailUrl = `https://${process.env.S3_BUCKET_NAME}.s3.${process.env.S3_REGION}.amazonaws.com/${s3Key}`
-      }
-
-      // Update the post with the new data
+      // Set the new thumbnail URL and update the post title/visibility
+      const thumbnailUrl = `https://${process.env.S3_BUCKET_NAME}.s3.${process.env.S3_REGION}.amazonaws.com/${s3Key}`
       post.title = newTitle || post.title
       post.thumbnail_url = thumbnailUrl
       post.isPublic = isPublic
-
       await post.save()
 
+      // Respond with the presigned URL and updated post info
       res.status(200).json({
+        presignedPost,
         title: post.title,
-        thumbnail_url: post.thumbnail_url,
+        thumbnailUrl,
         isPublic: post.isPublic,
       })
     } catch (error) {
       console.error("Error updating post title and thumbnail:", error)
       res.status(500).json({
-        message: "Failed to update post",
-        error: error.message || error,
+        message: "Failed to update post and generate presigned URL",
+        error: error.message,
       })
     }
   })
