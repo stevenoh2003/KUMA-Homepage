@@ -1,14 +1,14 @@
-// components/ImageUploadModal.js
-import React, { useState, useRef, useEffect } from "react"
+import React, { useState, useRef } from "react"
+import axios from "axios"
 
 const ImageUploadModal = ({ onUpload, onClose }) => {
   const [selectedFile, setSelectedFile] = useState(null)
   const [previewUrl, setPreviewUrl] = useState(null)
-  const [resizePercent, setResizePercent] = useState(100) // Default to 100% of the container width
+  const [resizePercent, setResizePercent] = useState(100)
   const canvasRef = useRef(null)
   const containerRef = useRef(null)
 
-  // Handle image file change
+  // Handle file change and generate preview
   const handleFileChange = (event) => {
     const file = event.target.files[0]
     setSelectedFile(file)
@@ -20,22 +20,19 @@ const ImageUploadModal = ({ onUpload, onClose }) => {
   }
 
   // Handle resizing input change
-  // components/ImageUploadModal.js
   const handleResizePercentChange = (event) => {
     const value = event.target.value
-
-    // Allow empty string or numeric values only
     if (value === "" || (!isNaN(value) && value >= 0 && value <= 100)) {
-      setResizePercent(value) // Store as string to handle empty input
+      setResizePercent(value)
     }
   }
 
-  // Resize the image using a canvas
+  // Resize the image using canvas
   const resizeImage = (image, percentWidth) => {
     const canvas = canvasRef.current
     const ctx = canvas.getContext("2d")
 
-    // Calculate the new width in pixels based on the percentage of the container width
+    // Calculate new width based on percentage
     const containerWidth = containerRef.current.offsetWidth
     const newWidth = Math.round((percentWidth / 100) * containerWidth)
     const scale = newWidth / image.width
@@ -49,8 +46,7 @@ const ImageUploadModal = ({ onUpload, onClose }) => {
     return canvas.toDataURL("image/jpeg")
   }
 
-  
-  // Handle form submission
+  // Handle form submission with pre-signed URL
   const handleSubmit = async (event) => {
     event.preventDefault()
 
@@ -58,29 +54,46 @@ const ImageUploadModal = ({ onUpload, onClose }) => {
       const image = new Image()
       image.src = previewUrl
 
-      // Wait for the image to load before resizing
       image.onload = async () => {
-        // Resize the image using the specified percentage width
-        const imageUrl = resizeImage(image, resizePercent)
+        // Resize image
+        const resizedImageUrl = resizeImage(image, resizePercent)
 
-        // Convert the base64 image to a blob
-        const response = await fetch(imageUrl)
+        // Convert to Blob
+        const response = await fetch(resizedImageUrl)
         const blob = await response.blob()
-        const formData = new FormData()
-        formData.append("image", blob, selectedFile.name)
 
-        // Send the resized image to the server
-        const serverResponse = await fetch("/api/upload-image", {
-          method: "POST",
-          body: formData,
-        })
+        try {
+          // Request pre-signed URL from your backend API
+          const presignedResponse = await axios.post("/api/upload-image", {
+            filename: selectedFile.name,
+            filetype: blob.type,
+          })
 
-        const data = await serverResponse.json()
-        if (serverResponse.ok) {
-          onUpload(data.url)
-          onClose() // Close the modal
-        } else {
-          console.error("Image upload failed:", data.message)
+          const { presignedPost } = presignedResponse.data
+
+          // Upload to S3 using the pre-signed URL
+          const formData = new FormData()
+          Object.keys(presignedPost.fields).forEach((key) => {
+            formData.append(key, presignedPost.fields[key])
+          })
+          formData.append("file", blob, selectedFile.name)
+
+          const s3Response = await fetch(presignedPost.url, {
+            method: "POST",
+            body: formData,
+          })
+
+          if (s3Response.ok) {
+            onUpload(presignedResponse.data.imageUrl)
+            onClose()
+          } else {
+            console.error("Image upload failed to S3")
+          }
+        } catch (error) {
+          console.error(
+            "Error obtaining presigned URL or uploading image:",
+            error
+          )
         }
       }
     }
@@ -89,7 +102,7 @@ const ImageUploadModal = ({ onUpload, onClose }) => {
   return (
     <div
       className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center"
-      style={{ zIndex: 9999 }} // High z-index to ensure it stays on top
+      style={{ zIndex: 9999 }}
     >
       <div
         className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full"

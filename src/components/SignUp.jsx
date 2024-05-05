@@ -26,36 +26,46 @@ const handleChange = (event) => {
     }))
   }
 }
-
 const handleSubmit = async (event) => {
   event.preventDefault()
 
-  // Create an instance of FormData
+  // Create an instance of FormData with essential form data
   const data = new FormData()
-
-  // Append each form field to the FormData object
   data.append("name", formData.name)
   data.append("email", formData.email)
   data.append("password", formData.password)
-  data.append("profilePic", formData.profilePic) // Ensure this is the file
-  data.append("discordId", formData.discordId) // Ensure this is the file
+  data.append("discordId", formData.discordId)
 
   try {
-    // Post the FormData to your API endpoint
-    console.log(formData) // Log formData to ensure it's correctly populated
+    // Get a pre-signed URL from the backend
     const response = await axios.post("/api/auth/signup", data, {
       headers: {
         "Content-Type": "multipart/form-data",
       },
     })
 
-    alert(response.data.message)
-    // Redirect to login page upon successful registration
+    const { presignedPost, message } = response.data
+
+    // Create FormData object for S3 upload
+    const s3Data = new FormData()
+    Object.keys(presignedPost.fields).forEach((key) => {
+      s3Data.append(key, presignedPost.fields[key])
+    })
+    s3Data.append("file", formData.profilePic)
+
+    // Upload to S3 directly
+    await axios.post(presignedPost.url, s3Data)
+
+    alert(message)
     router.push("/auth/signin")
   } catch (error) {
-    console.log(error.response.data.message)
+    console.error(
+      "Error in signup:",
+      error.response?.data?.message || error.message
+    )
   }
 }
+
 
   return (
     <main className="w-full h-screen flex flex-col items-center justify-center px-4">

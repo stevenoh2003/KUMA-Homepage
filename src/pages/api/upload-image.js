@@ -1,7 +1,5 @@
 import { IncomingForm } from "formidable"
-import fs from "fs"
-import path from "path"
-import { PutObjectCommand } from "@aws-sdk/client-s3"
+import { createPresignedPost } from "@aws-sdk/s3-presigned-post"
 import s3Client from "../../libs/aws-config"
 
 export const config = {
@@ -15,61 +13,59 @@ export default async function handler(req, res) {
     return res.status(405).json({ message: "Method not allowed" })
   }
 
-  const uploadDir = path.join(process.cwd(), "uploads")
-  if (!fs.existsSync(uploadDir)) {
-    fs.mkdirSync(uploadDir, { recursive: true })
-  }
+  const form = new IncomingForm()
 
-  // Set up the form with the specified upload directory
-  const form = new IncomingForm({ uploadDir, keepExtensions: true })
-
-  form.parse(req, async (err, fields, files) => {
+  form.parse(req, async (err, fields) => {
     if (err) {
       return res
         .status(500)
-        .json({ message: "File upload error", error: err.toString() })
+        .json({ message: "Form parsing error", error: err.toString() })
     }
 
-    // Access the uploaded image file
-    const file = files.image && files.image[0]
-    if (!file) {
-      return res.status(400).json({ message: "Image file is required." })
+    // Extract desired image information (file type and name)
+    const { filename, filetype } = fields
+    const cleanFilename = Array.isArray(filename) ? filename[0] : filename
+    const cleanFiletype = Array.isArray(filetype) ? filetype[0] : filetype
+
+    // Validate the fields
+    if (!cleanFilename || !cleanFiletype) {
+      return res
+        .status(400)
+        .json({ message: "Filename and filetype are required." })
     }
 
     try {
-      // Set S3 parameters for file upload
-      const s3Key = `uploads/${Date.now()}_${file.originalFilename}`
-      const uploadCommand = new PutObjectCommand({
+      // Generate the S3 key
+      const s3Key = `uploads/${Date.now()}_${cleanFilename}`
+
+      // Create a pre-signed POST URL
+      const presignedPost = await createPresignedPost(s3Client, {
         Bucket: process.env.S3_BUCKET_NAME,
         Key: s3Key,
-        Body: fs.createReadStream(file.filepath),
-        ContentType: file.mimetype,
-        ACL: "public-read",
+        Fields: { "Content-Type": cleanFiletype, ACL: "public-read" },
+        Conditions: [
+          ["content-length-range", 0, 5000000], // Limit to 5MB
+          { "Content-Type": cleanFiletype },
+          { ACL: "public-read" },
+        ],
+        Expires: 60, // URL expires in 60 seconds
       })
 
-      // Upload the file using the imported `s3Client`
-      await s3Client.send(uploadCommand)
-
-      // Delete the local file after successfully uploading to S3
-      fs.unlink(file.filepath, (unlinkErr) => {
-        if (unlinkErr) {
-          console.error("Error deleting local file:", unlinkErr)
-        }
+      // Return the pre-signed URL and other required fields
+      res.status(201).json({
+        message: "Pre-signed URL created successfully",
+        presignedPost,
+        imageUrl: `https://${process.env.S3_BUCKET_NAME}.s3.${process.env.S3_REGION}.amazonaws.com/${s3Key}`,
       })
-
-      // Create the full image URL to send back in the response
-      const imageUrl = `https://${process.env.S3_BUCKET_NAME}.s3.${process.env.S3_REGION}.amazonaws.com/${s3Key}`
-
-      // Respond with the image URL and success message
-      res
-        .status(201)
-        .json({ message: "Image uploaded successfully", url: imageUrl })
     } catch (error) {
-      // Log any errors that occur during the upload process
-      console.error("Error during image upload:", error)
+      // Log any errors during the pre-signed URL creation
+      console.error("Error during presigned URL generation:", error)
       res
         .status(500)
-        .json({ message: "Image upload failed", error: error.message })
+        .json({
+          message: "Pre-signed URL generation failed",
+          error: error.message,
+        })
     }
   })
 }
