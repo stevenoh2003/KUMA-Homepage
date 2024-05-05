@@ -25,6 +25,8 @@ export default async function handler(req, res) {
         .json({ message: "Form parsing error", error: err.toString() })
     }
 
+    console.log("Parsed fields:", fields)
+
     // Extract relevant data from form fields
     const currentTitle = Array.isArray(fields.currentTitle)
       ? fields.currentTitle[0]
@@ -35,13 +37,14 @@ export default async function handler(req, res) {
     const isPublic = String(fields.isPublic).toLowerCase() === "true"
     const thumbnailName = Array.isArray(fields.thumbnailName)
       ? fields.thumbnailName[0]
-      : fields.thumbnailName
+      : null
     const thumbnailType = Array.isArray(fields.thumbnailType)
       ? fields.thumbnailType[0]
-      : fields.thumbnailType
+      : null
 
-    // Ensure all required fields are provided
-    if (!currentTitle || !newTitle || !thumbnailName || !thumbnailType) {
+    // Ensure required fields are provided
+    if (!currentTitle || !newTitle) {
+      console.error("Missing required fields:", { currentTitle, newTitle })
       return res.status(400).json({ message: "Required fields are missing." })
     }
 
@@ -54,22 +57,27 @@ export default async function handler(req, res) {
         return res.status(404).json({ message: "Post not found" })
       }
 
-      // Generate a presigned URL if a new thumbnail is to be uploaded
-      const s3Key = `thumbnails/${Date.now()}_${thumbnailName}`
-      const presignedPost = await createPresignedPost(s3Client, {
-        Bucket: process.env.S3_BUCKET_NAME,
-        Key: s3Key,
-        Fields: { "Content-Type": thumbnailType, ACL: "public-read" },
-        Conditions: [
-          ["content-length-range", 0, 5000000], // Limit to 5MB
-          { "Content-Type": thumbnailType },
-          { ACL: "public-read" },
-        ],
-        Expires: 60, // URL expires in 60 seconds
-      })
+      let presignedPost = null
+      let thumbnailUrl = post.thumbnail_url // Keep the existing thumbnail URL
 
-      // Set the new thumbnail URL and update the post title/visibility
-      const thumbnailUrl = `https://${process.env.S3_BUCKET_NAME}.s3.${process.env.S3_REGION}.amazonaws.com/${s3Key}`
+      // Generate a presigned URL if a new thumbnail is provided
+      if (thumbnailName && thumbnailType) {
+        const s3Key = `thumbnails/${Date.now()}_${thumbnailName}`
+        presignedPost = await createPresignedPost(s3Client, {
+          Bucket: process.env.S3_BUCKET_NAME,
+          Key: s3Key,
+          Fields: { "Content-Type": thumbnailType, ACL: "public-read" },
+          Conditions: [
+            ["content-length-range", 0, 5000000], // Limit to 5MB
+            { "Content-Type": thumbnailType },
+            { ACL: "public-read" },
+          ],
+          Expires: 60, // URL expires in 60 seconds
+        })
+        thumbnailUrl = `https://${process.env.S3_BUCKET_NAME}.s3.${process.env.S3_REGION}.amazonaws.com/${s3Key}`
+      }
+
+      // Update the post title and visibility
       post.title = newTitle || post.title
       post.thumbnail_url = thumbnailUrl
       post.isPublic = isPublic
