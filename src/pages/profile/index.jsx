@@ -179,9 +179,9 @@ const response = await fetch("/api/users/update", {
                         <span className="block text-indigo-600">
                           {new Date(post.created_at).toLocaleDateString()}
                         </span>
-                        <span className="block text-gray-600">
+                        {/* <span className="block text-gray-600">
                           {post.ownerName || "Unknown Author"}
-                        </span>
+                        </span> */}
                       </div>
                       <h3 className="text-lg text-gray-800 duration-150 group-hover:text-indigo-600 font-semibold">
                         {post.title}
