@@ -1,5 +1,6 @@
 // pages/discordPosts.js
 import { useEffect, useState } from "react"
+import Footer from "src/components/Footer"
 
 const PAGE_SIZE = 15
 
@@ -195,6 +196,7 @@ const DiscordPosts = () => {
           </div>
         </div>
       </section>
+      <Footer />
     </div>
   )
 }

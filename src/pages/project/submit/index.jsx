@@ -57,7 +57,7 @@ const handleSubmit = async (event) => {
 
       // Add the channel ID to the FormData
       data.append("discordChannelId", dataChannel.channelId)
-      alert("Channel created successfully!")
+      // alert("Channel created successfully!")
     }
 
     // Submit project data along with the new Discord channel ID if available

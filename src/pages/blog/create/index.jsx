@@ -5,6 +5,7 @@ import MenuBar from "src/components/Blog/MenuBar"
 import { extensions, content } from "src/components/Blog/editorSettings"
 import { EditorProvider } from "@tiptap/react"
 import CreateBlog from "src/components/Blog/CreateBlog"
+import Footer from "src/components/Footer"
 
 const EditorPage = () => {
   return (
@@ -29,6 +30,7 @@ const EditorPage = () => {
           <CreateBlog />
         </EditorProvider>
       </StyledEditor>
+      <Footer />
     </div>
   )
 }

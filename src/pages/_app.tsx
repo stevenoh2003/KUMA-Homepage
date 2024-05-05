@@ -7,8 +7,7 @@ import "../styles/styles.css"
 import { AuthProvider } from '../context/auth-context'; // Adjust the path as necessary
 import { SessionProvider } from "next-auth/react";
 import { useState, useEffect, startTransition } from 'react';
-import Footer from "src/components/Footer";
-
+import Loading from "src/components/Loading"
 function App({ Component, pageProps }: AppPropsWithLayout) {
   const getLayout = Component.getLayout || ((page) => page);
   const [ready, setReady] = useState(false);
@@ -32,7 +31,6 @@ function App({ Component, pageProps }: AppPropsWithLayout) {
             <RootLayout>{getLayout(<Component {...pageProps} />)}</RootLayout>
             <div style={{ backgroundColor: "#f2f3ef" }}>
               {" "}
-              <Footer />
             </div>
           </AuthProvider>
         </Hydrate>

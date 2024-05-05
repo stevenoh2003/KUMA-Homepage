@@ -1,7 +1,7 @@
 import { useState } from "react"
 import { useRouter } from "next/router"
 import { useSession, signOut } from "next-auth/react"
-import { UserCircleIcon } from "@heroicons/react/24/solid" // Ensure you have this icon or similar
+import { UserCircleIcon } from "@heroicons/react/24/solid"
 
 export default function NavBar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -16,17 +16,12 @@ export default function NavBar() {
       path: "/project",
       current: router.pathname === "/project",
     },
-    {
-      title: "Events",
-      path: "/events",
-      current: router.pathname === "/events",
-    },
   ]
 
   const isHomePage = router.pathname === "/"
   const navBarStyle = isHomePage
-    ? { backgroundColor: "#f2f3ef", color: "#1F2937" } // Light background for home
-    : { backgroundColor: "#1F2937", color: "#fff" } // Dark background otherwise
+    ? { backgroundColor: "#f2f3ef", color: "#1F2937" }
+    : { backgroundColor: "#1F2937", color: "#fff" }
 
   const linkStyle = (isHomePage, current) => {
     if (isHomePage) {
@@ -38,9 +33,15 @@ export default function NavBar() {
     }
   }
 
+  // Inline styles to match the dropdown menu background to the navbar
+  const dropdownBackgroundStyle = isHomePage
+    ? { backgroundColor: "#f2f3ef", color: "#1F2937" }
+    : { backgroundColor: "#1F2937", color: "#fff" }
+
   return (
     <nav className="bg-transparent w-full py-2 relative" style={navBarStyle}>
       <div className="max-w-screen-xl mx-auto px-4 md:px-8 flex justify-between items-center">
+        {/* Mobile Menu Toggle Button */}
         <div className="md:hidden">
           <button
             onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -62,10 +63,13 @@ export default function NavBar() {
             </svg>
           </button>
         </div>
+
+        {/* Dropdown Navigation */}
         <div
           className={`${
             isMenuOpen ? "block" : "hidden"
-          } md:flex md:items-center md:justify-center absolute md:static top-full left-0 w-full z-20 bg-white shadow-md py-3 md:shadow-none md:bg-transparent`}
+          } md:flex md:items-center md:justify-center absolute md:static top-full left-0 w-full z-20 shadow-md py-3 md:shadow-none md:bg-transparent`}
+          style={dropdownBackgroundStyle}
         >
           <ul className="flex flex-col md:flex-row md:space-x-10 justify-center items-center w-full">
             {navigation.map((item, idx) => (
@@ -108,45 +112,32 @@ export default function NavBar() {
               </>
             ) : (
               <>
-              <li>
-                <a
-                  href="/profile"
-                  className={`py-2 text-sm md:text-base ${linkStyle(
-                    isHomePage,
-                    false
-                  )}`}
-                >
-                  <UserCircleIcon className="h-8 w-8 mr-2" />
-
-                </a>
-              </li>
-                          <li>
-              <button
-                onClick={() => signOut()}
-                className={`block py-2 px-4 text-sm md:text-base ${linkStyle(
-                  isHomePage,
-                  false
-                )}`}
-              >
-                Log Out
-              </button>
-            </li>
-            </>
+                <li>
+                  <a
+                    href="/profile"
+                    className={`py-2 text-sm md:text-base ${linkStyle(
+                      isHomePage,
+                      false
+                    )}`}
+                  >
+                    <UserCircleIcon className="h-8 w-8 mr-2" />
+                  </a>
+                </li>
+                <li>
+                  <button
+                    onClick={() => signOut()}
+                    className={`block py-2 px-4 text-sm md:text-base ${linkStyle(
+                      isHomePage,
+                      false
+                    )}`}
+                  >
+                    Log Out
+                  </button>
+                </li>
+              </>
             )}
-
           </ul>
         </div>
-        {/* {session && (
-          <div className="hidden md:flex items-center">
-            <a href="/profile" className="flex items-center">
-              <UserCircleIcon className="h-8 w-8 text-white mr-2" />
-              Profile
-            </a>
-            <button onClick={() => signOut()} className="ml-4 text-white">
-              Log Out
-            </button>
-          </div>
-        )} */}
       </div>
     </nav>
   )

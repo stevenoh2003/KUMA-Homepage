@@ -46,6 +46,7 @@ const FeedPage = () => {
       <LogoGrid />
       {/* <FeaturedPosts /> */}
       <Team />
+      <Footer />
     </>
   )
 }
