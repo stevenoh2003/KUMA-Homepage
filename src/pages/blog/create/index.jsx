@@ -11,7 +11,7 @@ const EditorPage = () => {
   return (
     <div style={{ backgroundColor: "#f2f3ef" }}>
       <StyledEditor>
-        <div className="max-w-lg mx-auto space-y-3 sm:text-center">
+        <div className="max-w-lg my-8 mx-auto space-y-3 sm:text-center">
           <h3 className="text-indigo-600 font-semibold">Create a Blog Post</h3>
           <p>Fill out the form below to share your ideas and stories!</p>
         </div>

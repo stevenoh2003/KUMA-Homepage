@@ -4,19 +4,19 @@ import Image from "next/image"
 export default () => {
   const footerNavs = [
     {
-      href: "javascript:void()",
+      href: "/",
       name: "Home",
     },
     {
-      href: "javascript:void()",
+      href: "/blog",
       name: "Blog",
     },
     {
-      href: "javascript:void()",
+      href: "/project",
       name: "Project",
     },
     {
-      href: "javascript:void()",
+      href: "/events",
       name: "Events",
     },
 
@@ -25,12 +25,12 @@ export default () => {
   return (
     <footer
       className="text-gray-500 px-4 py-5 max-w-screen-xl mx-auto md:px-8"
-      style={{ backgroundColor: "#f2f3ef"}}
+      style={{ backgroundColor: "#f2f3ef" }}
     >
       <div className="max-w-lg sm:mx-auto sm:text-center">
         <Image alt="Logo" src={Logo} className="w-32 sm:mx-auto" />
         <p className="leading-relaxed mt-2 text-[15px]">
-Network, Collaborate, Share.
+          Network, Collaborate, Share.
         </p>
       </div>
       <ul className="items-center justify-center mt-8 space-y-5 sm:flex sm:space-x-4 sm:space-y-0">
@@ -49,7 +49,7 @@ Network, Collaborate, Share.
         <div className="mt-6 sm:mt-0">
           <ul className="flex items-center space-x-4">
             <li className="w-10 h-10 border rounded-full flex items-center justify-center">
-              <a href="javascript:void()">
+              <a href="https://www.instagram.com/kuma.tech2024/">
                 <img src="/logos/icons8-instagram.svg" alt="Instagram Logo" />
               </a>
             </li>

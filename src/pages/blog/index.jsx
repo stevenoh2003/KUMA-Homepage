@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react"
 import Link from "next/link"
 import { useRouter } from "next/router"
 import Footer from "src/components/Footer"
+import { useSession } from "next-auth/react"
+
 const PAGE_LIMIT = 15
 
 const BlogIndex = () => {
@@ -9,6 +11,7 @@ const BlogIndex = () => {
   const [currentPage, setCurrentPage] = useState(1)
   const [totalPages, setTotalPages] = useState(1)
   const router = useRouter()
+  const { data: session, status } = useSession()
 
   const fetchPosts = async (page) => {
     const response = await fetch(`/api/posts?page=${page}&limit=${PAGE_LIMIT}`)
@@ -55,24 +58,33 @@ const BlogIndex = () => {
                 Blogs that are loved by the community. Updated regularly.
               </p>
             </div>
-            <button
-              onClick={() => router.push("/blog/create")}
-              className="px-3 py-3 text-indigo-600 bg-indigo-50 rounded-lg duration-150 hover:bg-indigo-100 active:bg-indigo-200 flex items-center"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                fill="currentColor"
-                className="w-5 h-5 mr-2"
+            {status === "authenticated" ? ( // Check if user is authenticated
+              <button
+                onClick={() => router.push("/blog/create")}
+                className="px-3 py-3 text-indigo-600 bg-indigo-50 rounded-lg duration-150 hover:bg-indigo-100 active:bg-indigo-200 flex items-center"
               >
-                <path
-                  fillRule="evenodd"
-                  d="M12 5.25a.75.75 0 01.75.75v5.25H18a.75.75 0 010 1.5h-5.25V18a.75.75 0 01-1.5 0v-5.25H6a.75.75 0 010-1.5h5.25V6a.75.75 0 01.75-.75z"
-                  clipRule="evenodd"
-                />
-              </svg>
-              Add New Post
-            </button>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                  className="w-5 h-5 mr-2"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M12 5.25a.75.75 0 01.75.75v5.25H18a.75.75 0 010 1.5h-5.25V18a.75.75 0 01-1.5 0v-5.25H6a.75.75 0 010-1.5h5.25V6a.75.75 0 01.75-.75z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+                Add New Post
+              </button>
+            ) : (
+              <button
+                onClick={() => router.push("/auth/signup")}
+                className="px-3 py-3 text-indigo-600 bg-indigo-50 rounded-lg duration-150 hover:bg-indigo-100 active:bg-indigo-200 flex items-center"
+              >
+                Sign Up to Add New Post
+              </button>
+            )}
           </div>
           <ul className="grid gap-x-8 gap-y-10 mt-16 sm:grid-cols-2 lg:grid-cols-3">
             {posts.map((post) => (

@@ -23,7 +23,13 @@ export const extensions = [
   TextAlign.configure({
     types: ["heading", "paragraph"],
   }),
-  Mathematics,
+  Mathematics.configure({
+    katexOptions: {
+      displayMode: true, // Enable display mode
+      throwOnError: false, // Prevent throwing errors
+    },
+  }),
+  ,
   Image,
   Dropcursor,
 ]
@@ -35,8 +41,13 @@ export const content = `
     <li>That’s a bullet list with one …</li>
     <li>… or two list items.</li>
   </ul>
-  $\\theta = \\alpha + \\beta \\cdot \\gamma$
-  <p>Isn’t that great? And all of that is editable. </p>
+  <p>aligned equation</p>
+  <p style="text-align: center"> <span class="Tiptap-mathematics-editor" style="">$\\begin{aligned}a + b &amp;= c \\\\ d + e &amp;= f \\\\g + h &amp;= i\\end{aligned}$</span></p>
+
+
+  <p>In-line equation:  $\\theta = \\alpha + \\beta \\cdot \\gamma$
+ </p>
+
   <pre><code class="language-css">print("Hello")</code></pre>
   <blockquote>Machine learning is wonderful</blockquote>
 `

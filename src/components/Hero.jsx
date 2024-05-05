@@ -57,11 +57,11 @@ const Hero = () => {
                     color: "#4f46e5",
                   }}
                 >
-                  kuma.
-                </span>
+                  kuma
+                </span>.
               </h1>
               <p className="mt-4 text-lg leading-8 text-gray-600 hidden lg:block">
-                A Waseda University-based community.
+                Network, collaborate, expand boundaries of machine intelligence
               </p>
               <div className="mt-6">
                 <a

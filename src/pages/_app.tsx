@@ -24,18 +24,18 @@ function App({ Component, pageProps }: AppPropsWithLayout) {
   }
 
   return (
-    <SessionProvider session={pageProps.session}>
-      <QueryClientProvider client={queryClient}>
-        <Hydrate state={pageProps.dehydratedState}>
-          <AuthProvider>
-            <RootLayout>{getLayout(<Component {...pageProps} />)}</RootLayout>
-            <div style={{ backgroundColor: "#f2f3ef" }}>
-              {" "}
-            </div>
-          </AuthProvider>
-        </Hydrate>
-      </QueryClientProvider>
-    </SessionProvider>
+    <div style={{ backgroundColor: "#f2f3ef" }}>
+      <SessionProvider session={pageProps.session}>
+        <QueryClientProvider client={queryClient}>
+          <Hydrate state={pageProps.dehydratedState}>
+            <AuthProvider>
+              <RootLayout>{getLayout(<Component {...pageProps} />)}</RootLayout>
+              <div style={{ backgroundColor: "#f2f3ef" }}> </div>
+            </AuthProvider>
+          </Hydrate>
+        </QueryClientProvider>
+      </SessionProvider>
+    </div>
   )
 }
 

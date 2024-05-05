@@ -32,10 +32,13 @@ export const StyledButton = styled.button`
 export const StyledEditor = styled.div`
   width: 70%;
   margin: auto;
-  padding: 20px;
 
   @media (max-width: 768px) {
-    width: 100%;
+    width: 100%; // Adjusted to 90% for small screens
+  }
+
+  @media (max-width: 480px) {
+    width: 100%; // Further reduce width for very small screens (optional)
   }
 
   .ProseMirror {

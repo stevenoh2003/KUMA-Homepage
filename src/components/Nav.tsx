@@ -115,14 +115,28 @@ export default function NavBar() {
                 <li>
                   <a
                     href="/profile"
-                    className={`py-2 text-sm md:text-base ${linkStyle(
+                    className={`py-2 text-sm md:text-base flex items-center ${linkStyle(
                       isHomePage,
                       false
                     )}`}
+                    style={{
+                      transition: "background-color 0.2s ease, color 0.2s ease",
+                    }}
+                    onMouseEnter={(e) => {
+                      // e.currentTarget.style.backgroundColor = "#4f46e5"
+                      e.currentTarget.style.color = "#4f46e5"
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.backgroundColor = "transparent"
+                      e.currentTarget.style.color = isHomePage
+                        ? "#1F2937"
+                        : "#fff"
+                    }}
                   >
                     <UserCircleIcon className="h-8 w-8 mr-2" />
                   </a>
                 </li>
+
                 <li>
                   <button
                     onClick={() => signOut()}

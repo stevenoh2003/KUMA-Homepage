@@ -11,7 +11,7 @@ import TextAlign from "@tiptap/extension-text-align"
 import Image from "@tiptap/extension-image"
 import Dropcursor from "@tiptap/extension-dropcursor"
 import ImageExtension from "src/components/tiptap-imagresize/src/index"
-
+import Footer from "src/components/Footer.jsx"
 const PostPage = () => {
 
 
@@ -180,7 +180,7 @@ const updateTitleAndThumbnail = async () => {
           alt="Thumbnail"
           className="w-full h-full object-cover"
         />
-        <div className="absolute inset-0 bg-black opacity-60 flex justify-center items-center">
+        <div className="absolute inset-0 bg-black opacity-70 flex justify-center items-center">
           <div className="relative flex items-center space-x-2">
             <h1 className="text-4xl text-white font-semibold">
               {postContent.title}
@@ -203,34 +203,32 @@ const updateTitleAndThumbnail = async () => {
       </div>
       <div className="mt-8">
         {userInfo ? (
-          <div className="flex items-center justify-between mt-4 mx-auto max-w-screen-md">
+          <div className="flex justify-between items-center mt-4 mb-4 mx-auto max-w-screen-lg px-4 sm:px-0">
             {/* Author Profile */}
-            <div className="flex items-center">
+            <div className="flex items-center space-x-2 md:space-x-4">
               {userInfo.profilePicUrl ? (
                 <img
                   src={userInfo.profilePicUrl}
                   alt="Profile"
-                  className="w-24 h-24 rounded-full object-cover"
+                  className="w-12 h-12 sm:w-16 sm:h-16 md:w-24 md:h-24 rounded-full object-cover"
                 />
               ) : (
-                <div className="w-24 h-24 bg-gray-200 rounded-full" />
+                <div className="w-12 h-12 sm:w-16 sm:h-16 md:w-24 md:h-24 bg-gray-200 rounded-full" />
               )}
-              <div className="ml-4">
-                <h4 className="text-xl font-medium text-gray-700">
+              <div>
+                <h4 className="text-sm sm:text-lg md:text-xl font-medium text-gray-700">
                   {userInfo.name}
                 </h4>
               </div>
             </div>
 
-            {/* Created At (aligned to the right) */}
-            <div className="text-right">
-              <p className="text-sm text-gray-500">
+            {/* Created At */}
+            <div className="text-right flex flex-col space-y-1 sm:space-y-0 sm:space-x-2 sm:flex-row items-center">
+              <p className="text-xs sm:text-sm md:text-base text-gray-500">
                 {new Date(postContent.created_at).toLocaleDateString()}{" "}
-                {/* Date Format */}
               </p>
-              <p className="text-sm text-gray-500">
+              <p className="text-xs sm:text-sm md:text-base text-gray-500">
                 {new Date(postContent.created_at).toLocaleTimeString()}{" "}
-                {/* Time Format */}
               </p>
             </div>
           </div>
@@ -239,6 +237,13 @@ const updateTitleAndThumbnail = async () => {
         )}
       </div>
 
+      <hr
+        style={{
+          color: "black",
+          backgroundColor: "black",
+          height: 1,
+        }}
+      />
       <div className="max-w-screen-xl mx-auto px-4 py-4 md:px-8 text-gray-600">
         <StyledEditor>
           {editable && <MenuBar editor={editor} />}
@@ -247,6 +252,7 @@ const updateTitleAndThumbnail = async () => {
               style={{
                 color: "black",
                 backgroundColor: "black",
+                opacity: "70%",
                 height: 1,
               }}
             />
@@ -325,6 +331,7 @@ const updateTitleAndThumbnail = async () => {
           </div>
         )}
       </div>
+      <Footer />
     </div>
   )
 }

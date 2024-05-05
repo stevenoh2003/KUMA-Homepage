@@ -29,7 +29,7 @@ export default () => {
   ]
 
   return (
-    <section className="py-14" style={{ backgroundColor: "#f2f3ef" }}>
+    <section className="py-14 mb-24" style={{ backgroundColor: "#f2f3ef" }}>
       <div className="max-w-screen-xl mx-auto px-4 md:px-8">
         <div className="max-w-xl space-y-3">
           <h3 className="text-indigo-600 font-semibold">TEAM</h3>

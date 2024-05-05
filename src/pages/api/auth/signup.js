@@ -45,7 +45,7 @@ export default async function handler(req, res) {
 
       // Generate a pre-signed POST URL for direct upload to S3
       const s3Key = `uploads/${Date.now()}_${filename}`
-      const presignedPost = await createPresignedPost(s3Client, {
+    const presignedPost = await createPresignedPost(s3Client, {
         Bucket: process.env.S3_BUCKET_NAME,
         Key: s3Key,
         Fields: { "Content-Type": filetype, ACL: "public-read" },

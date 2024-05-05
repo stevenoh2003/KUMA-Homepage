@@ -135,7 +135,7 @@ const handlePost = async (isNew) => {
                 placeholder="Enter your blog title"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
-                className="w-full mt-2 px-3 py-2 text-gray-500 bg-transparent outline-none border-2 border-black focus:border-indigo-600 shadow-sm rounded-lg"
+                className="w-full mt-2 px-3 py-2 text-gray-500 bg-transparent outline-none border-2 border-black focus:border-indigo-600 shadow-lg rounded-lg"
               />
               {errorMessage && (
                 <p className="mt-1 text-red-600 text-sm">{errorMessage}</p>
@@ -152,7 +152,7 @@ const handlePost = async (isNew) => {
                   borderColor: "black",
                   borderRadius: "0.375rem", // Matches Tailwind's `rounded-lg`
                 }}
-                className="w-full mt-2 px-3 py-2 text-gray-500 bg-transparent outline-none border-indigo-600 shadow-sm"
+                className="w-full mt-2 px-3 py-2 text-gray-500 bg-transparent outline-none border-indigo-600 "
               />
             </div>
             <div>
@@ -161,7 +161,7 @@ const handlePost = async (isNew) => {
                   type="checkbox"
                   checked={isPublic}
                   onChange={(e) => setIsPublic(e.target.checked)}
-                  className="mr-2"
+                  className="mr-2 shadow-lg"
                 />
                 Public Post
               </label>
