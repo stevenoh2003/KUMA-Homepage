@@ -2,11 +2,13 @@ import { useState } from "react"
 import { useRouter } from "next/router"
 import { useSession, signOut } from "next-auth/react"
 import { UserCircleIcon } from "@heroicons/react/24/solid"
+import { useTranslation } from "react-i18next" // Import useTranslation hook
 
 export default function NavBar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const router = useRouter()
   const { data: session } = useSession()
+  const { i18n } = useTranslation() // Initialize useTranslation hook
 
   const navigation = [
     { title: "Home", path: "/", current: router.pathname === "/" },
@@ -33,10 +35,11 @@ export default function NavBar() {
     }
   }
 
-  // Inline styles to match the dropdown menu background to the navbar
-  const dropdownBackgroundStyle = isHomePage
-    ? { backgroundColor: "#f2f3ef", color: "#1F2937" }
-    : { backgroundColor: "#1F2937", color: "#fff" }
+  // Function to handle language switch
+  const switchLanguage = () => {
+    const lang = i18n.language === "en" ? "ja" : "en"
+    i18n.changeLanguage(lang)
+  }
 
   return (
     <nav className="bg-transparent w-full py-2 relative" style={navBarStyle}>
@@ -69,7 +72,6 @@ export default function NavBar() {
           className={`${
             isMenuOpen ? "block" : "hidden"
           } md:flex md:items-center md:justify-center absolute md:static top-full left-0 w-full z-20 shadow-md py-3 md:shadow-none md:bg-transparent`}
-          style={dropdownBackgroundStyle}
         >
           <ul className="flex flex-col md:flex-row md:space-x-10 justify-center items-center w-full">
             {navigation.map((item, idx) => (
@@ -152,6 +154,13 @@ export default function NavBar() {
             )}
           </ul>
         </div>
+        {/* Language switch icon */}
+        <button
+          className="text-white rounded-full py-2 px-4 ml-4 flex items-center justify-center"
+          onClick={switchLanguage}
+        >
+          <img src="icons8-globe-50.png" width="40" alt="Language Icon" />
+        </button>
       </div>
     </nav>
   )

@@ -80,9 +80,9 @@ const BlogIndex = () => {
             ) : (
               <button
                 onClick={() => router.push("/auth/signup")}
-                className="px-3 py-3 text-indigo-600 bg-indigo-50 rounded-lg duration-150 hover:bg-indigo-100 active:bg-indigo-200 flex items-center"
+                className="px-3 py-3 text-indigo-600 rounded-lg duration-150 hover:bg-indigo-100 active:bg-indigo-200 flex items-center"
               >
-                Sign Up to Add New Post
+                <img src="icons8-add-50.png" alt="" />
               </button>
             )}
           </div>

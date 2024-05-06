@@ -8,6 +8,9 @@ import { AuthProvider } from '../context/auth-context'; // Adjust the path as ne
 import { SessionProvider } from "next-auth/react";
 import { useState, useEffect, startTransition } from 'react';
 import Loading from "src/components/Loading"
+import { I18nextProvider } from "react-i18next"
+import il8n from "src/pages/i18n.js"
+
 function App({ Component, pageProps }: AppPropsWithLayout) {
   const getLayout = Component.getLayout || ((page) => page);
   const [ready, setReady] = useState(false);
@@ -25,16 +28,20 @@ function App({ Component, pageProps }: AppPropsWithLayout) {
 
   return (
     <div style={{ backgroundColor: "#f2f3ef" }}>
-      <SessionProvider session={pageProps.session}>
-        <QueryClientProvider client={queryClient}>
-          <Hydrate state={pageProps.dehydratedState}>
-            <AuthProvider>
-              <RootLayout>{getLayout(<Component {...pageProps} />)}</RootLayout>
-              <div style={{ backgroundColor: "#f2f3ef" }}> </div>
-            </AuthProvider>
-          </Hydrate>
-        </QueryClientProvider>
-      </SessionProvider>
+      <I18nextProvider i18n={il8n}>
+        <SessionProvider session={pageProps.session}>
+          <QueryClientProvider client={queryClient}>
+            <Hydrate state={pageProps.dehydratedState}>
+              <AuthProvider>
+                <RootLayout>
+                  {getLayout(<Component {...pageProps} />)}
+                </RootLayout>
+                <div style={{ backgroundColor: "#f2f3ef" }}> </div>
+              </AuthProvider>
+            </Hydrate>
+          </QueryClientProvider>
+        </SessionProvider>
+      </I18nextProvider>
     </div>
   )
 }

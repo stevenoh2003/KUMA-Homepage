@@ -2,11 +2,14 @@ import { useState } from "react"
 import { useRouter } from "next/router"
 import Image from "next/image"
 import Logo from "../assets/pictures/logo.jpg"
+import { FaDiscord } from "react-icons/fa" // Import Discord icon
+import { useTranslation } from "react-i18next"
 
 const Hero = () => {
   const [showModal, setShowModal] = useState(false)
   const [email, setEmail] = useState("")
   const router = useRouter()
+  const { t, i18n } = useTranslation() // Initialize useTranslation hook
 
   const handleEmail = async (event) => {
     event.preventDefault()
@@ -36,135 +39,53 @@ const Hero = () => {
       <div
         style={{
           backgroundColor: "#f2f3ef",
-          height: "calc(100vh - 110px)",
           position: "relative",
           overflow: "hidden",
         }}
       >
         <div
-          className="flex flex-col lg:flex-row items-center justify-center h-full relative z-10 px-10"
+          className="flex flex-col items-center justify-center px-10 py-8"
           style={{ maxWidth: "900px", margin: "0 auto" }}
         >
-          <div className="flex justify-center lg:justify-end w-full lg:w-2/5 mb-6 lg:mb-0">
+          <div className="mb-6">
             <Image alt="Logo" src={Logo} width="320" height="320" priority />
           </div>
-          <div className="flex items-center justify-center w-full lg:w-3/5">
-            <div className="text-center">
-              <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">
-                Explore the Next Frontier with{" "}
-                <span
-                  style={{
-                    color: "#4f46e5",
-                  }}
-                >
-                  kuma
-                </span>.
-              </h1>
-              <p className="mt-4 text-lg leading-8 text-gray-600 hidden lg:block">
-                Network, collaborate, expand boundaries of machine intelligence
-              </p>
-              <div className="mt-6">
-                <a
-                  href="/auth/signin"
-                  className="rounded-md bg-indigo-600 px-10 py-3 text-lg font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                >
-                  Get started
-                </a>
-              </div>
-            </div>
+          <div className="text-center mb-6">
+            <h1 className="text-4xl font-bold text-gray-900 sm:text-6xl">
+              {i18n.language === "ja" && (
+                <>
+                  <span style={{ color: "#4f46e5" }}>kuma </span>
+                </>
+              )}
+              {t("hero.title")}{" "}
+              {i18n.language === "en" && (
+                <>
+                  <span style={{ color: "#4f46e5" }}>kuma</span>.
+                </>
+              )}
+            </h1>
+            <p className="mt-4 text-lg leading-8 text-gray-600">
+              {t("hero.subtitle")}
+            </p>
           </div>
-        </div>
-        <div
-          style={{
-            position: "absolute",
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            backgroundImage: 'url("/path/to/dynamic-background.jpg")',
-            backgroundSize: "cover",
-            zIndex: 1,
-            opacity: 0.5,
-          }}
-        />
-      </div>
-      {showModal && (
-        <div
-          style={{
-            position: "fixed",
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            backgroundColor: "rgba(0, 0, 0, 0.5)",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            zIndex: 50,
-          }}
-        >
-          <div
-            style={{
-              backgroundColor: "white",
-              padding: "20px",
-              borderRadius: "10px",
-              width: "500px",
-              boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
-              position: "relative", // Needed to position the close button
-            }}
-          >
-            <button
-              onClick={() => setShowModal(false)}
-              style={{
-                position: "absolute",
-                top: "10px",
-                right: "10px",
-                border: "none",
-                background: "transparent",
-                fontSize: "1.5rem",
-                cursor: "pointer",
-              }}
+          <div className="w-full p-10 flex flex-col sm:flex-row justify-center items-center">
+            <a
+              href="/auth/signin"
+              className="w-full text-center sm:w-auto rounded-md bg-indigo-600 px-10 py-3 text-lg font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 mb-4 sm:mb-0 sm:mr-4"
             >
-              &times; {/* HTML entity for the 'X' character */}
-            </button>
-            <form onSubmit={handleEmail}>
-              <div className="text-lg font-semibold text-gray-900 mb-4">
-                Join our Discord channel
-              </div>
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="Enter your school email"
-                style={{
-                  width: "100%",
-                  padding: "10px",
-                  marginBottom: "10px",
-                  borderRadius: "5px",
-                  border: "1px solid #ccc",
-                }}
-              />
-              <button
-                type="submit"
-                style={{
-                  padding: "10px 20px",
-                  borderRadius: "5px",
-                  backgroundColor: "#4f46e5",
-                  color: "white",
-                  border: "none",
-                  cursor: "pointer",
-                  display: "block",
-                  width: "auto",
-                  marginLeft: "auto",
-                  marginRight: "auto",
-                }}
-              >
-                Submit
-              </button>
-            </form>
+              {t("hero.button.getStarted")}
+            </a>
+            <a
+              href="https://discord.gg/SWKRdkQCby"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-full sm:w-auto text-center rounded-md bg-blue-500 px-10 py-3 text-lg font-semibold text-white shadow-sm hover:bg-blue-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500"
+            >
+              <FaDiscord className="inline-block mr-2" /> Discord
+            </a>
           </div>
         </div>
-      )}
+      </div>
     </>
   )
 }
