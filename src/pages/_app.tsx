@@ -9,7 +9,7 @@ import { SessionProvider } from "next-auth/react";
 import { useState, useEffect, startTransition } from 'react';
 import Loading from "src/components/Loading"
 import { I18nextProvider } from "react-i18next"
-import il8n from "src/pages/i18n.js"
+import il8n from "src/components/i18n.js"
 
 function App({ Component, pageProps }: AppPropsWithLayout) {
   const getLayout = Component.getLayout || ((page) => page);

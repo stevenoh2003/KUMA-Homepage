@@ -14,8 +14,6 @@ import dynamic from 'next/dynamic';
 import Hero from "src/components/Hero";
 import Feature from "src/components/Feature";
 import FeaturedPosts from "src/routes/FeaturedPosts";
-import { I18nextProvider } from 'react-i18next';
-import il8n from "src/pages/i18n.js"
 // const FeaturedPosts = dynamic(() => import("src/components/FeaturedPosts"), { loading: () => <p>Loading...</p> });
 const Team = dynamic(() => import("src/components/Team"), { loading: () => <p>Loading...</p> });
 const Footer = dynamic(() => import("src/components/Footer"), { loading: () => <p>Loading...</p> });
@@ -41,7 +39,7 @@ const FeedPage = () => {
   }
 
   return (
-    <I18nextProvider i18n={il8n}>
+    <>
       {/* <NavBar /> */}
       <MetaConfig {...meta} />
       <Hero />
@@ -50,7 +48,7 @@ const FeedPage = () => {
       {/* <FeaturedPosts /> */}
       <Team />
       <Footer />
-    </I18nextProvider>
+    </>
   )
 }
 
