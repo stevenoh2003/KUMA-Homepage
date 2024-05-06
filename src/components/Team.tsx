@@ -1,9 +1,13 @@
+import React from "react"
 import Image from "next/image"
-import TaiPortrait from "../assets/pictures/tai.png"
+import TaiPortrait from "src/assets/pictures/tai.jpeg"
 import AlexPortrait from "../assets/pictures/alex.jpeg"
-import StevenPortrait from "src/assets/pictures/stevenoh.JPG"
+import StevenPortrait from "../assets/pictures/stevenoh.JPG" // Modified import path
+import { useTranslation } from "react-i18next"
 
 export default () => {
+    const { t } = useTranslation()
+
   const team = [
     {
       avatar: StevenPortrait,
@@ -32,30 +36,22 @@ export default () => {
     <section className="py-14 mb-24" style={{ backgroundColor: "#f2f3ef" }}>
       <div className="max-w-screen-xl mx-auto px-4 md:px-8">
         <div className="max-w-xl space-y-3">
-          <h3 className="text-indigo-600 font-semibold">TEAM</h3>
+          <h3 className="text-indigo-600 font-semibold">{t("title")}</h3>
           <p className="text-gray-800 text-3xl font-semibold sm:text-4xl">
-            Meet our foudners
+            {t("meetFounders")}
           </p>
-          <p>
-          </p>
+          <p></p>
         </div>
         <div className="mt-12">
           <ul className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
             {team.map((item, idx) => (
               <li key={idx} className="flex gap-4 items-center">
                 <div className="flex-none w-24 h-24">
-                  {/* <img
-                    src="../../assets/pictures/logo_transparent.png"
-                    className="w-full h-full rounded-full"
-                    width={200}
-                    height={200}
-                    alt=""
-                  /> */}
                   <Image
                     src={item.avatar}
                     alt="Description"
                     className="w-full h-full rounded-full"
-                    objectFit="contain" // This will ensure the image fits within the container without altering its aspect ratio
+                    objectFit="contain"
                     priority
                   />
                 </div>
@@ -63,9 +59,7 @@ export default () => {
                   <h4 className="text-gray-700 font-semibold sm:text-lg">
                     {item.name}
                   </h4>
-                  {/* <p className="text-indigo-600">{item.title}</p> */}
                   <div className="mt-3 flex gap-4 text-gray-400">
-               
                     <a href={item.linkedin}>
                       <svg
                         className="w-5 h-5 duration-150 hover:text-gray-500"

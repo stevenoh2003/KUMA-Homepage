@@ -1,8 +1,10 @@
 import axios from "axios"
 import { useState } from "react"
 import { useRouter } from "next/router"
+import { useTranslation } from "react-i18next"
 
 const SignUp = () => {
+  const { t } = useTranslation()
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -81,11 +83,9 @@ const SignUp = () => {
         <div className="relative z-10 w-full max-w-md">
           <div className="mt-16 space-y-3">
             <h3 className="text-white text-3xl font-bold">
-              Network, collaborate, share
+              {t("signUp.welcomeMessage")}
             </h3>
-            <p className="text-gray-300">
-              Expand your knowledge horizon with us.
-            </p>
+            <p className="text-gray-300">{t("signUp.description")}</p>
           </div>
         </div>
         <img
@@ -99,15 +99,15 @@ const SignUp = () => {
           <div className="">
             <div className="mt-5 space-y-2">
               <h3 className="text-gray-800 text-2xl font-bold sm:text-3xl">
-                Sign up
+                {t("signUp.signUp")}
               </h3>
               <p>
-                Already have an account?{" "}
+                {t("signUp.haveAccount")}{" "}
                 <a
                   href="/auth/signin"
                   className="font-medium text-indigo-600 hover:text-indigo-500"
                 >
-                  Log in
+                  {t("signUp.logIn")}
                 </a>
               </p>
             </div>
@@ -115,7 +115,7 @@ const SignUp = () => {
           <form onSubmit={handleSubmit} method="POST" className="space-y-5">
             <div>
               <label htmlFor="name" className="font-medium">
-                Name
+                {t("signUp.name")}
               </label>
               <input
                 id="name"
@@ -129,7 +129,7 @@ const SignUp = () => {
             </div>
             <div>
               <label htmlFor="profilePic" className="font-medium">
-                Profile Picture
+                {t("signUp.profilePicture")}
               </label>
               <input
                 id="profilePic"
@@ -141,7 +141,7 @@ const SignUp = () => {
             </div>
             <div>
               <label htmlFor="email" className="font-medium">
-                Email
+                {t("signUp.email")}
               </label>
               <input
                 id="email"
@@ -155,7 +155,7 @@ const SignUp = () => {
             </div>
             <div>
               <label htmlFor="password" className="font-medium">
-                Password
+                {t("signUp.password")}
               </label>
               <input
                 id="password"
@@ -173,7 +173,7 @@ const SignUp = () => {
                 type="submit"
                 className="w-30 px-4 py-2 text-white font-medium bg-indigo-600 hover:bg-indigo-500 active:bg-indigo-600 rounded-lg duration-150"
               >
-                Create account
+                {t("signUp.createAccount")}
               </button>
             </div>
           </form>

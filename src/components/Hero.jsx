@@ -52,7 +52,7 @@ const Hero = () => {
             <Image alt="Logo" src={Logo} width="320" height="320" priority />
           </div>
           <div className="text-center w-9/12 mb-6">
-            <h1 className="text font-bold text-gray-900 sm:text-6xl">
+            <h1 className="text font-bold text-gray-900 text-4xl sm:text-6xl">
               {i18n.language === "ja" && (
                 <>
                   <span style={{ color: "#4f46e5" }}>kuma </span>

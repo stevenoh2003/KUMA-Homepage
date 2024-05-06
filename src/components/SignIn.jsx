@@ -1,7 +1,9 @@
 import { signIn, useSession } from "next-auth/react"
 import { useRouter } from "next/router"
+import { useTranslation } from "react-i18next"
 
 const SignIn = () => {
+  const { t } = useTranslation()
   const { data: session } = useSession()
   const router = useRouter()
 
@@ -22,17 +24,16 @@ const SignIn = () => {
       router.push("/")
     }
   }
-
   return (
     <main className="w-full flex">
       {/* Left panel with the GIF background */}
       <div className="relative flex-1 hidden items-center justify-center h-screen lg:flex">
         <div className="relative z-10 w-full max-w-md">
           <div className="mt-16 space-y-3">
-            <h3 className="text-white text-3xl font-bold">Welcome Back!</h3>
-            <p className="text-gray-300">
-              Log in to your account and continue where you left off.
-            </p>
+            <h3 className="text-white text-3xl font-bold">
+              {t("signIn.welcomeBack")}
+            </h3>
+            <p className="text-gray-300">{t("signIn.logInToContinue")}</p>
           </div>
         </div>
         {/* GIF as the background */}
@@ -49,15 +50,15 @@ const SignIn = () => {
           <div>
             <div className="mt-5 space-y-2">
               <h3 className="text-gray-800 text-2xl font-bold sm:text-3xl">
-                Log in
+                {t("signIn.logIn")}
               </h3>
               <p>
-                Don't have an account?{" "}
+                {t("signIn.noAccount")}
                 <a
                   href="/auth/signup"
                   className="font-medium text-indigo-600 hover:text-indigo-500"
                 >
-                  Sign up
+                  {t("signIn.signUp")}
                 </a>
               </p>
             </div>
@@ -65,7 +66,7 @@ const SignIn = () => {
           <form onSubmit={handleSubmit} className="space-y-5">
             <div>
               <label htmlFor="email" className="font-medium">
-                Email
+                {t("signIn.email")}
               </label>
               <input
                 id="email"
@@ -77,7 +78,7 @@ const SignIn = () => {
             </div>
             <div>
               <label htmlFor="password" className="font-medium">
-                Password
+                {t("signIn.password")}
               </label>
               <input
                 id="password"
@@ -88,11 +89,13 @@ const SignIn = () => {
               />
             </div>
             <button className="w-30 px-4 py-2 text-white font-medium bg-indigo-600 hover:bg-indigo-500 active:bg-indigo-600 rounded-lg duration-150">
-              Sign in
+              {t("signIn.signIn")}
             </button>
           </form>
           {session && (
-            <p className="text-center">Logged in as {session.user.email}</p>
+            <p className="text-center">
+              {t("signIn.loggedInAs")} {session.user.email}
+            </p>
           )}
         </div>
       </div>

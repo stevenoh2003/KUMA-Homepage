@@ -1,4 +1,11 @@
 {
+  "nav.home": "Home",
+  "nav.blog": "Blog",
+  "nav.project": "Project",
+  "nav.login": "Log In",
+  "nav.signup": "Sign Up",
+  "nav.profile": "Profile",
+  "nav.logout": "Log Out",
   "hero.title": "Explore the Next Frontier with",
   "hero.subtitle": "Network, collaborate, expand boundaries of machine intelligence",
   "hero.button.getStarted": "Get started",
@@ -20,6 +27,44 @@
   "pagination.pageIndicator": "Page {{currentPage}} of {{totalPages}}",
 
 
-    "pagination.previous": "Previous",
-  "pagination.next": "Next"
+  "pagination.previous": "Previous",
+  "pagination.next": "Next",
+
+    "features.blogs": "Blogs",
+  "features.blogs.desc": "Share your unique insights and learning journey in blogs to inspire and inform the community.",
+  "features.projects": "Projects",
+  "features.projects.desc": "Collaborate with other members, discuss ideas on Discord, and build innovative projects together.",
+  "features.events": "Events",
+  "features.events.desc": "Join our exclusive events to network and participate in hackathons.",
+  "features.title": "Features",
+  "features.growWithUs": "Grow with us!",
+  "features.invitation": "Join our community to exchange ideas, ask questions, and thrive together.",
+
+  "trustedByMembers": "Trusted by members from around the world",
+      "title": "Team",
+    "meetFounders": "Meet the founders",
+      "signIn": {
+    "welcomeBack": "Welcome Back!",
+    "logInToContinue": "Log in to your account and continue where you left off.",
+    "logIn": "Log in",
+    "noAccount": "Don't have an account? ",
+    "signUp": "Sign up",
+    "email": "Email",
+    "password": "Password",
+    "signIn": "Sign in",
+    "failedToLogin": "Failed to login: ",
+    "loggedInAs": "Logged in as"
+  },
+    "signUp": {
+    "welcomeMessage": "Network, collaborate, share",
+    "description": "Expand your knowledge horizon with us.",
+    "signUp": "Sign up",
+    "haveAccount": "Already have an account?",
+    "logIn": "Log in",
+    "name": "Name",
+    "profilePicture": "Profile Picture",
+    "email": "Email",
+    "password": "Password",
+    "createAccount": "Create account"
+  }
 }

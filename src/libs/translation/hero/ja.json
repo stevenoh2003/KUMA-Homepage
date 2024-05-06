@@ -1,4 +1,11 @@
 {
+   "nav.home": "ホーム",
+  "nav.blog": "ブログ",
+  "nav.project": "プロジェクト",
+  "nav.login": "ログイン",
+  "nav.signup": "サインアップ",
+  "nav.profile": "プロフィール",
+  "nav.logout": "ログアウト",
   "hero.title": "と次の最先端を探検しよう。",
   "hero.subtitle": "繋がり、協力し、機械知能の限界を超えよう",
   "hero.button.getStarted": "はじめる",
@@ -6,18 +13,63 @@
   "modal.title": "ディスコードチャンネルに参加",
   "modal.placeholder": "学校のメールアドレスを入力してください",
   "modal.button.submit": "送信",
+
+
   "blogIndex.title": "最新のブログ記事",
   "blogIndex.subtitle": "コミュニティで人気のブログ。定期的に更新されます。",
-  "blogIndex.addNewPost": "新しい記事を追加する",
-  "blogIndex.signUp": "新しい記事を追加するにはサインアップしてください",
+  "blogIndex.addNewPost": "追加",
+  "blogIndex.signUp": "追加",
   "pagination.previous": "前",
   "pagination.next": "次",
 
 
   
   "discordPosts.title": "Discordフォーラム投稿",
-  "discordPosts.subtitle": "フォーラムチャンネルでの最新の議論をチェックしてください。",
-  "discordPosts.view": "見る",
+  "discordPosts.subtitle": "最新のプロジェクト",
+  "discordPosts.view": "チェック",
 
-  "pagination.pageIndicator": "ページ {{currentPage}} / {{totalPages}}"
+  "pagination.pageIndicator": "ページ {{currentPage}} / {{totalPages}}",
+
+  "features.blogs": "ブログ",
+  "features.blogs.desc": "ユニークな洞察と学びの旅を共有し、ブログで投稿しましょう。",
+  "features.projects": "プロジェクト",
+  "features.projects.desc": "他のメンバーと協力し、Discordでアイデアを議論し、革新的なプロジェクトを一緒に構築しましょう。",
+  "features.events": "イベント",
+  "features.events.desc": "ネットワークを構築し、限定的なイベントに参加して、ハッカソンに参加しましょう。",
+  "features.title": "機能",
+  "features.growWithUs": "私たちと一緒に成長しましょう！",
+  "features.invitation": "アイデアを交換し、質問し、一緒に成長するために、私たちのコミュニティに参加してください。",
+  "trustedByMembers": "世界中のメンバーを集まっています",
+
+  
+
+    "title": "チーム",
+    "meetFounders": "創設者",
+      "signIn": {
+    "welcomeBack": "Welcome back",
+    "logInToContinue": "アカウントにログインしよう",
+    "logIn": "ログイン",
+    "noAccount": "アカウントをお持ちでないですか？",
+    "signUp": "サインアップ",
+    "email": "メールアドレス",
+    "password": "パスワード",
+    "signIn": "サインイン",
+    "failedToLogin": "ログインに失敗しました：",
+    "loggedInAs": "次でログインしました"
+  },
+    "signUp": {
+    "welcomeMessage": "ネットワーク、協力、共有",
+    "description": "私たちと一緒に知識の地平を広げましょう。",
+    "signUp": "サインアップ",
+    "haveAccount": "アカウントをお持ちですか？",
+    "logIn": "ログイン",
+    "name": "名前",
+    "profilePicture": "プロフィール画像",
+    "email": "メールアドレス",
+    "password": "パスワード",
+    "createAccount": "アカウントを作成"
+  }
+  
+
+
 }

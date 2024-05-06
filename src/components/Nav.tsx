@@ -1,21 +1,25 @@
 import { useState } from "react"
 import { useRouter } from "next/router"
 import { useSession, signOut } from "next-auth/react"
-import { UserCircleIcon, Bars3Icon, XMarkIcon } from "@heroicons/react/24/solid"
 import { useTranslation } from "react-i18next"
 import Image from "next/image"
+import { UserCircleIcon, Bars3Icon, XMarkIcon } from "@heroicons/react/24/solid"
 
 export default function NavBar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const router = useRouter()
   const { data: session } = useSession()
-  const { i18n } = useTranslation()
+  const { t, i18n } = useTranslation()
 
   const navigation = [
-    { title: "Home", path: "/", current: router.pathname === "/" },
-    { title: "Blog", path: "/blog", current: router.pathname === "/blog" },
+    { title: t("nav.home"), path: "/", current: router.pathname === "/" },
     {
-      title: "Project",
+      title: t("nav.blog"),
+      path: "/blog",
+      current: router.pathname === "/blog",
+    },
+    {
+      title: t("nav.project"),
       path: "/project",
       current: router.pathname === "/project",
     },
@@ -45,82 +49,17 @@ export default function NavBar() {
 
   return (
     <nav className="bg-transparent w-full py-2 relative" style={navBarStyle}>
-      <div className="max-w-screen-xl mx-auto px-4 md:px-8 flex items-center justify-between">
-        {/* Left Side (Profile and Login/Logout) */}
-        <div className="flex items-center space-x-4 flex-none">
-          {session ? (
-            <>
-              <a
-                href="/profile"
-                className={`flex items-center py-2 text-sm md:text-base`}
-                style={{
-                  transition: "color 0.2s ease",
-                  color: isHomePage ? "#1F2937" : "#fff",
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.firstChild.style.color = "#6B46C1" // Purple
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.firstChild.style.color = isHomePage
-                    ? "#1F2937"
-                    : "#fff"
-                }}
-              >
-                <UserCircleIcon className="h-8 w-8 mr-2" />
-              </a>
-              <button
-                onClick={() => signOut()}
-                className={`block py-2 px-4 text-sm md:text-base ${linkStyle(
-                  isHomePage,
-                  false
-                )}`}
-              >
-                Log Out
-              </button>
-            </>
-          ) : (
-            <>
-              <a
-                href="/auth/signin"
-                className={`block py-2 px-4 text-sm md:text-base ${linkStyle(
-                  isHomePage,
-                  false
-                )}`}
-              >
-                Log In
-              </a>
-              <a
-                href="/auth/signup"
-                className={`block py-2 px-4 text-sm md:text-base ${linkStyle(
-                  isHomePage,
-                  false
-                )}`}
-              >
-                Sign Up
-              </a>
-            </>
-          )}
-        </div>
+      <div className="max-w-screen-xl mx-auto px-4 md:px-8 flex items-center justify-between relative">
+        {/* Semi-transparent overlay */}
+        {isMenuOpen && (
+          <div
+            className="fixed top-0 left-0 w-full h-full bg-black opacity-50 z-40"
+            onClick={toggleMenu}
+          />
+        )}
 
-        {/* Center (Navigation Links) */}
-        <ul className="hidden md:flex space-x-8 justify-center flex-grow">
-          {navigation.map((item, idx) => (
-            <li key={idx} className="text-center">
-              <a
-                href={item.path}
-                className={`block py-2 px-4 text-sm md:text-base ${linkStyle(
-                  isHomePage,
-                  item.current
-                )} transition-colors duration-200`}
-              >
-                {item.title}
-              </a>
-            </li>
-          ))}
-        </ul>
-
-        {/* Right Side (Language Switcher) */}
-        <div className="flex-none hidden md:block">
+        {/* Switch Language Icon (Left for Small Screens) */}
+        <div className="md:hidden flex-none z-50">
           <button
             className="text-white rounded-full py-2 px-4 flex items-center justify-center"
             onClick={switchLanguage}
@@ -130,6 +69,23 @@ export default function NavBar() {
               width="40"
               height="40"
               alt="Language Icon"
+              className={!isHomePage ? "filter brightness-0 invert" : ""}
+            />
+          </button>
+        </div>
+
+        {/* Right Side (Language Switcher - for Desktop) */}
+        <div className="flex-none hidden md:block z-50">
+          <button
+            className="text-white rounded-full py-2 px-4 flex items-center justify-center"
+            onClick={switchLanguage}
+          >
+            <Image
+              src="/icons8-globe-50.png"
+              width="40"
+              height="40"
+              alt="Language Icon"
+              className={!isHomePage ? "filter brightness-0 invert" : ""}
             />
           </button>
         </div>
@@ -137,7 +93,7 @@ export default function NavBar() {
         {/* Hamburger Menu for Mobile */}
         <button
           onClick={toggleMenu}
-          className="md:hidden text-gray-500 hover:text-gray-700"
+          className="text-gray-500 hover:text-gray-700 z-50"
           aria-label="Open menu"
         >
           {isMenuOpen ? (
@@ -149,83 +105,76 @@ export default function NavBar() {
       </div>
 
       {/* Slide-in Mobile Menu */}
-      {isMenuOpen && (
-        <div className="fixed top-0 right-0 w-64 h-full bg-gray-800 text-white z-50 shadow-lg transition-transform transform translate-x-0">
-          <ul className="flex flex-col p-6 space-y-4">
-            {navigation.map((item, idx) => (
-              <li key={idx}>
+      <div
+        className={`fixed top-0 right-0 w-80 h-full bg-gray-800 text-white z-50 shadow-lg transition-transform transform ${
+          isMenuOpen ? "translate-x-0" : "translate-x-full"
+        } transition duration-300 ease-in-out`}
+      >
+        <div className="flex justify-end p-4">
+          <button onClick={toggleMenu} aria-label="Close menu">
+            <XMarkIcon className="h-8 w-8 text-gray-400 hover:text-white" />
+          </button>
+        </div>
+        <ul className="flex flex-col p-6 space-y-4">
+          {navigation.map((item, idx) => (
+            <li key={idx}>
+              <a
+                href={item.path}
+                className={`block py-2 px-4 text-sm md:text-base ${linkStyle(
+                  false,
+                  item.current
+                )}`}
+                onClick={toggleMenu} // Close the menu when an item is clicked
+              >
+                {item.title}
+              </a>
+            </li>
+          ))}
+          {!session && (
+            <>
+              <li>
                 <a
-                  href={item.path}
-                  className={`block py-2 px-4 text-sm md:text-base ${linkStyle(
-                    false,
-                    item.current
-                  )}`}
-                  onClick={toggleMenu} // Close the menu when an item is clicked
+                  href="/auth/signin"
+                  className="block py-2 px-4 text-sm md:text-base hover:bg-indigo-600 hover:text-white hover:rounded-md"
+                  onClick={toggleMenu}
                 >
-                  {item.title}
+                  {t("nav.login")}
                 </a>
               </li>
-            ))}
-            {session ? (
-              <>
-                <li>
-                  <a
-                    href="/profile"
-                    className="block py-2 px-4 text-sm md:text-base"
-                    onClick={toggleMenu}
-                  >
-                    Profile
-                  </a>
-                </li>
-                <li>
-                  <button
-                    onClick={() => {
-                      signOut()
-                      toggleMenu()
-                    }}
-                    className="block py-2 px-4 text-sm md:text-base"
-                  >
-                    Log Out
-                  </button>
-                </li>
-              </>
-            ) : (
-              <>
-                <li>
-                  <a
-                    href="/auth/signin"
-                    className="block py-2 px-4 text-sm md:text-base"
-                    onClick={toggleMenu}
-                  >
-                    Log In
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="/auth/signup"
-                    className="block py-2 px-4 text-sm md:text-base"
-                    onClick={toggleMenu}
-                  >
-                    Sign Up
-                  </a>
-                </li>
-              </>
-            )}
-            {/* Add the language switcher to the menu */}
-            <li>
-              <button
-                className="block py-2 px-4 text-sm md:text-base"
-                onClick={() => {
-                  switchLanguage()
-                  toggleMenu()
-                }}
-              >
-                Switch Language
-              </button>
-            </li>
-          </ul>
-        </div>
-      )}
+              <li>
+                <a
+                  href="/auth/signup"
+                  className="block py-2 px-4 text-sm md:text-base hover:bg-indigo-600 hover:text-white hover:rounded-md"
+                  onClick={toggleMenu}
+                >
+                  {t("nav.signup")}
+                </a>
+              </li>
+            </>
+          )}
+          {session && (
+            <>
+              <li>
+                <a
+                  href="/profile"
+                  className="block py-2 px-4 text-sm md:text-base hover:bg-indigo-600 hover:text-white hover:rounded-md"
+                  onClick={toggleMenu}
+                >
+                  {t("nav.profile")}
+                </a>
+              </li>
+              <li>
+                <a
+                  className="block py-2 px-4 text-sm md:text-base hover:bg-indigo-600 hover:text-white hover:rounded-md"
+                  onClick={() => signOut()}
+                >
+                  {t("nav.logout")}
+                </a>
+              </li>
+            </>
+          )}
+        </ul>
+      </div>
     </nav>
   )
 }
