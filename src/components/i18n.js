@@ -1,8 +1,8 @@
 // i18n.js
 import i18n from "i18next"
 import { initReactI18next } from "react-i18next"
-import enTranslation from "src/libs/translation/en.json"
-import jaTranslation from "src/libs/translation/ja.json"
+import enTranslation from "src/libs/translation/hero/en.json"
+import jaTranslation from "src/libs/translation/hero/ja.json"
 
 i18n
   .use(initReactI18next) // passes i18n down to react-i18next

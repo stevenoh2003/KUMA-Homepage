@@ -3,6 +3,7 @@ import Link from "next/link"
 import { useRouter } from "next/router"
 import Footer from "src/components/Footer"
 import { useSession } from "next-auth/react"
+import { useTranslation } from "react-i18next"
 
 const PAGE_LIMIT = 15
 
@@ -12,6 +13,7 @@ const BlogIndex = () => {
   const [totalPages, setTotalPages] = useState(1)
   const router = useRouter()
   const { data: session, status } = useSession()
+  const { t } = useTranslation()
 
   const fetchPosts = async (page) => {
     const response = await fetch(`/api/posts?page=${page}&limit=${PAGE_LIMIT}`)
@@ -52,13 +54,11 @@ const BlogIndex = () => {
           <div className="flex items-center justify-between sm:max-w-full sm:mx-auto">
             <div>
               <h1 className="text-gray-800 text-3xl font-extrabold sm:text-4xl">
-                Latest Blog Posts
+                {t("blogIndex.title")}
               </h1>
-              <p className="text-gray-600">
-                Blogs that are loved by the community. Updated regularly.
-              </p>
+              <p className="text-gray-600">{t("blogIndex.subtitle")}</p>
             </div>
-            {status === "authenticated" ? ( // Check if user is authenticated
+            {status === "authenticated" ? (
               <button
                 onClick={() => router.push("/blog/create")}
                 className="px-3 py-3 text-indigo-600 bg-indigo-50 rounded-lg duration-150 hover:bg-indigo-100 active:bg-indigo-200 flex items-center"
@@ -75,14 +75,14 @@ const BlogIndex = () => {
                     clipRule="evenodd"
                   />
                 </svg>
-                Add New Post
+                {t("blogIndex.addNewPost")}
               </button>
             ) : (
               <button
                 onClick={() => router.push("/auth/signup")}
                 className="px-3 py-3 text-indigo-600 rounded-lg duration-150 hover:bg-indigo-100 active:bg-indigo-200 flex items-center"
               >
-                <img src="icons8-add-50.png" alt="" />
+                {t("blogIndex.signUp")}
               </button>
             )}
           </div>
@@ -135,7 +135,7 @@ const BlogIndex = () => {
                   : "bg-indigo-50"
               }`}
             >
-              Previous
+              {t("pagination.previous")}
             </button>
             <ul className="flex items-center space-x-2">
               {pages.map((page) => (
@@ -162,7 +162,7 @@ const BlogIndex = () => {
                   : "bg-indigo-50"
               }`}
             >
-              Next
+              {t("pagination.next")}
             </button>
           </div>
         </div>

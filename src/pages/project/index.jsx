@@ -1,6 +1,6 @@
-// pages/discordPosts.js
 import { useEffect, useState } from "react"
 import Footer from "src/components/Footer"
+import { useTranslation } from "react-i18next"
 
 const PAGE_SIZE = 15
 
@@ -10,6 +10,7 @@ const DiscordPosts = () => {
   const [error, setError] = useState("")
   const [currentPage, setCurrentPage] = useState(1)
   const [totalPages, setTotalPages] = useState(0)
+  const { t } = useTranslation()
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -61,7 +62,7 @@ const DiscordPosts = () => {
     }
   }
 
-  if (loading) return <p>Loading posts...</p>
+  if (loading) return <p>{t("loading")}</p>
   if (error) return <p>Error: {error}</p>
 
   return (
@@ -70,11 +71,9 @@ const DiscordPosts = () => {
         <div className="max-w-screen-xl mx-auto px-4 md:px-8">
           <div className="max-w-md">
             <h1 className="text-gray-800 text-xl font-extrabold sm:text-2xl">
-              Discord Forum Posts
+              {t("discordPosts.title")}
             </h1>
-            <p className="text-gray-600 mt-2">
-              Check out the latest discussions happening on our forum channel.
-            </p>
+            <p className="text-gray-600 mt-2">{t("discordPosts.subtitle")}</p>
           </div>
           <ul className="mt-16 grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
             {paginatedPosts.map((post) => (
@@ -88,10 +87,6 @@ const DiscordPosts = () => {
                     <h4 className="text-gray-800 font-semibold">
                       {post.title}
                     </h4>
-                    {/* <p className="text-gray-600 text-sm">
-                    Author: {post.authorId}
-                  </p>
-                  <p className="text-gray-600 text-sm">Date: {post.date}</p> */}
                     <p className="text-gray-600 text-sm">{post.description}</p>
                   </div>
                   <a
@@ -100,7 +95,7 @@ const DiscordPosts = () => {
                     rel="noopener noreferrer"
                     className="text-gray-700 text-sm border rounded-lg px-3 py-2 duration-150 hover:bg-gray-100"
                   >
-                    View
+                    {t("discordPosts.view")}
                   </a>
                 </div>
               </li>
@@ -130,7 +125,7 @@ const DiscordPosts = () => {
                     clipRule="evenodd"
                   />
                 </svg>
-                Previous
+                {t("pagination.previous")}
               </a>
               <ul className="flex items-center gap-1">
                 {Array.from({ length: totalPages }, (_, i) => i + 1).map(
@@ -157,7 +152,7 @@ const DiscordPosts = () => {
                 onClick={goToNextPage}
                 className="hover:text-indigo-600 flex items-center gap-x-2"
               >
-                Next
+                {t("pagination.next")}
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 20 20"
@@ -180,17 +175,20 @@ const DiscordPosts = () => {
                 onClick={goToPreviousPage}
                 className="px-4 py-2 border rounded-lg duration-150 hover:bg-gray-50"
               >
-                Previous
+                {t("pagination.previous")}
               </a>
               <div className="font-medium">
-                Page {currentPage} of {totalPages}
+                {t("pagination.pageIndicator", {
+                  currentPage,
+                  totalPages,
+                })}
               </div>
               <a
                 href="javascript:void(0)"
                 onClick={goToNextPage}
                 className="px-4 py-2 border rounded-lg duration-150 hover:bg-gray-50"
               >
-                Next
+                {t("pagination.next")}
               </a>
             </div>
           </div>

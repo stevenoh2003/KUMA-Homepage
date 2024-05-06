@@ -4,6 +4,7 @@ import Image from "next/image"
 import Logo from "../assets/pictures/logo.jpg"
 import { FaDiscord } from "react-icons/fa" // Import Discord icon
 import { useTranslation } from "react-i18next"
+import Link from "next/link"
 
 const Hero = () => {
   const [showModal, setShowModal] = useState(false)
@@ -50,8 +51,8 @@ const Hero = () => {
           <div className="mb-6">
             <Image alt="Logo" src={Logo} width="320" height="320" priority />
           </div>
-          <div className="text-center mb-6">
-            <h1 className="text-4xl font-bold text-gray-900 sm:text-6xl">
+          <div className="text-center w-9/12 mb-6">
+            <h1 className="text font-bold text-gray-900 sm:text-6xl">
               {i18n.language === "ja" && (
                 <>
                   <span style={{ color: "#4f46e5" }}>kuma </span>
@@ -69,12 +70,12 @@ const Hero = () => {
             </p>
           </div>
           <div className="w-full p-10 flex flex-col sm:flex-row justify-center items-center">
-            <a
+            <Link
               href="/auth/signin"
               className="w-full text-center sm:w-auto rounded-md bg-indigo-600 px-10 py-3 text-lg font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 mb-4 sm:mb-0 sm:mr-4"
             >
               {t("hero.button.getStarted")}
-            </a>
+            </Link>
             <a
               href="https://discord.gg/SWKRdkQCby"
               target="_blank"

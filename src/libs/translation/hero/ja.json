@@ -1,0 +1,23 @@
+{
+  "hero.title": "と次の最先端を探検しよう。",
+  "hero.subtitle": "繋がり、協力し、機械知能の限界を超えよう",
+  "hero.button.getStarted": "はじめる",
+  "hero.button.joinDiscord": "ディスコードに参加",
+  "modal.title": "ディスコードチャンネルに参加",
+  "modal.placeholder": "学校のメールアドレスを入力してください",
+  "modal.button.submit": "送信",
+  "blogIndex.title": "最新のブログ記事",
+  "blogIndex.subtitle": "コミュニティで人気のブログ。定期的に更新されます。",
+  "blogIndex.addNewPost": "新しい記事を追加する",
+  "blogIndex.signUp": "新しい記事を追加するにはサインアップしてください",
+  "pagination.previous": "前",
+  "pagination.next": "次",
+
+
+  
+  "discordPosts.title": "Discordフォーラム投稿",
+  "discordPosts.subtitle": "フォーラムチャンネルでの最新の議論をチェックしてください。",
+  "discordPosts.view": "見る",
+
+  "pagination.pageIndicator": "ページ {{currentPage}} / {{totalPages}}"
+}

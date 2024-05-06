@@ -112,6 +112,30 @@ useEffect(() => {
       })
       .catch((error) => console.error("Error updating post:", error))
   }
+
+  const deletePost = async () => {
+    if (!editable) return
+    const confirmed = confirm("Are you sure you want to delete this post?")
+    if (!confirmed) return
+
+    try {
+      const response = await fetch(`/api/posts/delete`, {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ title: postContent.title }),
+      })
+
+      if (response.ok) {
+        console.log("Post deleted successfully")
+        router.push("/blog")
+      } else {
+        console.error("Failed to delete post:", await response.json())
+      }
+    } catch (error) {
+      console.error("Error deleting post:", error)
+    }
+  }
+
 const updateTitleAndThumbnail = async () => {
   updatePost()
   const response = await fetch(`/api/posts/updateTitleAndThumbnail`, {
@@ -274,6 +298,12 @@ const updateTitleAndThumbnail = async () => {
                 onClick={() => setShowModal(true)}
               >
                 Update Post
+              </button>
+              <button
+                className="px-4 py-2 text-white font-medium bg-red-600 hover:bg-red-500 active:bg-red-700 rounded-lg ml-4"
+                onClick={deletePost}
+              >
+                Delete Post
               </button>
             </div>
           </>

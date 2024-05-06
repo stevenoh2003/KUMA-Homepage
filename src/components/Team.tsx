@@ -1,7 +1,7 @@
 import Image from "next/image"
 import TaiPortrait from "../assets/pictures/tai.png"
 import AlexPortrait from "../assets/pictures/alex.jpeg"
-import StevenPortrait from "../assets/pictures/steven.png"
+import StevenPortrait from "src/assets/pictures/stevenoh.JPG"
 
 export default () => {
   const team = [

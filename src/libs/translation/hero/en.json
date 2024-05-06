@@ -1,0 +1,25 @@
+{
+  "hero.title": "Explore the Next Frontier with",
+  "hero.subtitle": "Network, collaborate, expand boundaries of machine intelligence",
+  "hero.button.getStarted": "Get started",
+  "hero.button.joinDiscord": "Join Discord",
+  "modal.title": "Join our Discord channel",
+  "modal.placeholder": "Enter your school email",
+  "modal.button.submit": "Submit",
+
+  "blogIndex.title": "Latest Blog Posts",
+  "blogIndex.subtitle": "Blogs that are loved by the community. Updated regularly.",
+  "blogIndex.addNewPost": "Add New Post",
+  "blogIndex.signUp": "Sign Up to Add New Posts",
+
+
+    "discordPosts.title": "Discord Forum Posts",
+  "discordPosts.subtitle": "Check out the latest discussions happening on our forum channel.",
+  "discordPosts.view": "View",
+
+  "pagination.pageIndicator": "Page {{currentPage}} of {{totalPages}}",
+
+
+    "pagination.previous": "Previous",
+  "pagination.next": "Next"
+}
