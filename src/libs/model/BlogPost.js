@@ -3,6 +3,7 @@ import mongoose from "mongoose"
 
 const blogPostSchema = new mongoose.Schema({
   title: { type: String, required: true },
+  description: { type: String, required: false },
   s3_key: { type: String, required: true },
   thumbnail_url: { type: String },
   created_at: { type: Date, default: Date.now },

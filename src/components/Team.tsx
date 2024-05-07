@@ -3,10 +3,11 @@ import Image from "next/image"
 import TaiPortrait from "src/assets/pictures/tai.jpeg"
 import AlexPortrait from "../assets/pictures/alex.jpeg"
 import StevenPortrait from "../assets/pictures/stevenoh.JPG" // Modified import path
+import MaggiePortrait from "../assets/pictures/maggie.jpg"
 import { useTranslation } from "react-i18next"
 
 export default () => {
-    const { t } = useTranslation()
+  const { t } = useTranslation()
 
   const team = [
     {
@@ -28,6 +29,13 @@ export default () => {
       name: "Tai Inui",
       title: "Full stack engineer",
       linkedin: "https://www.linkedin.com/in/tai-inui-9a776a296/",
+      // twitter: "javascript:void(0)",
+    },
+    {
+      avatar: MaggiePortrait,
+      name: "Magdeline Kuan",
+      title: "Full stack engineer",
+      // linkedin: "https://www.linkedin.com/in/tai-inui-9a776a296/",
       // twitter: "javascript:void(0)",
     },
   ]
@@ -60,7 +68,7 @@ export default () => {
                     {item.name}
                   </h4>
                   <div className="mt-3 flex gap-4 text-gray-400">
-                    <a href={item.linkedin}>
+                    {/* <a href={item.linkedin}>
                       <svg
                         className="w-5 h-5 duration-150 hover:text-gray-500"
                         fill="none"
@@ -78,7 +86,7 @@ export default () => {
                           </clipPath>
                         </defs>
                       </svg>
-                    </a>
+                    </a> */}
                   </div>
                 </div>
               </li>

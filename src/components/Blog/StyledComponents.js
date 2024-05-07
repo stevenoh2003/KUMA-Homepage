@@ -44,6 +44,9 @@ export const StyledEditor = styled.div`
   .ProseMirror {
     border-radius: 5px;
     padding: 20px;
+    line-height: 1.8;
+    font-size: 17px;
+    font: "Fira Sans", sans-serif;
   }
 
   > * + * {
@@ -68,19 +71,19 @@ export const StyledEditor = styled.div`
   }
 
   h1 {
-    font-size: calc(1.5rem + 1.5vw); /* Largest, for main titles */
+    font-size: calc(1.5rem + 1vw); /* Largest, for main titles */
     line-height: 1.2;
   }
 
   h2 {
     font-size: calc(
-      1.375rem + 1.2vw
+      1.375rem + 0.8vw
     ); /* Second largest, for major section headings */
     line-height: 1.3;
   }
 
   h3 {
-    font-size: calc(1.25rem + 0.9vw); /* Medium size, for sub-sections */
+    font-size: calc(1.25rem + 0.6vw); /* Medium size, for sub-sections */
     line-height: 1.35;
   }
 

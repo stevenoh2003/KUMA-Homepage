@@ -2,7 +2,7 @@ import axios from "axios"
 import { useState } from "react"
 import { useRouter } from "next/router"
 import { useTranslation } from "react-i18next"
-
+import Link from "next/link"
 const SignUp = () => {
   const { t } = useTranslation()
   const [formData, setFormData] = useState({
@@ -103,12 +103,12 @@ const SignUp = () => {
               </h3>
               <p>
                 {t("signUp.haveAccount")}{" "}
-                <a
+                <Link
                   href="/auth/signin"
                   className="font-medium text-indigo-600 hover:text-indigo-500"
                 >
                   {t("signUp.logIn")}
-                </a>
+                </Link>
               </p>
             </div>
           </div>

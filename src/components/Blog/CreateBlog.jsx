@@ -12,6 +12,7 @@ const CreateBlog = () => {
   const [s3Key, setS3Key] = useState(null)
   const [thumbnail, setThumbnail] = useState(null)
   const [title, setTitle] = useState("")
+  const [description, setDescription] = useState("")
   const [isPublic, setIsPublic] = useState(false)
   const [errorMessage, setErrorMessage] = useState("")
   const { editor } = useCurrentEditor()
@@ -97,6 +98,7 @@ const handlePost = async (isNew) => {
     credentials: "include",
     body: JSON.stringify({
       title,
+      description,
       content: htmlContent,
       s3Key,
       isNew,
@@ -135,6 +137,14 @@ const handlePost = async (isNew) => {
                 placeholder="Enter your blog title"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
+                className="w-full mt-2 px-3 py-2 text-gray-500 bg-transparent outline-none border-2 border-black focus:border-indigo-600 shadow-lg rounded-lg"
+              />
+              <label className="font-medium">Description</label>
+              <input
+                type="text"
+                placeholder="Enter a short description"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
                 className="w-full mt-2 px-3 py-2 text-gray-500 bg-transparent outline-none border-2 border-black focus:border-indigo-600 shadow-lg rounded-lg"
               />
               {errorMessage && (

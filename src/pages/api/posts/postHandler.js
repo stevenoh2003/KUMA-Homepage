@@ -6,7 +6,7 @@ import s3Client from "src/libs/aws-config"
 
 async function handler(req, res) {
   await dbConnect()
-  const { title, content, isNew, userId, thumbnailUrl, isPublic } = req.body
+  const { title, description, content, isNew, userId, thumbnailUrl, isPublic } = req.body
   let s3Key = req.body.s3Key
 
   try {
@@ -32,6 +32,7 @@ async function handler(req, res) {
 
       const newPost = new BlogPost({
         title: title,
+        description: description,
         s3_key: s3Key,
         thumbnail_url: thumbnailUrl,
         owner: userId,

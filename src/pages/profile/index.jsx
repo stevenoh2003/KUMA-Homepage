@@ -82,9 +82,7 @@ const response = await fetch("/api/users/update", {
         <title>User Profile</title>
       </Head>
       <div
-      
         style={{
-        
           display: "flex",
           justifyContent: "space-between",
           maxWidth: "1200px",
@@ -121,13 +119,22 @@ const response = await fetch("/api/users/update", {
             <div className="inputGroup mb-4">
               <strong>Profile Image:</strong>
               {session.user.image && (
-                <div className="imageWrapper mt-1">
+                <div
+                  className="imageWrapper mt-1"
+                  style={{
+                    width: "100px",
+                    height: "100px",
+                    overflow: "hidden",
+                    borderRadius: "50%",
+                  }}
+                >
                   <Image
                     src={session.user.image}
                     alt="Profile Picture"
                     width={100}
                     height={100}
-                    className="rounded-full object-cover"
+                    className="object-cover"
+                    style={{ minWidth: "100%", minHeight: "100%" }}
                   />
                 </div>
               )}
