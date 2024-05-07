@@ -20,7 +20,7 @@
   "blogIndex.signUp": "Sign Up to Add New Posts",
 
 
-    "discordPosts.title": "Discord Forum Posts",
+  "discordPosts.title": "Discord Forum Posts",
   "discordPosts.subtitle": "Check out the latest discussions happening on our forum channel.",
   "discordPosts.view": "View",
 
@@ -30,13 +30,13 @@
   "pagination.previous": "Previous",
   "pagination.next": "Next",
 
-    "features.blogs": "Blogs",
-  "features.blogs.desc": "Share your unique insights and learning journey in blogs to inspire and inform the community.",
-  "features.projects": "Projects",
-  "features.projects.desc": "Collaborate with other members, discuss ideas on Discord, and build innovative projects together.",
-  "features.events": "Events",
-  "features.events.desc": "Join our exclusive events to network and participate in hackathons.",
-  "features.title": "Features",
+  "features.blogs": "Global Connections",
+  "features.blogs.desc": "Connect with Kuma members from every corner of the globe, from Tokyo to London, and expand your network!",
+  "features.projects": "Bilingual Community",
+  "features.projects.desc": "Join our diverse community where most members are fluent in both English and Japanese, enriching your experience and broadening your horizons!",
+  "features.events": "Epic Rewards",
+  "features.events.desc": "Stay tuned for thrilling rewards from our sponsors that will inspire and motivate!",
+  "features.title": "Why kuma?",
   "features.growWithUs": "Grow with us!",
   "features.invitation": "Join our community to exchange ideas, ask questions, and thrive together.",
 

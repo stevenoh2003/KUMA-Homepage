@@ -9,6 +9,7 @@ import { GetStaticProps } from "next";
 import { dehydrate } from "@tanstack/react-query";
 import { filterPosts } from "src/libs/utils/notion";
 import LogoGrid from "src/components/LogoGrid"
+import Explanation from "src/components/Explanation"
 
 import dynamic from 'next/dynamic';
 import Hero from "src/components/Hero";
@@ -44,6 +45,7 @@ const FeedPage = () => {
       <MetaConfig {...meta} />
       <Hero />
       <Feature />
+      <Explanation />
       <LogoGrid />
       {/* <FeaturedPosts /> */}
       <Team />

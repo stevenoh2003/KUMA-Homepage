@@ -23,20 +23,20 @@
   "pagination.next": "次",
 
 
-  
   "discordPosts.title": "Discordフォーラム投稿",
   "discordPosts.subtitle": "最新のプロジェクト",
   "discordPosts.view": "チェック",
 
   "pagination.pageIndicator": "ページ {{currentPage}} / {{totalPages}}",
 
-  "features.blogs": "ブログ",
-  "features.blogs.desc": "ユニークな洞察と学びの旅を共有し、ブログで投稿しましょう。",
-  "features.projects": "プロジェクト",
-  "features.projects.desc": "他のメンバーと協力し、Discordでアイデアを議論し、革新的なプロジェクトを一緒に構築しましょう。",
-  "features.events": "イベント",
-  "features.events.desc": "ネットワークを構築し、限定的なイベントに参加して、ハッカソンに参加しましょう。",
-  "features.title": "機能",
+"features.blogs": "グローバルなつながり",
+"features.blogs.desc": "東京からロンドンまで、世界各地のkumaメンバーと繋がり、あなたのネットワークを広げましょう！",
+"features.projects": "バイリンガルコミュニティ",
+"features.projects.desc": "英語と日本語の両方に堪能なメンバーが多数参加している多様なコミュニティに参加し、あなたの経験を豊かにし、視野を広げましょう！",
+"features.events": "スポンサー",
+"features.events.desc": "スポンサーからの奨をお楽しみに！",
+
+  "features.title": "kumaってなに",
   "features.growWithUs": "私たちと一緒に成長しましょう！",
   "features.invitation": "アイデアを交換し、質問し、一緒に成長するために、私たちのコミュニティに参加してください。",
   "trustedByMembers": "世界中のメンバーを集まっています",
