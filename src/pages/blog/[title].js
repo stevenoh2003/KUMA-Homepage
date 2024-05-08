@@ -237,7 +237,7 @@ const updateTitleAndThumbnail = async () => {
       </div>
       <div className="mt-8">
         {userInfo ? (
-          <div className="flex justify-between items-center mt-4 md:mx-12 mb-4 mx-auto max-w-screen-lg px-4 sm:px-0">
+          <div className="flex justify-between items-center mt-4 mb-4 mx-auto max-w-screen-lg px-4 sm:px-0 md:px-14">
             {/* Author Profile */}
             <div className="flex items-center space-x-2 md:space-x-4">
               {userInfo.profilePicUrl ? (
