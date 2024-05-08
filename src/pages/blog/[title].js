@@ -32,11 +32,14 @@ const PostPage = () => {
   const [newTitle, setNewTitle] = useState("")
   const [newThumbnail, setNewThumbnail] = useState(null)
   const [isPublic, setIsPublic] = useState(postContent.isPublic) // Initialize to the post's value
+  const [editorFocused, setEditorFocused] = useState(false)
 
   const editor = useEditor({
     extensions: [
       StarterKit,
-      Mathematics,
+      Mathematics.configure({
+        // Custom regex to identify single and double dollar signs
+      }),
       TextAlign.configure({
         types: ["heading", "paragraph"],
       }),
@@ -45,14 +48,21 @@ const PostPage = () => {
       }),
       Image.configure({
         HTMLAttributes: {
-          class: "tiptap-image"
+          class: "tiptap-image",
         },
       }),
       // ImageExtension,
     ],
     content: "",
     editable: false,
+    onFocus: ({ editor }) => {
+      setEditorFocused(true)
+    },
+    onBlur: ({ editor }) => {
+      setEditorFocused(false)
+    },
   })
+
 
 useEffect(() => {
   // If editable is null, default to false
@@ -204,7 +214,7 @@ const updateTitleAndThumbnail = async () => {
           alt="Thumbnail"
           className="w-full h-full object-cover"
         />
-        <div className="absolute inset-0 bg-black opacity-70 flex justify-center items-center">
+        <div className="absolute inset-0 bg-black opacity-85 flex justify-center items-center">
           <div className="relative flex items-center space-x-2">
             <h1 className="text-4xl text-white font-semibold">
               {postContent.title}
@@ -227,7 +237,7 @@ const updateTitleAndThumbnail = async () => {
       </div>
       <div className="mt-8">
         {userInfo ? (
-          <div className="flex justify-between items-center mt-4 mb-4 mx-auto max-w-screen-lg px-4 sm:px-0">
+          <div className="flex justify-between items-center mt-4 md:mx-12 mb-4 mx-auto max-w-screen-lg px-4 sm:px-0">
             {/* Author Profile */}
             <div className="flex items-center space-x-2 md:space-x-4">
               {userInfo.profilePicUrl ? (
@@ -281,7 +291,10 @@ const updateTitleAndThumbnail = async () => {
               }}
             />
           )}
-          <EditorContent editor={editor} />
+          <EditorContent
+            editor={editor}
+            style={{ backgroundColor: editorFocused ? "white" : "transparent" }}
+          />
         </StyledEditor>
         {editable && (
           <>

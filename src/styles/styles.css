@@ -1,4 +1,5 @@
 .ProseMirror {
+
     >*+* {
         margin-top: 0.75em;
     }
@@ -28,10 +29,48 @@
         border-radius: 0.25rem;
         display: inline-block;
     }
+
+        .Tiptap-mathematics-editor,
+        .Tiptap-mathematics-render {
+                line-height: 1;
+                    /* Adjust line height to remove extra vertical space */
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+                vertical-align: top;
+                    /* This helps align items at the top, removing unexpected vertical spaces */
+        }
+
+.Tiptap-mathematics-editor,
+.Tiptap-mathematics-render {
+
+    max-width: 100%;
+    /* Ensures the container does not overflow the parent's width */
+    overflow-x: auto;
+    /* Enables horizontal scrolling if content overflows */
+    white-space: nowrap;
+    /* Prevents the equation from wrapping onto the next line */
+    /* Display style */
+    opacity: 1;
+    /* Makes the equation visible */
+    position: relative;
+    /* Normal positioning */
+}
+.Tiptap-mathematics-editor::-webkit-scrollbar,
+.Tiptap-mathematics-render::-webkit-scrollbar {
+    display: none;
+    /* Completely hide the scrollbar */
+}
+.Tiptap-mathematics-editor--hidden {
+    /* Ensures the editor is visible for adjustment */
+    opacity: 1;
+    /* Adjusts opacity to ensure content is visible */
+}
 }
 
 /* Basic editor styles */
 .tiptap {
+
     >*+* {
         margin-top: 0.75em;
     }
@@ -86,6 +125,7 @@
         margin: 2rem 0;
     }
 }
+
 .image-resizer {
     position: relative;
     /* display: inline-block; */
@@ -107,7 +147,7 @@
 
 /* Ensure the images inside .tiptap are centered horizontally */
 .tiptap img {
-    
+
     display: block;
     /* Makes margin auto effective */
     margin-left: auto;
@@ -119,6 +159,7 @@
     height: auto;
     /* Keeps the aspect ratio */
 }
+
 img.tiptap-image::after {
     content: "\n";
     /* Adds a visible content block */
