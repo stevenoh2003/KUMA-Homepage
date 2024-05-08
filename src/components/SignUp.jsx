@@ -14,21 +14,31 @@ const SignUp = () => {
   })
 
   const router = useRouter() // Initialize useRouter for redirection
+const [error, setError] = useState("")
 
-  const handleChange = (event) => {
-    const { name, value, type, files } = event.target
-    if (type === "file") {
-      setFormData((prev) => ({
-        ...prev,
-        [name]: files[0],
-      }))
+const handleChange = (event) => {
+  const { name, value, type, files } = event.target
+  if (type === "file") {
+    const file = files[0]
+    if (file.size > 10000000) {
+      // 10MB limit
+      setError("Please upload a file smaller than 10MB")
+      return // Stop further processing
     } else {
-      setFormData((prev) => ({
-        ...prev,
-        [name]: value,
-      }))
+      setError("") // Clear any existing errors if the file size is valid
     }
+    setFormData((prev) => ({
+      ...prev,
+      [name]: file,
+    }))
+  } else {
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }))
   }
+}
+
 
   const handleSubmit = async (event) => {
     event.preventDefault()
@@ -138,7 +148,9 @@ const SignUp = () => {
                 onChange={handleChange}
                 className="w-full mt-2 px-3 py-2 text-gray-500 bg-transparent outline-none border focus:border-indigo-600 rounded-lg"
               />
+              {error && <p style={{ color: "red" }}>{error}</p>}
             </div>
+
             <div>
               <label htmlFor="email" className="font-medium">
                 {t("signUp.email")}

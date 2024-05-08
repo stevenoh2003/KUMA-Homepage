@@ -46,7 +46,7 @@ export const StyledEditor = styled.div`
     padding: 20px;
     line-height: 1.8;
     font-size: 17px;
-    font: "Fira Sans", sans-serif;
+    font: sans-serif, "Fira Sans";
   }
 
   > * + * {

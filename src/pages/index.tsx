@@ -19,6 +19,7 @@ import FeaturedPosts from "src/routes/FeaturedPosts";
 const Team = dynamic(() => import("src/components/Team"), { loading: () => <p>Loading...</p> });
 const Footer = dynamic(() => import("src/components/Footer"), { loading: () => <p>Loading...</p> });
 import NavBar from "src/components/Nav";
+import Quote from "src/components/Quote"
 export const getStaticProps: GetStaticProps = async () => {
   const posts = filterPosts(await getPosts());
   await queryClient.prefetchQuery(queryKey.posts(), () => posts);
@@ -44,6 +45,8 @@ const FeedPage = () => {
       {/* <NavBar /> */}
       <MetaConfig {...meta} />
       <Hero />
+      <Quote />
+
       <Feature />
       <Explanation />
       <LogoGrid />

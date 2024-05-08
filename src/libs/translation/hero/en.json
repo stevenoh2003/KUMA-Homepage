@@ -66,5 +66,23 @@
     "email": "Email",
     "password": "Password",
     "createAccount": "Create account"
+  },
+
+  "quote":{
+    "title":"Learn by Sharing",
+    "quote":"If you can't explain something in simple terms, you don'tunderstand it.",
+    "author":"Richard Feyman"
+  },
+    "step1": {
+    "title": "Sign up",
+    "description": "Register an account on our website, head to the blog page and begin writing! We will be releasing monthly kuma awards to outstanding articles!"
+  },
+  "step2": {
+    "title": "Join our discord channel",
+    "description": "Participate in heated discussions with other kuma members in our discord channel. In discord create your own threads in the project forum to seek collaboration!"
+  },
+  "step3": {
+    "title": "Join events",
+    "description": "Tune in for updates on in-person and virtual events. Networking events, hackathons, paper-studying session, and more!"
   }
 }

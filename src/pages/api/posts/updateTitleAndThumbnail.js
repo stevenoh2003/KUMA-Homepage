@@ -68,7 +68,7 @@ export default async function handler(req, res) {
           Key: s3Key,
           Fields: { "Content-Type": thumbnailType, ACL: "public-read" },
           Conditions: [
-            ["content-length-range", 0, 5000000], // Limit to 5MB
+            ["content-length-range", 0, 10000000], // Limit to 5MB
             { "Content-Type": thumbnailType },
             { ACL: "public-read" },
           ],
