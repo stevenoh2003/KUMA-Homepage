@@ -6,7 +6,7 @@
   "nav.signup": "サインアップ",
   "nav.profile": "プロフィール",
   "nav.logout": "ログアウト",
-  "hero.title": "と次の最先端を探検しよう。",
+  "hero.title": "と最先端を探検しよう。",
   "hero.subtitle": "繋がり、協力し、機械知能の限界を超えよう",
   "hero.button.getStarted": "はじめる",
   "hero.button.joinDiscord": "ディスコードに参加",
@@ -71,7 +71,7 @@
   },
   
     "quote":{
-    "title":"分かち合うて学ぶ",
+    "title":"説明して学ぶ",
     "quote":"簡単な言葉で説明できないなら、理解していないことになる。",
     "author":"リチャード・フェイマン"
   },

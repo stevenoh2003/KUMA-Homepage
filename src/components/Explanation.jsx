@@ -71,7 +71,7 @@ export default function Example() {
             </div>
           </div>
         </div>
-        <div className="relative -ml-12 -mt-12 p-12 lg:sticky lg:top-4 lg:col-start-2 lg:row-span-2 lg:row-start-1 lg:overflow-hidden fade-in-section">
+        <div className="relative hidden sm:block -ml-12 -mt-12 p-12 lg:sticky lg:top-4 lg:col-start-2 lg:row-span-2 lg:row-start-1 lg:overflow-hidden fade-in-section">
           {isLoading && (
             <div
               className="absolute inset-0 flex justify-center items-center" // Full overlay on the parent div

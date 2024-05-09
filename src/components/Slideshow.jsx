@@ -47,8 +47,8 @@ function Slideshow() {
   }, [index])
 
   return (
-    <div className="mb-32">
-      <h1 className="mt-2 ml-20 mb-20 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+    <div className="mb-32 mt-32">
+      <h1 className="mt-2 ml-6 mb-4 sm:ml-20 sm:mb-20 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
         Past Projects from Our Members
       </h1>
       <div className="slideshow">

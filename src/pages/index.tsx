@@ -10,6 +10,7 @@ import { dehydrate } from "@tanstack/react-query";
 import { filterPosts } from "src/libs/utils/notion";
 import LogoGrid from "src/components/LogoGrid"
 import Explanation from "src/components/Explanation"
+import { Suspense } from 'react'
 
 import Slideshow from "src/components/Slideshow"
 import dynamic from 'next/dynamic';
@@ -49,7 +50,11 @@ const FeedPage = () => {
       <Quote />
 
       <Feature />
-      <Explanation />
+      
+      <Suspense fallback={<p>Loading feed...</p>}>
+        <Explanation />
+      </Suspense>
+
       <Slideshow />
       <LogoGrid />
       {/* <FeaturedPosts /> */}
