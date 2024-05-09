@@ -38,7 +38,7 @@ const SignIn = () => {
         </div>
         {/* GIF as the background */}
         <img
-          src="/robot.gif" // Adjust the path to your GIF file
+          src="https://kuma2024.s3.ap-southeast-2.amazonaws.com/robot.webp" // Adjust the path to your GIF file
           alt="Background GIF"
           className="absolute inset-0 h-full w-full object-cover opacity-80"
         />

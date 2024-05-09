@@ -88,7 +88,7 @@ export default function Example() {
           )}
           <Image
             className="w-[48rem] max-w-none rounded-xl bg-gray-900 shadow-xl ring-1 ring-gray-400/10 sm:w-[57rem]"
-            src="https://kuma2024.s3.ap-southeast-2.amazonaws.com/robot.gif"
+            src="https://kuma2024.s3.ap-southeast-2.amazonaws.com/robot.webp"
             alt={t("robotImageAlt")} // Example of another translated text
             width={1000} // Correct width based on image aspect ratio
             height={600} // Correct height based on image aspect ratio

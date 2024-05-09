@@ -49,7 +49,13 @@ const Hero = () => {
           style={{ maxWidth: "900px", margin: "0 auto" }}
         >
           <div className="mb-6">
-            <Image alt="Logo" src={Logo} width="320" height="320" priority />
+            <Image
+              alt="Logo"
+              src="https://kuma2024.s3.ap-southeast-2.amazonaws.com/logo_transparent.webp"
+              width="320"
+              height="320"
+              priority
+            />
           </div>
           <div className="text-center w-9/12 mb-6">
             <h1 className="text font-bold text-gray-900 text-4xl sm:text-6xl">

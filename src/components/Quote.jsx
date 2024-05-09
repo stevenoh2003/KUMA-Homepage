@@ -48,7 +48,7 @@ export default function Example() {
           )}
           <Image
             className="w-[48rem] max-w-none bg-gray-900 shadow-xl ring-1 ring-gray-400/10 sm:w-[57rem]"
-            src="https://kuma2024.s3.ap-southeast-2.amazonaws.com/Feyman.gif"
+            src="https://kuma2024.s3.ap-southeast-2.amazonaws.com/ezgif.com-gif-to-webp-converter.webp"
             alt={t("imageAlt")} // Translating alt text
             width={1000} // Ensure you set these to the actual image dimensions
             height={600}
