@@ -11,6 +11,7 @@ import { filterPosts } from "src/libs/utils/notion";
 import LogoGrid from "src/components/LogoGrid"
 import Explanation from "src/components/Explanation"
 
+import Slideshow from "src/components/Slideshow"
 import dynamic from 'next/dynamic';
 import Hero from "src/components/Hero";
 import Feature from "src/components/Feature";
@@ -49,6 +50,7 @@ const FeedPage = () => {
 
       <Feature />
       <Explanation />
+      <Slideshow />
       <LogoGrid />
       {/* <FeaturedPosts /> */}
       <Team />

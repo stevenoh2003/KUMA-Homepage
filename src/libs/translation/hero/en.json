@@ -69,7 +69,7 @@
   },
 
   "quote":{
-    "title":"Learn by Sharing",
+    "title":"Learn by Explaining to others",
     "quote":"If you can't explain something in simple terms, you don'tunderstand it.",
     "author":"Richard Feyman"
   },
@@ -84,5 +84,7 @@
   "step3": {
     "title": "Join events",
     "description": "Tune in for updates on in-person and virtual events. Networking events, hackathons, paper-studying session, and more!"
-  }
+  },
+
+  "slideshow.project": "Past Projects from Our Members"
 }

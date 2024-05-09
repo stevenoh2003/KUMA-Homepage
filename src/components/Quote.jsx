@@ -34,17 +34,14 @@ export default function Example() {
       className="relative isolate overflow-hidden px-6 py-16 sm:py-64 lg:overflow-visible lg:px-0"
     >
       <div className="mx-auto grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 lg:mx-0 lg:max-w-none lg:grid-cols-2 lg:items-start lg:gap-y-10">
-        <div className="h-3/5 lg:top-4 mr-20 lg:col-start-1 lg:row-span-2 lg:row-start-1 max-[550px]:hidden fade-in-section">
+        <div className="relative h-3/5 lg:top-4 mr-20 lg:col-start-1 lg:row-span-2 lg:row-start-1 max-[550px]:hidden fade-in-section">
           {isLoading && (
-            <div
-              className="flex justify-center items-center"
-              style={{ height: 100, width: 100 }}
-            >
+            <div className="absolute inset-0 flex justify-center items-center">
               <Audio
                 height="80"
                 width="80"
                 radius="9"
-                color="green"
+                color="purple"
                 ariaLabel="three-dots-loading"
               />
             </div>
@@ -53,8 +50,8 @@ export default function Example() {
             className="w-[48rem] max-w-none bg-gray-900 shadow-xl ring-1 ring-gray-400/10 sm:w-[57rem]"
             src="https://kuma2024.s3.ap-southeast-2.amazonaws.com/Feyman.gif"
             alt={t("imageAlt")} // Translating alt text
-            width="100"
-            height="100"
+            width={1000} // Ensure you set these to the actual image dimensions
+            height={600}
             onLoadingComplete={() => setIsLoading(false)}
           />
         </div>

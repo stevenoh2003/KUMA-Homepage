@@ -1,8 +1,27 @@
 import { useTranslation } from "react-i18next"
-
+import { useEffect, useRef } from "react"
 export default () => {
   const { t } = useTranslation()
+  const ref = useRef(null)
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("fade-in")
+          }
+        })
+      },
+      {
+        threshold: 0.5,
+      }
+    )
 
+    const elements = ref.current.querySelectorAll(".feature-item")
+    elements.forEach((element) => observer.observe(element))
+
+    return () => observer.disconnect()
+  }, [])
   const features = [
     {
       icon: (
@@ -58,7 +77,7 @@ export default () => {
 
   return (
     <div style={{ backgroundColor: "#f2f3ef" }}>
-      <div className="mx-auto" style={{ width: "80%" }}>
+      <div className="mx-auto" style={{ width: "80%" }} ref={ref}>
         <section className="pt-12 pb-48">
           <div className="max-w-screen-xl mx-auto text-gray-600 md:px-8">
             <div className="max-w-xl space-y-3">

@@ -71,17 +71,17 @@ export default function Example() {
             </div>
           </div>
         </div>
-        <div className="-ml-12 -mt-12 p-12 lg:sticky lg:top-4 lg:col-start-2 lg:row-span-2 lg:row-start-1 lg:overflow-hidden fade-in-section">
+        <div className="relative -ml-12 -mt-12 p-12 lg:sticky lg:top-4 lg:col-start-2 lg:row-span-2 lg:row-start-1 lg:overflow-hidden fade-in-section">
           {isLoading && (
             <div
-              className="flex justify-center items-center"
-              style={{ height: 100, width: 100 }}
+              className="absolute inset-0 flex justify-center items-center" // Full overlay on the parent div
+              style={{ height: "100%", width: "100%" }}
             >
               <Audio
                 height="80"
                 width="80"
                 radius="9"
-                color="green"
+                color="purple"
                 ariaLabel="three-dots-loading"
               />
             </div>
@@ -90,8 +90,8 @@ export default function Example() {
             className="w-[48rem] max-w-none rounded-xl bg-gray-900 shadow-xl ring-1 ring-gray-400/10 sm:w-[57rem]"
             src="https://kuma2024.s3.ap-southeast-2.amazonaws.com/robot.gif"
             alt={t("robotImageAlt")} // Example of another translated text
-            width="100"
-            height="100"
+            width={1000} // Correct width based on image aspect ratio
+            height={600} // Correct height based on image aspect ratio
             onLoadingComplete={() => setIsLoading(false)}
           />
         </div>
