@@ -1,6 +1,6 @@
 import Image from "next/image"
 import { useState, useEffect, useRef } from "react"
-import { Audio } from "react-loader-spinner"
+import { Blocks } from "react-loader-spinner"
 import { useTranslation } from "react-i18next" // Import the useTranslation hook
 
 export default function Example() {
@@ -77,12 +77,14 @@ export default function Example() {
               className="absolute inset-0 flex justify-center items-center" // Full overlay on the parent div
               style={{ height: "100%", width: "100%" }}
             >
-              <Audio
+              <Blocks
                 height="80"
                 width="80"
-                radius="9"
-                color="purple"
-                ariaLabel="three-dots-loading"
+                color="#4fa94d"
+                ariaLabel="blocks-loading"
+                wrapperStyle={{}}
+                wrapperClass="blocks-wrapper"
+                visible={true}
               />
             </div>
           )}

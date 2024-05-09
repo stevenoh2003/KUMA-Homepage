@@ -33,7 +33,7 @@
   "features.blogs": "Global Connections",
   "features.blogs.desc": "Connect with Kuma members from every corner of the globe, from Tokyo to London, and expand your network!",
   "features.projects": "Bilingual Community",
-  "features.projects.desc": "Join our diverse community where most members are fluent in both English and Japanese, enriching your experience and broadening your horizons!",
+  "features.projects.desc": "Join our diverse community where most members are fluent in both English and Japanese.",
   "features.events": "Epic Rewards",
   "features.events.desc": "Stay tuned for thrilling rewards from our sponsors that will inspire and motivate!",
   "features.title": "Why kuma?",
@@ -69,7 +69,7 @@
   },
 
   "quote":{
-    "title":"Learn by Explaining to others",
+    "title":"Learn by Explaining to Others",
     "quote":"If you can't explain something in simple terms, you don'tunderstand it.",
     "author":"Richard Feyman"
   },

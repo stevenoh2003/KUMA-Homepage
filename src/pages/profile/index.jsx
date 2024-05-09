@@ -61,11 +61,11 @@ const handleImageChange = (e) => {
   if (file) {
     setImage(file)
     setImagePreview(URL.createObjectURL(file)) // More efficient than FileReader for previews
-    // Setting state for file name and type to pass them to the backend
-    setFileName(file.name)
-    setFileType(file.type)
+    setFileName(file.name) // Capturing file name
+    setFileType(file.type) // Capturing file type
   }
 }
+
 const handleSubmit = async (event) => {
   event.preventDefault()
   setUpdating(true)

@@ -34,7 +34,7 @@ export default function Example() {
       className="relative isolate overflow-hidden px-6 py-16 sm:py-64 lg:overflow-visible lg:px-0"
     >
       <div className="mx-auto grid max-w-2xl grid-cols-1 gap-x-8 gap-y-16 lg:mx-0 lg:max-w-none lg:grid-cols-2 lg:items-start lg:gap-y-10">
-        <div className="relative h-3/5 lg:top-4 mr-20 lg:col-start-1 lg:row-span-2 lg:row-start-1 max-[550px]:hidden fade-in-section">
+        <div className="relative h-3/5 lg:top-4 mr-20 lg:col-start-1 lg:row-span-2 lg:row-start-1 max-[800px]:hidden fade-in-section">
           {isLoading && (
             <div className="absolute inset-0 flex justify-center items-center">
               <Audio
@@ -55,7 +55,7 @@ export default function Example() {
             onLoadingComplete={() => setIsLoading(false)}
           />
         </div>
-        <div className="sm:mx-auto sm:flex max-[600px]:items-center max-[600px]:justify-center max-[600px]:px-12 lg:mt-16 lg:col-span-1 bg-gray-50 lg:col-start-2 shadow-xl pt-8 pb-16 rounded-lg lg:row-start-1 lg:mx-auto lg:grid lg:w-full lg:max-w-7xl lg:grid-cols-1 lg:gap-x-8 lg:pl-8 fade-in-section">
+        <div className="sm:mx-auto sm:flex max-[600px]:items-center max-[600px]:justify-center max-[900px]:px-12 lg:mt-32 lg:col-span-1 bg-gray-50 lg:col-start-2 shadow-xl pt-8 pb-16 rounded-lg lg:row-start-1 lg:mx-auto lg:grid lg:w-full lg:max-w-7xl lg:grid-cols-1 lg:gap-x-8 lg:pl-8 fade-in-section">
           <div className="lg:pr-4 mt-12 sm:flex sm:flex-col sm:justify-center">
             <div className="lg:max-w-lg mb-10">
               <h1 className="mt-2 text-3xl font-bold text-indigo-600 sm:text-4xl">
@@ -78,7 +78,7 @@ export default function Example() {
                 ></path>
               </svg>
               <div className="relative z-10">
-                <p className="text-xl text-gray-800 md:text-3xl md:leading-normal dark:text-white">
+                <p className="text-xl text-gray-800 md:text-3xl md:leading-normal">
                   <em>{t("quote.quote")}</em>
                 </p>
                 <footer className="mt-6 text-base font-semibold text-gray-800 dark:text-neutral-400">
