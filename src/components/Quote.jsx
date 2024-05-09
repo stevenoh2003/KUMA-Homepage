@@ -1,6 +1,6 @@
 import Image from "next/image"
 import { useState, useEffect, useRef } from "react"
-import { Audio } from "react-loader-spinner"
+import { RotatingLines } from "react-loader-spinner"
 import { useTranslation } from "react-i18next" // Import the useTranslation hook
 
 export default function Example() {
@@ -37,17 +37,28 @@ export default function Example() {
         <div className="relative h-3/5 lg:top-4 mr-20 lg:col-start-1 lg:row-span-2 lg:row-start-1 max-[800px]:hidden fade-in-section">
           {isLoading && (
             <div className="absolute inset-0 flex justify-center items-center">
-              <Audio
+              {/* <Audio
                 height="80"
                 width="80"
                 radius="9"
                 color="purple"
                 ariaLabel="three-dots-loading"
+              /> */}
+              <RotatingLines
+                visible={true}
+                height="96"
+                width="96"
+                color="#4f46e5"
+                strokeWidth="5"
+                animationDuration="0.75"
+                ariaLabel="rotating-lines-loading"
+                wrapperStyle={{}}
+                wrapperClass=""
               />
             </div>
           )}
           <Image
-            className="w-[48rem] max-w-none bg-gray-900 shadow-xl ring-1 ring-gray-400/10 sm:w-[57rem]"
+            className="w-[48rem] max-w-none rounded-r-xl bg-gray-900 shadow-xl ring-1 ring-gray-400/10 sm:w-[57rem]"
             src="https://kuma2024.s3.ap-southeast-2.amazonaws.com/ezgif.com-gif-to-webp-converter.webp"
             alt={t("imageAlt")} // Translating alt text
             width={1000} // Ensure you set these to the actual image dimensions
@@ -64,7 +75,7 @@ export default function Example() {
             </div>
             <blockquote className="relative">
               <svg
-                className="absolute -top-6 -start-11 size-16 text-gray-200 dark:text-neutral-700"
+                className="absolute -top-6 -start-11 size-16 text-gray-200"
                 width="16"
                 height="16"
                 viewBox="0 0 16 16"
@@ -81,7 +92,7 @@ export default function Example() {
                 <p className="text-xl text-gray-800 md:text-3xl md:leading-normal">
                   <em>{t("quote.quote")}</em>
                 </p>
-                <footer className="mt-6 text-base font-semibold text-gray-800 dark:text-neutral-400">
+                <footer className="mt-6 text-base font-semibold text-neutral-400">
                   {t("quote.author")}
                 </footer>
               </div>

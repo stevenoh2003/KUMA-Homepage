@@ -1,6 +1,6 @@
 import Image from "next/image"
 import { useState, useEffect, useRef } from "react"
-import { Blocks } from "react-loader-spinner"
+import { RotatingLines } from "react-loader-spinner"
 import { useTranslation } from "react-i18next" // Import the useTranslation hook
 
 export default function Example() {
@@ -77,14 +77,16 @@ export default function Example() {
               className="absolute inset-0 flex justify-center items-center" // Full overlay on the parent div
               style={{ height: "100%", width: "100%" }}
             >
-              <Blocks
-                height="80"
-                width="80"
-                color="#4fa94d"
-                ariaLabel="blocks-loading"
-                wrapperStyle={{}}
-                wrapperClass="blocks-wrapper"
+              <RotatingLines
                 visible={true}
+                height="96"
+                width="96"
+                color="#4f46e5"
+                strokeWidth="5"
+                animationDuration="0.75"
+                ariaLabel="rotating-lines-loading"
+                wrapperStyle={{}}
+                wrapperClass=""
               />
             </div>
           )}
