@@ -19,6 +19,7 @@ const PostPage = () => {
   const { title } = router.query
   const [postContent, setPostContent] = useState({
     title: "",
+    description: "",
     content: "",
     owner: "",
     thumbnail_url: "",
@@ -30,6 +31,8 @@ const PostPage = () => {
   const [editable, setEditable] = useState(false)
   const [showModal, setShowModal] = useState(false)
   const [newTitle, setNewTitle] = useState("")
+const [newDescription, setNewDescription] = useState("")
+
   const [newThumbnail, setNewThumbnail] = useState(null)
   const [isPublic, setIsPublic] = useState(postContent.isPublic) // Initialize to the post's value
   const [editorFocused, setEditorFocused] = useState(false)
@@ -73,24 +76,24 @@ useEffect(() => {
   }
 }, [editor, editable])
 
-
-  useEffect(() => {
-    if (title && editor) {
-      fetch(`/api/posts/${encodeURIComponent(title)}`)
-        .then((response) => response.json())
-        .then((data) => {
-          setPostContent(data)
-          setNewTitle(data.title)
-          setIsPublic(data.isPublic) // Initialize the checkbox value
-          editor.commands.setContent(
-            data.content || "<p>No content available</p>"
-          )
-          if (data.owner) fetchUserInfo(data.owner)
-          setEditable(session && session.user && data.owner === session.user.id)
-        })
-        .catch((error) => console.error("Error fetching post details:", error))
-    }
-  }, [title, editor, session])
+useEffect(() => {
+  if (title && editor) {
+    fetch(`/api/posts/${encodeURIComponent(title)}`)
+      .then((response) => response.json())
+      .then((data) => {
+        setPostContent(data)
+        setNewTitle(data.title)
+        setNewDescription(data.description || "") // Set the current description
+        setIsPublic(data.isPublic)
+        editor.commands.setContent(
+          data.content || "<p>No content available</p>"
+        )
+        if (data.owner) fetchUserInfo(data.owner)
+        setEditable(session && session.user && data.owner === session.user.id)
+      })
+      .catch((error) => console.error("Error fetching post details:", error))
+  }
+}, [title, editor, session])
 
   const fetchUserInfo = (userId) => {
     fetch(`/api/users/${userId}`)
@@ -152,6 +155,8 @@ const updateTitleAndThumbnail = async () => {
     method: "POST",
     body: new URLSearchParams({
       currentTitle: postContent.title,
+      currentDescription: postContent.description,
+      newDescription: newDescription, // Include the updated description
       newTitle: newTitle,
       isPublic: String(isPublic),
       thumbnailName: newThumbnail ? newThumbnail.name : "",
@@ -182,6 +187,7 @@ const updateTitleAndThumbnail = async () => {
     setPostContent((prev) => ({
       ...prev,
       title: result.title,
+      description: result.description,
       thumbnail_url: result.thumbnailUrl,
       isPublic: result.isPublic,
     }))
@@ -191,6 +197,8 @@ const updateTitleAndThumbnail = async () => {
     setPostContent((prev) => ({
       ...prev,
       title: result.title,
+      description: result.description,
+
       thumbnail_url: result.thumbnail_url,
       isPublic: result.isPublic,
     }))
@@ -322,12 +330,11 @@ const updateTitleAndThumbnail = async () => {
           </>
         )}
 
-        {/* Modal for Title, Thumbnail, and isPublic Update */}
         {showModal && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
             <div className="bg-white rounded-lg shadow-lg p-6 max-w-lg w-full">
               <h3 className="text-2xl font-semibold mb-4">
-                Edit Title, Thumbnail, and Visibility
+                Edit Title, Thumbnail, Description, and Visibility
               </h3>
               <label className="block mb-2">
                 New Title
@@ -336,6 +343,15 @@ const updateTitleAndThumbnail = async () => {
                   value={newTitle}
                   onChange={(e) => setNewTitle(e.target.value)}
                   className="w-full mt-1 px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-600"
+                />
+              </label>
+              <label className="block mb-4">
+                New Description
+                <textarea
+                  value={newDescription}
+                  onChange={(e) => setNewDescription(e.target.value)}
+                  className="w-full mt-1 px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-600"
+                  rows="3"
                 />
               </label>
               <label className="block mb-4">

@@ -4,19 +4,32 @@ import Image from "next/image"
 import { useState, useEffect } from "react"
 import Link from "next/link"
 import Footer from "src/components/Footer"
+import dbConnect from "src/libs/mongoose"
+import User from "src/libs/model/User"
 
-export default function Profile() {
+export default function Profile({ user }) {
+  // Ensure user is destructured here
   const { data: session, status } = useSession()
   const loading = status === "loading"
 
   const [posts, setPosts] = useState([])
   const [page, setPage] = useState(1)
   const [totalPages, setTotalPages] = useState(0)
-  const [name, setName] = useState(session?.user?.name || "")
+  const [name, setName] = useState(user.name || "")
   const [image, setImage] = useState(null)
+  const [imagePreview, setImagePreview] = useState(user.image || null)
+  const [updating, setUpdating] = useState(false)
 
-  const defaultThumbnail =
-    "https://images.unsplash.com/photo-1556155092-490a1ba16284?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80"
+  const [fileName, setFileName] = useState(null);
+
+  const [fileType, setFileType] = useState(null)
+
+  useEffect(() => {
+    if (session?.user) {
+      setName(user.name)
+      setImagePreview(user.image)
+    }
+  }, [session])
 
   useEffect(() => {
     async function fetchPosts() {
@@ -43,33 +56,66 @@ export default function Profile() {
       </div>
     )
   }
+const handleImageChange = (e) => {
+  const file = e.target.files[0]
+  if (file) {
+    setImage(file)
+    setImagePreview(URL.createObjectURL(file)) // More efficient than FileReader for previews
+    // Setting state for file name and type to pass them to the backend
+    setFileName(file.name)
+    setFileType(file.type)
+  }
+}
+const handleSubmit = async (event) => {
+  event.preventDefault()
+  setUpdating(true)
 
-  const handleSubmit = async (event) => {
-    event.preventDefault()
-    const formData = new FormData()
-    formData.append("name", name)
-    if (image) {
-      formData.append("file", image)
-    }
-
-    const response = await fetch("/api/users/update", {
-      method: "POST",
-      body: formData,
-    })
-
-    if (response.ok) {
-      const updatedUser = await response.json()
-      // Update session data if needed
-    } else {
-      console.error("Failed to update profile")
-    }
+  if (!name) {
+    // Ensuring required fields are not empty
+    alert("Please check your name and user identification")
+    setUpdating(false)
+    return
   }
 
-  const handleImageChange = (e) => {
-    if (e.target.files && e.target.files[0]) {
-      setImage(e.target.files[0])
+  const formData = new FormData()
+  formData.append("name", name)
+
+  if (image) {
+    if (!fileName || !fileType) {
+      alert("Missing file details")
+      setUpdating(false)
+      return
     }
+    formData.append("file", image)
+    formData.append("fileName", fileName) // Pass file name
+    formData.append("fileType", fileType) // Pass file type
   }
+
+  // Append user ID to formData
+  if (session?.user?.id) {
+    formData.append("userId", session.user.id)
+  } else {
+    alert("Session user ID not found")
+    setUpdating(false)
+    return
+  }
+
+  const response = await fetch("/api/users/profile-update", {
+    method: "POST",
+    body: formData,
+  })
+
+  setUpdating(false)
+  if (response.ok) {
+    const updatedUser = await response.json()
+    setImagePreview(updatedUser.profilePicUrl)
+    alert("Profile updated successfully!")
+  } else {
+    console.error("Failed to update profile:", response.statusText)
+    alert(`Failed to update profile: ${response.statusText}`)
+  }
+}
+
 
   const handlePageChange = (newPage) => {
     setPage(newPage)
@@ -81,7 +127,6 @@ export default function Profile() {
         <title>User Profile</title>
       </Head>
       <div className="mx-auto max-w-screen-xl p-5 lg:flex lg:gap-8 lg:items-start">
-        {/* Profile Section (Responsive) */}
         <div className="lg:flex-shrink-0 lg:w-1/3 bg-gray-50 rounded-lg shadow px-4 py-8 mb-6 lg:mb-0">
           <h2 className="text-2xl font-bold mb-4">Profile</h2>
           <form onSubmit={handleSubmit}>
@@ -99,14 +144,12 @@ export default function Profile() {
             </div>
             <div className="mb-4">
               <strong>Profile Image:</strong>
-              {session.user.image && (
+              {imagePreview && (
                 <div className="mt-1 w-24 h-24 rounded-full overflow-hidden">
-                  <Image
-                    src={session.user.image}
-                    alt="Profile Picture"
-                    width={100}
-                    height={100}
-                    className="object-cover"
+                  <img
+                    src={imagePreview}
+                    alt="Profile Preview"
+                    className="object-cover w-full h-full"
                   />
                 </div>
               )}
@@ -119,13 +162,13 @@ export default function Profile() {
             <button
               type="submit"
               className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+              disabled={updating}
             >
-              Update Profile
+              {updating ? "Updating..." : "Update Profile"}
             </button>
           </form>
         </div>
 
-        {/* Posts Section (Responsive) */}
         <div className="flex-1 bg-gray-50 rounded-lg shadow px-4 py-8">
           <h2 className="text-2xl font-bold mb-4">My Posts</h2>
           <ul className="space-y-6">
@@ -157,7 +200,6 @@ export default function Profile() {
             ))}
           </ul>
           <div className="mt-6">
-            {" "}
             <div className="flex justify-between max-w-xl mx-auto p-4">
               <button
                 onClick={() => handlePageChange(Math.max(page - 1, 1))}
@@ -191,9 +233,12 @@ export default function Profile() {
   )
 }
 
+
 export async function getServerSideProps(context) {
   const session = await getSession(context)
-  if (!session) {
+
+  // Redirect to sign-in page if not logged in
+  if (!session || !session.user) {
     return {
       redirect: {
         destination: "/auth/signin",
@@ -201,7 +246,31 @@ export async function getServerSideProps(context) {
       },
     }
   }
+
+  await dbConnect()
+
+  // Fetch user details from the database
+  const user = await User.findById(session.user.id).lean() // Using lean() for plain JavaScript objects
+  if (!user) {
+    return {
+      redirect: {
+        destination: "/auth/signin",
+        permanent: false,
+      },
+    }
+  }
+
+  // Ensure all values are serializable
+  const serializableUser = {
+    name: user.name || null,
+    image: user.profilePicUrl || null, // Default to null if undefined
+  }
+
+  // Pass the user details to the client
   return {
-    props: { session },
+    props: {
+      session,
+      user: serializableUser,
+    },
   }
 }
