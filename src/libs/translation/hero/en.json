@@ -21,7 +21,7 @@
 
 
   "discordPosts.title": "Discord Forum Posts",
-  "discordPosts.subtitle": "Check out the latest discussions happening on our forum channel.",
+  "discordPosts.subtitle": "Check out the latest discussions happening on our forum channel. Click on posts you are interested in and join the discussion thread on Discord!",
   "discordPosts.view": "View",
 
   "pagination.pageIndicator": "Page {{currentPage}} of {{totalPages}}",
@@ -78,7 +78,7 @@
     "description": "Register an account on our website, head to the blog page and begin writing! We will be releasing monthly kuma awards to outstanding articles!"
   },
   "step2": {
-    "title": "Join our discord channel",
+    "title": "Discord channel",
     "description": "Participate in heated discussions with other kuma members in our discord channel. In discord create your own threads in the project forum to seek collaboration!"
   },
   "step3": {

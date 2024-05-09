@@ -29,12 +29,12 @@ const CONFIG = {
   ],
   // blog setting (required)
   blog: {
-    title: "kuma",
-    description: "welcome to our homepage",
+    title: "kuma - your platform to explore machine intellignece",
+    description: "kuma is a community started from Waseda University. We hope to build a platform to help people share and collaborate on state-of-the-art AI projects and discussions.  ",
   },
 
   // CONFIG configration (required)
-  link: "",
+  link: "https://www.kuma2024.tech/",
   since: 2024, // If leave this empty, current year will be used.
   lang: "en-US", // ['en-US', 'zh-CN', 'zh-HK', 'zh-TW', 'ja-JP', 'es-ES', 'ko-KR']
   ogImageGenerateURL: "", // The link to generate OG image, don't end with a slash

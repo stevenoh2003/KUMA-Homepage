@@ -61,7 +61,7 @@ const Hero = () => {
             <h1 className="text font-bold text-gray-900 text-4xl sm:text-6xl">
               {i18n.language === "ja" && (
                 <>
-                  <span style={{ color: "4f46e5#" }}>kuma </span>
+                  <span style={{ color: "#4f46e5" }}>kuma </span>
                 </>
               )}
               {t("hero.title")}{" "}

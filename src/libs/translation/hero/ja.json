@@ -25,7 +25,7 @@
 
   "discordPosts.title": "Discordフォーラム投稿",
   "discordPosts.subtitle": "最新のプロジェクト",
-  "discordPosts.view": "チェック",
+  "discordPosts.view": "View",
 
   "pagination.pageIndicator": "ページ {{currentPage}} / {{totalPages}}",
 
@@ -81,7 +81,7 @@
     "description": "当サイトにアカウントを登録し、ブログページへ進んで執筆を始めてください！毎月、優れた記事にはクマアワードを授与します。"
   },
   "step2": {
-    "title": "ディスコードチャネルに参加する",
+    "title": "ディスコードチャネル",
     "description": "ディスコードチャネルで他のクマメンバーと熱い議論に参加しましょう。ディスコードでプロジェクトフォーラムに自分のスレッドを作成して協力を求めましょう！"
   },
   "step3": {
