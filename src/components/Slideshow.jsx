@@ -1,10 +1,14 @@
 import React from "react"
 import { useTranslation } from "react-i18next" // Import the useTranslation hook
-
 const slides = [
   {
     imageUrl: "https://kuma2024.s3.ap-southeast-2.amazonaws.com/mane.jpeg",
     caption: "真似っこロボット",
+  },
+  {
+    imageUrl:
+      "https://kuma2024.s3.ap-southeast-2.amazonaws.com/Screenshot+2024-05-10+at+14.43.14.png",
+    caption: "Robot-sketched drawings",
   },
   {
     imageUrl: "https://kuma2024.s3.ap-southeast-2.amazonaws.com/cointbot.jpg",

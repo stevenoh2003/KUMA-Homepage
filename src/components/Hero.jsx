@@ -1,7 +1,7 @@
 import { useState } from "react"
 import { useRouter } from "next/router"
 import Image from "next/image"
-import Logo from "../assets/pictures/logo.jpg"
+import Logo from "../assets/pictures/logo_transparent.webp"
 import { FaDiscord } from "react-icons/fa" // Import Discord icon
 import { useTranslation } from "react-i18next"
 import Link from "next/link"
@@ -51,7 +51,7 @@ const Hero = () => {
           <div className="mb-6">
             <Image
               alt="Logo"
-              src="https://kuma2024.s3.ap-southeast-2.amazonaws.com/logo_transparent.webp"
+              src={Logo}
               width="320"
               height="320"
               priority

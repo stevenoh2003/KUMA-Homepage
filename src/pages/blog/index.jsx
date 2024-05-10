@@ -59,8 +59,8 @@ const BlogIndex = () => {
             <div className="flex justify-center items-center min-h-screen">
               <RotatingLines
                 visible={true}
-                height="96"
-                width="96"
+                height="90"
+                width="90"
                 color="#4f46e5"
                 strokeWidth="5"
                 animationDuration="0.75"
