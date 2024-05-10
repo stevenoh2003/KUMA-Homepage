@@ -29,7 +29,7 @@ const CONFIG = {
   ],
   // blog setting (required)
   blog: {
-    title: "kuma - your platform to explore machine intellignece",
+    title: "kuma",
     description: "kuma is a community started from Waseda University. We hope to build a platform to help people share and collaborate on state-of-the-art AI projects and discussions.  ",
   },
 
