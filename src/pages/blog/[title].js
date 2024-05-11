@@ -76,24 +76,46 @@ useEffect(() => {
   }
 }, [editor, editable])
 
+
+
 useEffect(() => {
   if (title && editor) {
-    fetch(`/api/posts/${encodeURIComponent(title)}`)
-      .then((response) => response.json())
-      .then((data) => {
-        setPostContent(data)
-        setNewTitle(data.title)
-        setNewDescription(data.description || "") // Set the current description
-        setIsPublic(data.isPublic)
-        editor.commands.setContent(
-          data.content || "<p>No content available</p>"
-        )
-        if (data.owner) fetchUserInfo(data.owner)
-        setEditable(session && session.user && data.owner === session.user.id)
-      })
-      .catch((error) => console.error("Error fetching post details:", error))
+    const localContent = localStorage.getItem(`editorContent-${title}`)
+    if (localContent && editable) {
+      editor.commands.setContent(localContent)
+    } else {
+      fetch(`/api/posts/${encodeURIComponent(title)}`)
+        .then((response) => response.json())
+        .then((data) => {
+          setPostContent(data)
+          setNewTitle(data.title) // Update title state here
+          setNewDescription(data.description || "") // Update description state here
+          setIsPublic(data.isPublic) // Make sure to update the isPublic state as well
+          editor.commands.setContent(
+            data.content || "<p>No content available</p>"
+          )
+          if (data.owner) fetchUserInfo(data.owner)
+          setEditable(session && session.user && data.owner === session.user.id)
+        })
+        .catch((error) => console.error("Error fetching post details:", error))
+    }
   }
-}, [title, editor, session])
+}, [title, editor, editable, session])
+
+
+  useEffect(() => {
+    if (editor && editable) {
+      const updateStorage = () => {
+        localStorage.setItem(`editorContent-${title}`, editor.getHTML())
+      }
+
+      editor.on("update", updateStorage)
+      return () => {
+        editor.off("update", updateStorage)
+      }
+    }
+  }, [editor, editable, title])
+
 
   const fetchUserInfo = (userId) => {
     fetch(`/api/users/${userId}`)
