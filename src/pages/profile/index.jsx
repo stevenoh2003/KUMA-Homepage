@@ -24,6 +24,9 @@ export default function Profile({ user }) {
 
   const [fileType, setFileType] = useState(null)
 
+    const defaultThumbnail =
+      "https://images.unsplash.com/photo-1556155092-490a1ba16284?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80"
+
   useEffect(() => {
     if (session?.user) {
       setName(user.name)
@@ -176,11 +179,13 @@ const handleSubmit = async (event) => {
               <li key={post._id} className="group">
                 <Link href={`/blog/${encodeURIComponent(post.title)}`}>
                   <div className="h-48 w-full overflow-hidden rounded-lg bg-white shadow">
-                    <img
+                    <Image
                       src={post.thumbnail_url || defaultThumbnail}
                       alt={post.title}
                       className="object-cover h-full w-full"
                       loading="lazy"
+                      width={100}
+                      height={100}
                     />
                   </div>
                   <div className="mt-3 space-y-2">
