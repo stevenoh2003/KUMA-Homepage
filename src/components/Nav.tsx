@@ -2,7 +2,6 @@ import { useState } from "react"
 import { useRouter } from "next/router"
 import { useSession, signOut } from "next-auth/react"
 import { useTranslation } from "react-i18next"
-import Image from "next/image"
 import { UserCircleIcon, Bars3Icon, XMarkIcon } from "@heroicons/react/24/solid"
 
 export default function NavBar() {
@@ -61,32 +60,20 @@ export default function NavBar() {
         {/* Switch Language Icon (Left for Small Screens) */}
         <div className="md:hidden flex-none z-50">
           <button
-            className="text-white rounded-full py-2 px-4 flex items-center justify-center"
+            className="text-black text-lg rounded-full py-2 px-4 flex items-center justify-center"
             onClick={switchLanguage}
           >
-            <Image
-              src="/icons8-globe-50.png"
-              width="40"
-              height="40"
-              alt="Language Icon"
-              className={!isHomePage ? "filter brightness-0 invert" : ""}
-            />
+            {i18n.language === "en" ? "日本語" : "English"}
           </button>
         </div>
 
         {/* Right Side (Language Switcher - for Desktop) */}
         <div className="flex-none hidden md:block z-50">
           <button
-            className="text-white rounded-full py-2 px-4 flex items-center justify-center"
+            className="text-black text-lg rounded-full py-2 px-4 flex items-center justify-center"
             onClick={switchLanguage}
           >
-            <Image
-              src="/icons8-globe-50.png"
-              width="40"
-              height="40"
-              alt="Language Icon"
-              className={!isHomePage ? "filter brightness-0 invert" : ""}
-            />
+            {i18n.language === "en" ? "日本語" : "English"}
           </button>
         </div>
 

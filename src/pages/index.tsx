@@ -16,10 +16,12 @@ import Slideshow from "src/components/Slideshow"
 import dynamic from 'next/dynamic';
 import Hero from "src/components/Hero";
 import Feature from "src/components/Feature";
+import Features from "src/components/Features"
 import FeaturedPosts from "src/routes/FeaturedPosts";
 // const FeaturedPosts = dynamic(() => import("src/components/FeaturedPosts"), { loading: () => <p>Loading...</p> });
 const Team = dynamic(() => import("src/components/Team"), { loading: () => <p>Loading...</p> });
 const Footer = dynamic(() => import("src/components/Footer"), { loading: () => <p>Loading...</p> });
+import Gallery from "src/components/Gallery"
 import NavBar from "src/components/Nav";
 import Quote from "src/components/Quote"
 export const getStaticProps: GetStaticProps = async () => {
@@ -47,15 +49,16 @@ const FeedPage = () => {
       {/* <NavBar /> */}
       <MetaConfig {...meta} />
       <Hero />
-      <Quote />
+      <Gallery />
+      {/* <Quote /> */}
 
-      <Feature />
+      <Features />
       
       <Suspense fallback={<p>Loading feed...</p>}>
         <Explanation />
       </Suspense>
 
-      <Slideshow />
+      {/* <Slideshow /> */}
       <LogoGrid />
       {/* <FeaturedPosts /> */}
       <Team />

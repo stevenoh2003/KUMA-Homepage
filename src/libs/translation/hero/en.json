@@ -7,7 +7,7 @@
   "nav.profile": "Profile",
   "nav.logout": "Log Out",
   "hero.title": "Explore the Next Frontier with",
-  "hero.subtitle": "Network, collaborate, expand boundaries of machine intelligence",
+  "hero.subtitle": "Empowering Tomorrow's Innovators in AI and Robotics",
   "hero.button.getStarted": "Get started",
   "hero.button.joinDiscord": "Join Discord",
   "modal.title": "Join our Discord channel",
@@ -73,18 +73,35 @@
     "quote":"If you can't explain something in simple terms, you don't understand it.",
     "author":"Richard Feynman"
   },
-    "step1": {
-    "title": "Sign up",
-    "description": "Register an account on our website, head to the blog page and begin writing! We will be releasing monthly kuma awards to outstanding articles!"
+  "step1": {
+    "title": "Join Our Discord Channel",
+    "description": "Dive into cutting-edge discussions and collaborate on innovative projects in our dynamic intellectual workspace!"
   },
   "step2": {
-    "title": "Discord channel",
-    "description": "Participate in heated discussions with other kuma members in our discord channel. In discord create your own threads in the project forum to seek collaboration!"
+    "title": "Sign Up Now",
+    "description": "Share your insights and publish your own blogs on our website by creating an account today!"
   },
   "step3": {
-    "title": "Join events",
-    "description": "Tune in for updates on in-person and virtual events. Networking events, hackathons, paper-studying session, and more!"
+    "title": "Participate in Exciting Events",
+    "description": "Engage in networking events, hackathons, paper-studying sessions, and more! Don't miss out on the action!"
   },
+  "slideshow.project": "Past Projects from Our Members",
 
-  "slideshow.project": "Past Projects from Our Members"
+  "features": {
+    "title": "Why kuma?",
+    "growWithUs": "Grow with us",
+    "invitation": "",
+    "research": {
+      "title": "Cutting-edge Research for All",
+      "desc": "Access research opportunities and resources, no matter your background."
+    },
+    "community": {
+      "title": "International Community",
+      "desc": "Engage with a diverse, multilingual community that bridges cultures."
+    },
+    "network": {
+      "title": "Networking Opportunity",
+      "desc": "Expand your professional network with like-minded individuals."
+    }
+  }
 }
