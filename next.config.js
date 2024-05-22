@@ -1,4 +1,5 @@
 module.exports = {
+
   eslint: {
     // Warning: This will disable ESLint checks for the entire project.
     ignoreDuringBuilds: true,

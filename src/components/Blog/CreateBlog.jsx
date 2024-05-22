@@ -1,9 +1,9 @@
 import { useSession } from "next-auth/react"
 import { useEditor, EditorContent } from "@tiptap/react"
-import { useCurrentEditor } from "@tiptap/react"
-import { useState, useCallback } from "react"
+import { useState } from "react"
 import { useRouter } from "next/router"
 import ImageUploadModal from "../../components/ImageUploadModal"
+import StarterKit from "@tiptap/starter-kit" // Add your editor extensions
 
 const CreateBlog = () => {
   const { data: session } = useSession()
@@ -13,9 +13,15 @@ const CreateBlog = () => {
   const [thumbnail, setThumbnail] = useState(null)
   const [title, setTitle] = useState("")
   const [description, setDescription] = useState("")
+  const [notionLink, setNotionLink] = useState("") // New state for Notion link
   const [isPublic, setIsPublic] = useState(false)
   const [errorMessage, setErrorMessage] = useState("")
-  const { editor } = useCurrentEditor()
+
+  // Initialize the editor
+  const editor = useEditor({
+    extensions: [StarterKit],
+    content: "",
+  })
 
   const handleThumbnailChange = (event) => {
     setThumbnail(event.target.files[0])
@@ -40,87 +46,96 @@ const CreateBlog = () => {
     return true
   }
 
-const handlePost = async (isNew) => {
-  const isFormValid = await validateForm()
-  if (!isFormValid || !editor || !session) {
-    return
-  }
-
-  const htmlContent = editor.getHTML()
-  let thumbnailUrl = ""
-
-  if (thumbnail) {
-    try {
-      // Request a presigned URL from the API
-      const presignedResponse = await fetch("/api/posts/uploadThumbnail", {
-        method: "POST",
-        body: new URLSearchParams({
-          filename: thumbnail.name,
-          filetype: thumbnail.type,
-        }),
-      })
-
-      const presignedData = await presignedResponse.json()
-
-      // Upload the thumbnail directly to S3
-      const formData = new FormData()
-      Object.keys(presignedData.presignedPost.fields).forEach((key) => {
-        formData.append(key, presignedData.presignedPost.fields[key])
-      })
-      formData.append("file", thumbnail)
-
-      const s3Response = await fetch(presignedData.presignedPost.url, {
-        method: "POST",
-        body: formData,
-      })
-
-      if (s3Response.ok) {
-        thumbnailUrl = presignedData.thumbnailUrl
-      } else {
-        console.error("Thumbnail upload failed to S3")
-        setErrorMessage("Thumbnail upload failed")
-        return
-      }
-    } catch (error) {
-      console.error("Error getting presigned URL or uploading to S3:", error)
-      setErrorMessage("Error getting presigned URL or uploading")
+  const handlePost = async (isNew) => {
+    const isFormValid = await validateForm()
+    if (!isFormValid || !session) {
       return
     }
-  }
 
-  // Continue with creating the post as before
-  const response = await fetch("/api/posts/postHandler", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${session.accessToken}`,
-    },
-    credentials: "include",
-    body: JSON.stringify({
-      title,
-      description,
-      content: htmlContent,
-      s3Key,
-      isNew,
-      userId: session.user.id,
-      thumbnailUrl,
-      isPublic,
-    }),
-  })
-
-  try {
-    const data = await response.json()
-    if (isNew && data.s3_key) {
-      setS3Key(data.s3_key)
-      setErrorMessage("")
-      router.push("/blog") // Redirect to the blog page after successful post creation
+    if (!notionLink.trim() && (!editor || editor.getHTML().trim() === "")) {
+      setErrorMessage("Content or Notion link is required.")
+      return
     }
-  } catch (error) {
-    console.error("Error during fetch operation:", error)
-    setErrorMessage("An unexpected error occurred while creating the post.")
-  }
-}
 
+    let content = null
+    if (!notionLink.trim() && editor) {
+      content = editor.getHTML()
+    }
+
+    let thumbnailUrl = ""
+
+    if (thumbnail) {
+      try {
+        // Request a presigned URL from the API
+        const presignedResponse = await fetch("/api/posts/uploadThumbnail", {
+          method: "POST",
+          body: new URLSearchParams({
+            filename: thumbnail.name,
+            filetype: thumbnail.type,
+          }),
+        })
+
+        const presignedData = await presignedResponse.json()
+
+        // Upload the thumbnail directly to S3
+        const formData = new FormData()
+        Object.keys(presignedData.presignedPost.fields).forEach((key) => {
+          formData.append(key, presignedData.presignedPost.fields[key])
+        })
+        formData.append("file", thumbnail)
+
+        const s3Response = await fetch(presignedData.presignedPost.url, {
+          method: "POST",
+          body: formData,
+        })
+
+        if (s3Response.ok) {
+          thumbnailUrl = presignedData.thumbnailUrl
+        } else {
+          console.error("Thumbnail upload failed to S3")
+          setErrorMessage("Thumbnail upload failed")
+          return
+        }
+      } catch (error) {
+        console.error("Error getting presigned URL or uploading to S3:", error)
+        setErrorMessage("Error getting presigned URL or uploading")
+        return
+      }
+    }
+
+    // Continue with creating the post as before
+    const response = await fetch("/api/posts/postHandler", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${session.accessToken}`,
+      },
+      credentials: "include",
+      body: JSON.stringify({
+        title,
+        description,
+        content,
+        notionLink: notionLink.trim() || null, // Send Notion link if provided
+        s3Key: s3Key || null,
+        isNew,
+        userId: session.user.id,
+        thumbnailUrl,
+        isPublic,
+      }),
+    })
+
+    try {
+      const data = await response.json()
+      if (isNew && data.s3_key) {
+        setS3Key(data.s3_key)
+        setErrorMessage("")
+        router.push("/blog") // Redirect to the blog page after successful post creation
+      }
+    } catch (error) {
+      console.error("Error during fetch operation:", error)
+      setErrorMessage("An unexpected error occurred while creating the post.")
+    }
+  }
 
   return (
     <main className="py-1">
@@ -131,6 +146,14 @@ const handlePost = async (isNew) => {
             onSubmit={(e) => e.preventDefault()}
           >
             <div>
+              <label className="font-medium">(Alternative) Notion Link</label>
+              <input
+                type="text"
+                placeholder="Enter notion link"
+                value={notionLink}
+                onChange={(e) => setNotionLink(e.target.value)}
+                className="w-full mt-2 mb-6 px-3 py-2 text-gray-500 bg-transparent outline-none border-2 border-black focus:border-indigo-600 shadow-lg rounded-lg"
+              />
               <label className="font-medium">Blog Title</label>
               <input
                 type="text"
@@ -173,7 +196,7 @@ const handlePost = async (isNew) => {
                   onChange={(e) => setIsPublic(e.target.checked)}
                   className="mr-2 shadow-lg"
                 />
-              Make Public
+                Make Public
               </label>
             </div>
             <button
@@ -183,9 +206,11 @@ const handlePost = async (isNew) => {
               Create New Post
             </button>
           </form>
-          <div className="mt-10">
-            <EditorContent editor={editor} />
-          </div>
+          {!notionLink && ( // Hide the editor if a Notion link is provided
+            <div className="mt-10">
+              <EditorContent editor={editor} />
+            </div>
+          )}
         </div>
       </div>
     </main>

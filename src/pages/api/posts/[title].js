@@ -3,6 +3,7 @@ import dbConnect from "src/libs/mongoose"
 import BlogPost from "src/libs/model/BlogPost"
 import { GetObjectCommand } from "@aws-sdk/client-s3"
 import s3Client from "src/libs/aws-config"
+import { NotionAPI } from "notion-client"
 
 export default async function handler(req, res) {
   const { title } = req.query
@@ -15,31 +16,44 @@ export default async function handler(req, res) {
       return res.status(404).json({ message: "Post not found" })
     }
 
-    // Fetch content from S3 using the s3_key from the MongoDB document
-    const { Body } = await s3Client.send(
-      new GetObjectCommand({
-        Bucket: process.env.S3_BUCKET_NAME,
-        Key: post.s3_key,
+    if (post.notion_id) {
+      const notion = new NotionAPI()
+      const recordMap = await notion.getPage(post.notion_id)
+      res.status(200).json({
+        title: post.title,
+        notion_id: post.notion_id,
+        recordMap: recordMap,
+        created_at: post.created_at,
+        owner: post.owner,
+        thumbnail_url: post.thumbnail_url,
+        isPublic: post.isPublic,
       })
-    )
+    } else if (post.s3_key) {
+      const { Body } = await s3Client.send(
+        new GetObjectCommand({
+          Bucket: process.env.S3_BUCKET_NAME,
+          Key: post.s3_key,
+        })
+      )
 
-    // Convert the S3 stream to text
-    const content = await new Promise((resolve, reject) => {
-      let data = ""
-      Body.on("data", (chunk) => (data += chunk))
-      Body.on("end", () => resolve(data))
-      Body.on("error", reject)
-    })
+      const content = await new Promise((resolve, reject) => {
+        let data = ""
+        Body.on("data", (chunk) => (data += chunk))
+        Body.on("end", () => resolve(data))
+        Body.on("error", reject)
+      })
 
-    res.status(200).json({
-      title: post.title,
-      content: content,
-      created_at: post.created_at,
-      owner: post.owner,
-      thumbnail_url: post.thumbnail_url,
-      isPublic: post.isPublic, // Add isPublic to the response
-      created_at: post.created_at
-    })
+      res.status(200).json({
+        title: post.title,
+        content: content,
+        created_at: post.created_at,
+        owner: post.owner,
+        thumbnail_url: post.thumbnail_url,
+        isPublic: post.isPublic,
+      })
+    } else {
+      res.status(404).json({ message: "No content available" })
+    }
   } catch (error) {
     console.error("Failed to fetch post data:", error)
     res

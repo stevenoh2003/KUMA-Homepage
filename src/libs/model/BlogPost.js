@@ -4,11 +4,12 @@ import mongoose from "mongoose"
 const blogPostSchema = new mongoose.Schema({
   title: { type: String, required: true },
   description: { type: String, required: false },
-  s3_key: { type: String, required: true },
+  s3_key: { type: String, required: false },
+  notion_id: { type: String, required: false }, // Add notion_id field
   thumbnail_url: { type: String },
   created_at: { type: Date, default: Date.now },
   owner: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
-  isPublic: { type: Boolean, default: false }, // New field
+  isPublic: { type: Boolean, default: false },
 })
 
 const BlogPost =
