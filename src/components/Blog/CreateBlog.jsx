@@ -1,9 +1,9 @@
+import React, { useState } from "react"
 import { useSession } from "next-auth/react"
 import { useEditor, EditorContent } from "@tiptap/react"
-import { useState } from "react"
 import { useRouter } from "next/router"
-import ImageUploadModal from "../../components/ImageUploadModal"
-import StarterKit from "@tiptap/starter-kit" // Add your editor extensions
+import StarterKit from "@tiptap/starter-kit"
+import "katex/dist/katex.min.css"
 
 const CreateBlog = () => {
   const { data: session } = useSession()
@@ -13,11 +13,11 @@ const CreateBlog = () => {
   const [thumbnail, setThumbnail] = useState(null)
   const [title, setTitle] = useState("")
   const [description, setDescription] = useState("")
-  const [notionLink, setNotionLink] = useState("") // New state for Notion link
+  const [notionLink, setNotionLink] = useState("")
+  const [useNotion, setUseNotion] = useState(false)
   const [isPublic, setIsPublic] = useState(false)
   const [errorMessage, setErrorMessage] = useState("")
 
-  // Initialize the editor
   const editor = useEditor({
     extensions: [StarterKit],
     content: "",
@@ -52,13 +52,13 @@ const CreateBlog = () => {
       return
     }
 
-    if (!notionLink.trim() && (!editor || editor.getHTML().trim() === "")) {
+    if (!useNotion && (!editor || editor.getHTML().trim() === "")) {
       setErrorMessage("Content or Notion link is required.")
       return
     }
 
     let content = null
-    if (!notionLink.trim() && editor) {
+    if (!useNotion && editor) {
       content = editor.getHTML()
     }
 
@@ -66,7 +66,6 @@ const CreateBlog = () => {
 
     if (thumbnail) {
       try {
-        // Request a presigned URL from the API
         const presignedResponse = await fetch("/api/posts/uploadThumbnail", {
           method: "POST",
           body: new URLSearchParams({
@@ -77,7 +76,6 @@ const CreateBlog = () => {
 
         const presignedData = await presignedResponse.json()
 
-        // Upload the thumbnail directly to S3
         const formData = new FormData()
         Object.keys(presignedData.presignedPost.fields).forEach((key) => {
           formData.append(key, presignedData.presignedPost.fields[key])
@@ -103,33 +101,42 @@ const CreateBlog = () => {
       }
     }
 
-    // Continue with creating the post as before
-    const response = await fetch("/api/posts/postHandler", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${session.accessToken}`,
-      },
-      credentials: "include",
-      body: JSON.stringify({
-        title,
-        description,
-        content,
-        notionLink: notionLink.trim() || null, // Send Notion link if provided
-        s3Key: s3Key || null,
-        isNew,
-        userId: session.user.id,
-        thumbnailUrl,
-        isPublic,
-      }),
-    })
-
     try {
+      const response = await fetch("/api/posts/postHandler", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${session.accessToken}`,
+        },
+        credentials: "include",
+        body: JSON.stringify({
+          title,
+          description,
+          content,
+          notionLink: useNotion ? notionLink.trim() : null,
+          s3Key: s3Key || null,
+          isNew,
+          userId: session.user.id,
+          thumbnailUrl,
+          isPublic,
+        }),
+      })
+
       const data = await response.json()
-      if (isNew && data.s3_key) {
-        setS3Key(data.s3_key)
+
+      if (response.ok) {
+        console.log("Post created successfully:", data)
+        if (isNew && data.s3_key) {
+          setS3Key(data.s3_key)
+        }
         setErrorMessage("")
-        router.push("/blog") // Redirect to the blog page after successful post creation
+        router.push("/blog")
+      } else {
+        console.error("Error creating post:", data)
+        setErrorMessage(
+          data.message ||
+            "An unexpected error occurred while creating the post."
+        )
       }
     } catch (error) {
       console.error("Error during fetch operation:", error)
@@ -146,14 +153,6 @@ const CreateBlog = () => {
             onSubmit={(e) => e.preventDefault()}
           >
             <div>
-              <label className="font-medium">(Alternative) Notion Link</label>
-              <input
-                type="text"
-                placeholder="Enter notion link"
-                value={notionLink}
-                onChange={(e) => setNotionLink(e.target.value)}
-                className="w-full mt-2 mb-6 px-3 py-2 text-gray-500 bg-transparent outline-none border-2 border-black focus:border-indigo-600 shadow-lg rounded-lg"
-              />
               <label className="font-medium">Blog Title</label>
               <input
                 type="text"
@@ -174,6 +173,49 @@ const CreateBlog = () => {
                 <p className="mt-1 text-red-600 text-sm">{errorMessage}</p>
               )}
             </div>
+
+            <div className="mb-4">
+              <label className="font-medium">Use notion?</label>
+              <div className="mt-2">
+                <label className="font-medium">
+                  <input
+                    type="radio"
+                    name="contentType"
+                    checked={useNotion}
+                    onChange={() => setUseNotion(true)}
+                    className="mr-2 shadow-lg"
+                  />
+                  Use Notion Link
+                </label>
+                <label className="font-medium ml-4">
+                  <input
+                    type="radio"
+                    name="contentType"
+                    checked={!useNotion}
+                    onChange={() => setUseNotion(false)}
+                    className="mr-2 shadow-lg"
+                  />
+                  Use Editor
+                </label>
+              </div>
+            </div>
+
+            {useNotion ? (
+              <div>
+                <label className="font-medium">Notion Link</label>
+                <input
+                  type="text"
+                  placeholder="Enter Notion link"
+                  value={notionLink}
+                  onChange={(e) => setNotionLink(e.target.value)}
+                  className="w-full mt-2 mb-6 px-3 py-2 text-gray-500 bg-transparent outline-none border-2 border-black focus:border-indigo-600 shadow-lg rounded-lg"
+                />
+              </div>
+            ) : (
+              <div>
+              </div>
+            )}
+
             <div>
               <label className="font-medium">Upload Thumbnail</label>
               <input
@@ -183,7 +225,7 @@ const CreateBlog = () => {
                 style={{
                   borderWidth: "5px",
                   borderColor: "black",
-                  borderRadius: "0.375rem", // Matches Tailwind's `rounded-lg`
+                  borderRadius: "0.375rem",
                 }}
                 className="w-full mt-2 px-3 py-2 text-gray-500 bg-transparent outline-none border-indigo-600 "
               />
@@ -206,11 +248,6 @@ const CreateBlog = () => {
               Create New Post
             </button>
           </form>
-          {!notionLink && ( // Hide the editor if a Notion link is provided
-            <div className="mt-10">
-              <EditorContent editor={editor} />
-            </div>
-          )}
         </div>
       </div>
     </main>

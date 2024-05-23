@@ -10,10 +10,9 @@ import MenuBar from "src/components/Blog/UpdateMenuBar"
 import TextAlign from "@tiptap/extension-text-align"
 import Image from "@tiptap/extension-image"
 import Dropcursor from "@tiptap/extension-dropcursor"
-import ImageExtension from "src/components/tiptap-imagresize/src/index"
 import Footer from "src/components/Footer.jsx"
+
 import dynamic from "next/dynamic"
-import { NotionAPI } from "notion-client"
 import { NotionRenderer } from "react-notion-x"
 import "react-notion-x/src/styles.css"
 
@@ -26,7 +25,9 @@ const Collection = dynamic(() =>
   )
 )
 const Equation = dynamic(() =>
-  import("react-notion-x/build/third-party/equation").then((m) => m.Equation)
+  import("src/routes/Detail/components/NotionRenderer/Equation.js").then(
+    (m) => m.Equation
+  )
 )
 const Pdf = dynamic(
   () => import("react-notion-x/build/third-party/pdf").then((m) => m.Pdf),
@@ -41,10 +42,7 @@ const Modal = dynamic(
   }
 )
 
-
 const PostPage = () => {
-
-
   const router = useRouter()
   const { title } = router.query
   const [postContent, setPostContent] = useState({
@@ -53,27 +51,24 @@ const PostPage = () => {
     content: "",
     owner: "",
     thumbnail_url: "",
-    isPublic: false, // Track existing `isPublic` value
+    isPublic: false,
     created_at: "",
-    notion_id: ""
+    notion_id: "",
   })
   const [userInfo, setUserInfo] = useState(null)
   const { data: session } = useSession()
   const [editable, setEditable] = useState(false)
   const [showModal, setShowModal] = useState(false)
   const [newTitle, setNewTitle] = useState("")
-const [newDescription, setNewDescription] = useState("")
-
+  const [newDescription, setNewDescription] = useState("")
   const [newThumbnail, setNewThumbnail] = useState(null)
-  const [isPublic, setIsPublic] = useState(postContent.isPublic) // Initialize to the post's value
+  const [isPublic, setIsPublic] = useState(postContent.isPublic)
   const [editorFocused, setEditorFocused] = useState(false)
 
   const editor = useEditor({
     extensions: [
       StarterKit,
-      Mathematics.configure({
-        // Custom regex to identify single and double dollar signs
-      }),
+      Mathematics.configure({}),
       TextAlign.configure({
         types: ["heading", "paragraph"],
       }),
@@ -85,7 +80,6 @@ const [newDescription, setNewDescription] = useState("")
           class: "tiptap-image",
         },
       }),
-      // ImageExtension,
     ],
     content: "",
     editable: false,
@@ -97,42 +91,43 @@ const [newDescription, setNewDescription] = useState("")
     },
   })
 
+  useEffect(() => {
+    const canEdit = editable === null ? false : editable
 
-useEffect(() => {
-  // If editable is null, default to false
-  const canEdit = editable === null ? false : editable
-
-  if (editor) {
-    editor.setEditable(canEdit)
-  }
-}, [editor, editable])
-
-
-
-useEffect(() => {
-  if (title && editor) {
-    const localContent = localStorage.getItem(`editorContent-${title}`)
-    if (localContent && editable) {
-      editor.commands.setContent(localContent)
-    } else {
-      fetch(`/api/posts/${encodeURIComponent(title)}`)
-        .then((response) => response.json())
-        .then((data) => {
-          setPostContent(data)
-          setNewTitle(data.title) // Update title state here
-          setNewDescription(data.description || "") // Update description state here
-          setIsPublic(data.isPublic) // Make sure to update the isPublic state as well
-          editor.commands.setContent(
-            data.content || "<p>No content available</p>"
-          )
-          if (data.owner) fetchUserInfo(data.owner)
-          setEditable(session && session.user && data.owner === session.user.id)
-        })
-        .catch((error) => console.error("Error fetching post details:", error))
+    if (editor) {
+      editor.setEditable(canEdit)
     }
-  }
-}, [title, editor, editable, session])
+  }, [editor, editable])
 
+  useEffect(() => {
+    if (title && editor) {
+      const localContent = localStorage.getItem(`editorContent-${title}`)
+      if (localContent && editable) {
+        editor.commands.setContent(localContent)
+      } else {
+        fetch(`/api/posts/${encodeURIComponent(title)}`)
+          .then((response) => response.json())
+          .then((data) => {
+            setPostContent(data)
+            setNewTitle(data.title)
+            setNewDescription(data.description || "")
+            setIsPublic(data.isPublic)
+            if (!data.notion_id) {
+              editor.commands.setContent(
+                data.content || "<p>No content available</p>"
+              )
+            }
+            if (data.owner) fetchUserInfo(data.owner)
+            setEditable(
+              session && session.user && data.owner === session.user.id
+            )
+          })
+          .catch((error) =>
+            console.error("Error fetching post details:", error)
+          )
+      }
+    }
+  }, [title, editor, editable, session])
 
   useEffect(() => {
     if (editor && editable) {
@@ -146,7 +141,6 @@ useEffect(() => {
       }
     }
   }, [editor, editable, title])
-
 
   const fetchUserInfo = (userId) => {
     fetch(`/api/users/${userId}`)
@@ -202,64 +196,61 @@ useEffect(() => {
     }
   }
 
-const updateTitleAndThumbnail = async () => {
-  updatePost()
-  const response = await fetch(`/api/posts/updateTitleAndThumbnail`, {
-    method: "POST",
-    body: new URLSearchParams({
-      currentTitle: postContent.title,
-      currentDescription: postContent.description,
-      newDescription: newDescription, // Include the updated description
-      newTitle: newTitle,
-      isPublic: String(isPublic),
-      thumbnailName: newThumbnail ? newThumbnail.name : "",
-      thumbnailType: newThumbnail ? newThumbnail.type : "",
-    }),
-  })
-
-  const result = await response.json()
-
-  if (response.ok && result.presignedPost) {
-    // Use the pre-signed URL to upload the new thumbnail
-    const formData = new FormData()
-    Object.keys(result.presignedPost.fields).forEach((key) => {
-      formData.append(key, result.presignedPost.fields[key])
-    })
-    formData.append("file", newThumbnail)
-
-    const s3Response = await fetch(result.presignedPost.url, {
+  const updateTitleAndThumbnail = async () => {
+    updatePost()
+    const response = await fetch(`/api/posts/updateTitleAndThumbnail`, {
       method: "POST",
-      body: formData,
+      body: new URLSearchParams({
+        currentTitle: postContent.title,
+        currentDescription: postContent.description,
+        newDescription: newDescription,
+        newTitle: newTitle,
+        isPublic: String(isPublic),
+        thumbnailName: newThumbnail ? newThumbnail.name : "",
+        thumbnailType: newThumbnail ? newThumbnail.type : "",
+      }),
     })
 
-    if (!s3Response.ok) {
-      console.error("Error uploading thumbnail to S3")
-      return
+    const result = await response.json()
+
+    if (response.ok && result.presignedPost) {
+      const formData = new FormData()
+      Object.keys(result.presignedPost.fields).forEach((key) => {
+        formData.append(key, result.presignedPost.fields[key])
+      })
+      formData.append("file", newThumbnail)
+
+      const s3Response = await fetch(result.presignedPost.url, {
+        method: "POST",
+        body: formData,
+      })
+
+      if (!s3Response.ok) {
+        console.error("Error uploading thumbnail to S3")
+        return
+      }
+
+      setPostContent((prev) => ({
+        ...prev,
+        title: result.title,
+        description: result.description,
+        thumbnail_url: result.thumbnailUrl,
+        isPublic: result.isPublic,
+      }))
+      setShowModal(false)
+    } else if (response.ok) {
+      setPostContent((prev) => ({
+        ...prev,
+        title: result.title,
+        description: result.description,
+        thumbnail_url: result.thumbnail_url,
+        isPublic: result.isPublic,
+      }))
+      setShowModal(false)
+    } else {
+      console.error("Error updating title and thumbnail:", result.error)
     }
-
-    setPostContent((prev) => ({
-      ...prev,
-      title: result.title,
-      description: result.description,
-      thumbnail_url: result.thumbnailUrl,
-      isPublic: result.isPublic,
-    }))
-    setShowModal(false)
-  } else if (response.ok) {
-    // Update post without changing the thumbnail
-    setPostContent((prev) => ({
-      ...prev,
-      title: result.title,
-      description: result.description,
-
-      thumbnail_url: result.thumbnail_url,
-      isPublic: result.isPublic,
-    }))
-    setShowModal(false)
-  } else {
-    console.error("Error updating title and thumbnail:", result.error)
   }
-}
 
   if (!editor) return null
 
@@ -280,26 +271,12 @@ const updateTitleAndThumbnail = async () => {
             <h1 className="text-4xl text-white font-semibold">
               {postContent.title}
             </h1>
-            {/* {editable && (
-              <button>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-4 w-4 text-white cursor-pointer"
-                  fill="currentColor"
-                  class="bi bi-pencil-fill"
-                  viewBox="0 0 16 16"
-                >
-                  <path d="M12.854.146a.5.5 0 0 0-.707 0L10.5 1.793 14.207 5.5l1.647-1.646a.5.5 0 0 0 0-.708l-3-3zm.646 6.061L9.793 2.5 3.293 9H3.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.207l6.5-6.5zm-7.468 7.468A.5.5 0 0 1 6 13.5V13h-.5a.5.5 0 0 1-.5-.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.5-.5V10h-.5a.499.499 0 0 1-.175-.032l-.179.178a.5.5 0 0 0-.11.168l-2 5a.5.5 0 0 0 .65.65l5-2a.5.5 0 0 0 .168-.11l.178-.178z" />
-                </svg>
-              </button>
-            )} */}
           </div>
         </div>
       </div>
       <div className="mt-8">
         {userInfo ? (
           <div className="flex justify-between items-center mt-4 mb-4 mx-auto max-w-screen-lg px-4 sm:px-0 md:px-14">
-            {/* Author Profile */}
             <div className="flex items-center space-x-2 md:space-x-4">
               {userInfo.profilePicUrl ? (
                 <img
@@ -316,8 +293,6 @@ const updateTitleAndThumbnail = async () => {
                 </h4>
               </div>
             </div>
-
-            {/* Created At */}
             <div className="text-right flex flex-col space-y-1 sm:space-y-0 sm:space-x-2 sm:flex-row items-center">
               <p className="text-xs sm:text-sm md:text-base text-gray-500">
                 {new Date(postContent.created_at).toLocaleDateString()}{" "}
@@ -331,7 +306,6 @@ const updateTitleAndThumbnail = async () => {
           <p className="mt-4 text-gray-600">No user information available.</p>
         )}
       </div>
-
       <hr
         style={{
           color: "black",
@@ -340,24 +314,41 @@ const updateTitleAndThumbnail = async () => {
         }}
       />
       <div className="max-w-screen-xl mx-auto px-4 py-4 md:px-8 text-gray-600">
-        <StyledEditor>
-          {editable && <MenuBar editor={editor} />}
-          {editable && (
-            <hr
+        {postContent.notion_id ? (
+          <NotionRenderer
+            recordMap={postContent.recordMap}
+            disableHeader={true}
+            header={null}
+            components={{
+              Code,
+              Collection,
+              Equation,
+              Modal,
+              Pdf,
+            }}
+          />
+        ) : (
+          <StyledEditor>
+            {editable && <MenuBar editor={editor} />}
+            {editable && (
+              <hr
+                style={{
+                  color: "black",
+                  backgroundColor: "black",
+                  opacity: "70%",
+                  height: 1,
+                }}
+              />
+            )}
+            <EditorContent
+              editor={editor}
               style={{
-                color: "black",
-                backgroundColor: "black",
-                opacity: "70%",
-                height: 1,
+                backgroundColor: editorFocused ? "white" : "transparent",
               }}
             />
-          )}
-          <EditorContent
-            editor={editor}
-            style={{ backgroundColor: editorFocused ? "white" : "transparent" }}
-          />
-        </StyledEditor>
-        {editable && (
+          </StyledEditor>
+        )}
+        {editable && !postContent.notion_id && (
           <>
             <hr
               style={{
@@ -373,16 +364,9 @@ const updateTitleAndThumbnail = async () => {
               >
                 Update Post
               </button>
-              <button
-                className="px-4 py-2 text-white font-medium bg-red-600 hover:bg-red-500 active:bg-red-700 rounded-lg ml-4"
-                onClick={deletePost}
-              >
-                Delete Post
-              </button>
             </div>
           </>
         )}
-
         {showModal && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
             <div className="bg-white rounded-lg shadow-lg p-6 max-w-lg w-full">
@@ -440,6 +424,16 @@ const updateTitleAndThumbnail = async () => {
                 </button>
               </div>
             </div>
+          </div>
+        )}
+        {editable && (
+          <div className="flex justify-end mt-4">
+            <button
+              className="px-4 py-2 text-white font-medium bg-red-600 hover:bg-red-500 active:bg-red-700 rounded-lg ml-4"
+              onClick={deletePost}
+            >
+              Delete Post
+            </button>
           </div>
         )}
       </div>

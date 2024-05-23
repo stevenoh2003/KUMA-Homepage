@@ -1,4 +1,3 @@
-// src/pages/api/posts/[title].js
 import dbConnect from "src/libs/mongoose"
 import BlogPost from "src/libs/model/BlogPost"
 import { GetObjectCommand } from "@aws-sdk/client-s3"

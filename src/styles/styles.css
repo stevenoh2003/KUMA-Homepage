@@ -49,6 +49,24 @@
 }
 
 /* Update other styles as necessary */
+.notion-equation {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 20px 0;
+    /* Optional: Add some margin for spacing */
+}
+
+.notion-equation-block {
+    width: 100%;
+    /* Ensure the block takes up full width */
+    display: flex;
+    justify-content: center;
+}
+
+div.notion-collection-page-properties {
+    display: none !important;
+}
 
 /* Dots for navigation */
 .slideshowDots {
