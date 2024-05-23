@@ -44,6 +44,10 @@ export default function NavBar() {
     i18n.changeLanguage(lang)
   }
 
+  const languageButtonStyle = isHomePage
+    ? "text-black"
+    : "text-white hover:bg-indigo-600 hover:text-white hover:rounded-md"
+
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen)
 
   return (
@@ -60,7 +64,7 @@ export default function NavBar() {
         {/* Switch Language Icon (Left for Small Screens) */}
         <div className="md:hidden flex-none z-50">
           <button
-            className="text-black text-lg rounded-full py-2 px-4 flex items-center justify-center"
+            className={`text-lg rounded-full py-2 px-4 flex items-center justify-center ${languageButtonStyle}`}
             onClick={switchLanguage}
           >
             {i18n.language === "en" ? "日本語" : "English"}
@@ -70,7 +74,7 @@ export default function NavBar() {
         {/* Right Side (Language Switcher - for Desktop) */}
         <div className="flex-none hidden md:block z-50">
           <button
-            className="text-black text-lg rounded-full py-2 px-4 flex items-center justify-center"
+            className={`text-lg rounded-full py-2 px-4 flex items-center justify-center ${languageButtonStyle}`}
             onClick={switchLanguage}
           >
             {i18n.language === "en" ? "日本語" : "English"}

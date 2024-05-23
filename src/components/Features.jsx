@@ -19,6 +19,10 @@ const FeatureHeading = styled.h3`
   font-weight: 700; /* Make heading more bold */
   font-size: 2rem; /* Increase the size of the heading */
   margin-bottom: 10px;
+
+  @media (max-width: 767px) {
+    font-size: 1.5rem; /* Adjust the size of the heading for small screens */
+  }
 `
 
 const FeatureTitle = styled.p`
@@ -26,6 +30,10 @@ const FeatureTitle = styled.p`
   font-size: 3rem; /* Increase font size */
   font-weight: 700; /* Make the font weight bolder */
   margin-bottom: 20px;
+
+  @media (max-width: 767px) {
+    font-size: 2rem; /* Adjust the size of the title for small screens */
+  }
 `
 
 const FeatureDescription = styled.p`
@@ -85,6 +93,12 @@ const FeatureItem = styled.li`
       display: none;
     }
   }
+
+  @media (max-width: 767px) {
+    width: 100%; /* Take full width */
+    margin: 0; /* Remove margin */
+
+  }
 `
 
 const FeatureIcon = styled.div`
@@ -105,7 +119,6 @@ const FeatureIcon = styled.div`
 `
 
 const FeatureHeadingSection = styled.div`
-  max-width: 600px;
   margin-bottom: 40px;
   margin: 0 auto;
 `
@@ -179,7 +192,7 @@ const FeatureSectionComponent = () => {
           viewBox="0 0 16 16"
         >
           <path d="M9.669.864 8 0 6.331.864l-1.858.282-.842 1.68-1.337 1.32L2.6 6l-.306 1.854 1.337 1.32.842 1.68 1.858.282L8 12l1.669-.864 1.858-.282.842-1.68 1.337-1.32L13.4 6l.306-1.854-1.337-1.32-.842-1.68L9.669.864zm1.196 1.193.684 1.365 1.086 1.072L12.387 6l.248 1.506-1.086 1.072-.684 1.365-1.51.229L8 10.874l-1.355-.702-1.51-.229-.684-1.365-1.086-1.072L3.614 6l-.25-1.506 1.087-1.072.684-1.365 1.51-.229L8 1.126l1.356.702 1.509.229z" />
-          <path d="M4 11.794V16l4-1 4 1v-4.206l-2.018.306L8 13.126 6.018 12.1 4 11.794z" />
+          <path d="M4 11.794V16l4-1 4 1v-4.206l-2.018.306L8 13.126l-1.982-.926L4 11.794z" />
         </svg>
       ),
       title: t("features.network.title"),
