@@ -49,13 +49,11 @@
     "@tiptap/starter-kit": "^2.3.0",
     "@vercel/analytics": "^1.2.2",
     "@vercel/speed-insights": "^1.0.10",
-    "aws-sdk": "^2.1606.0",
     "axios": ">=0.21.1",
     "bcryptjs": "^2.4.3",
     "cookie": "^0.6.0",
     "cookies-next": "^2.1.2",
     "crypto": "^1.0.1",
-    "dns": "^0.2.2",
     "form-data": "^4.0.0",
     "formidable": "^3.5.1",
     "fs": "^0.0.1-security",
@@ -78,7 +76,6 @@
     "notion-client": "^6.16.0",
     "notion-types": "^6.16.0",
     "notion-utils": "^6.16.0",
-    "npm": "^10.7.0",
     "prismjs": "^1.29.0",
     "react": "^18.2.0",
     "react-big-calendar": "^1.11.2",
@@ -109,5 +106,10 @@
     "prismjs": "^1.29.0",
     "tailwindcss": "^3.4.1",
     "typescript": "^4.9.4"
+  },
+  "overrides": {
+    "react-cusdis": {
+      "react": "^18.2.0"
+    }
   }
 }
