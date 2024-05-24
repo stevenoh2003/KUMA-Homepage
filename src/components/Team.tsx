@@ -130,7 +130,7 @@ export default () => {
               <h4 className="text-gray-700 font-semibold sm:text-lg">
                 {advisor.name}
               </h4>
-              <p className="text-gray-500">{advisor.title}</p>
+              {/* <p className="text-gray-500">{advisor.title}</p> */}
               <p className="text-gray-500 mt-2">{advisor.bio}</p>
               <a
                 href="https://www.aimanmmo.com/"
