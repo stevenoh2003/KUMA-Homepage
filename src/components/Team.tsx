@@ -141,7 +141,7 @@ export default () => {
                 rel="noopener noreferrer"
                 className="text-indigo-600 hover:underline mt-2"
               >
-                {advisor.urlText}
+                Website
               </a>
             </div>
           </div>
