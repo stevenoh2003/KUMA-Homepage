@@ -50,25 +50,19 @@ const Hero = () => {
           style={{ maxWidth: "900px", margin: "0 auto" }}
         >
           <div className="mb-6">
-            <Image
-              alt="Logo"
-              src={LogoNew}
-              width="250"
-              height="250"
-              priority
-            />
+            <Image alt="Logo" src={LogoNew} width="250" height="250" priority />
           </div>
-          <div className="text-center w-7/12 mb-6">
+          <div className="text-center w-12/12 mb-6">
             <h1 className="text font-bold text-gray-900 sm:text-6xl">
               {i18n.language === "ja" && (
                 <>
-                  <span style={{ color: "#4f46e5" }}>kuma </span>
+                  <span style={{ color: "#4f46e5" }}>Kuma </span>
                 </>
               )}
               {t("hero.title")}{" "}
               {i18n.language === "en" && (
                 <>
-                  <span style={{ color: "#4f46e5" }}>kuma</span>.
+                  <span style={{ color: "#4f46e5" }}>Kuma</span>
                 </>
               )}
             </h1>
