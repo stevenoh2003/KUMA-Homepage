@@ -4,6 +4,7 @@ import TaiPortrait from "src/assets/pictures/tai.jpeg"
 import AlexPortrait from "../assets/pictures/alex.jpeg"
 import StevenPortrait from "../assets/pictures/stevenoh.JPG" // Modified import path
 import MaggiePortrait from "../assets/pictures/maggie.jpg"
+import AdvisorPortrait from "../assets/pictures/omer.jpg" // Add the advisor's picture
 import { useTranslation } from "react-i18next"
 
 export default () => {
@@ -40,6 +41,15 @@ export default () => {
     },
   ]
 
+  const advisor = {
+    avatar: AdvisorPortrait,
+    name: t("advisorName"),
+    title: t("advisorTitleText"),
+    bio: t("advisorBio"),
+    url: "https://example.com", // Add the advisor's URL
+    urlText: t("advisorUrlText"),
+  }
+
   return (
     <section className="py-14 mb-24" style={{ backgroundColor: "#f2f3ef" }}>
       <div className="max-w-screen-xl mx-auto px-4 md:px-8">
@@ -69,6 +79,7 @@ export default () => {
                   <h4 className="text-gray-700 font-semibold sm:text-lg">
                     {item.name}
                   </h4>
+                  <p className="text-gray-500">{item.title}</p>
                   <div className="mt-3 flex gap-4 text-gray-400">
                     <a href={item.linkedin}>
                       <svg
@@ -94,6 +105,42 @@ export default () => {
               </li>
             ))}
           </ul>
+        </div>
+
+        {/* Advisor Section */}
+        <div className="mt-12">
+          <div className="max-w-xl space-y-3">
+
+            {/* Add translation key for advisor title */}
+            <p className="text-gray-800 text-3xl font-semibold sm:text-4xl">
+              {t("meetAdvisor")}
+            </p>{" "}
+            {/* Add translation key for meet advisor */}
+          </div>
+          <div className="mt-12 flex gap-4 items-center">
+            <div className="flex-none w-24 h-24">
+              <Image
+                src={advisor.avatar}
+                alt={advisor.name}
+                className="w-full h-full rounded-full"
+                objectFit="cover" // Use cover instead of contain
+                priority
+              />
+            </div>
+            <div>
+              <h4 className="text-gray-700 font-semibold sm:text-lg">
+                {advisor.name}
+              </h4>
+              <p className="text-gray-500">{advisor.title}</p>
+              <p className="text-gray-500 mt-2">{advisor.bio}</p>
+              <a
+                href="https://www.aimanmmo.com/"
+                className="text-indigo-600 hover:underline mt-2"
+              >
+                https://www.aimanmmo.com/
+              </a>
+            </div>
+          </div>
         </div>
       </div>
     </section>

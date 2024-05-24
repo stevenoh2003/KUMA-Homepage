@@ -43,6 +43,13 @@
   "trustedByMembers": "Trusted by members from around the world",
       "title": "Team",
     "meetFounders": "Meet the founders",
+
+
+ "advisorTitle": "Our Advisor",
+  "meetAdvisor": "Meet Our Advisor",
+  "advisorName": "Omer Aiman" ,
+  "advisorTitleText": "Kuma Advisor",
+  "advisorBio": "Founder & CEO of WinRoad RTS | Robotics Scientist & Entrepreneur | Business Developer & Consultant for Robot Technology | Researcher & Lecturer",
       "signIn": {
     "welcomeBack": "Welcome Back!",
     "logInToContinue": "Log in to your account and continue where you left off.",

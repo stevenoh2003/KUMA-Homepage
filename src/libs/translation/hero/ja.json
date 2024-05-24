@@ -36,6 +36,10 @@
 "features.events": "スポンサー",
 "features.events.desc": "スポンサーからの奨をお楽しみに！",
 
+  "meetAdvisor": "アドバイザー",
+
+ "advisorTitleText": "Kuma アドバイザー",
+  "advisorBio": "WinRoad RTSの創設者兼CEO | ロボティクス科学者 & 起業家 | ロボット技術のビジネス開発者 & コンサルタント | 研究者 & 講師",
   "features.title": "kumaってなに",
   "features.growWithUs": "私たちと一緒に成長しましょう！",
   "features.invitation": "アイデアを交換し、質問し、一緒に成長するために、私たちのコミュニティに参加してください。",

@@ -2,6 +2,7 @@ import { useState } from "react"
 import { useRouter } from "next/router"
 import Image from "next/image"
 import Logo from "../assets/pictures/logo_transparent.webp"
+import LogoNew from "../assets/pictures/bear-black-big.png"
 import { FaDiscord } from "react-icons/fa" // Import Discord icon
 import { useTranslation } from "react-i18next"
 import Link from "next/link"
@@ -45,20 +46,20 @@ const Hero = () => {
         }}
       >
         <div
-          className="flex flex-col items-center justify-center px-10 py-8"
+          className="flex flex-col items-center justify-center px-10 py-20"
           style={{ maxWidth: "900px", margin: "0 auto" }}
         >
           <div className="mb-6">
             <Image
               alt="Logo"
-              src={Logo}
-              width="320"
-              height="320"
+              src={LogoNew}
+              width="250"
+              height="250"
               priority
             />
           </div>
-          <div className="text-center w-9/12 mb-6">
-            <h1 className="text font-bold text-gray-900 text-4xl sm:text-6xl">
+          <div className="text-center w-7/12 mb-6">
+            <h1 className="text font-bold text-gray-900 sm:text-6xl">
               {i18n.language === "ja" && (
                 <>
                   <span style={{ color: "#4f46e5" }}>kuma </span>

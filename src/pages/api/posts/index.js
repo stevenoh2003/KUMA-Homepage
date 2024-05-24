@@ -3,7 +3,6 @@ import dbConnect from "src/libs/mongoose"
 import BlogPost from "src/libs/model/BlogPost"
 import User from "src/libs/model/User"
 
-
 export default async function handler(req, res) {
   await dbConnect()
 
@@ -17,8 +16,9 @@ export default async function handler(req, res) {
     // Calculate the number of documents to skip
     const skip = (pageNum - 1) * limitNum
 
-    // Fetch paginated posts with `isPublic` set to true
+    // Fetch paginated posts with `isPublic` set to true, sorted by `created_at` in descending order
     const posts = await BlogPost.find({ isPublic: true })
+      .sort({ created_at: -1 }) // Sort by created_at field in descending order
       .skip(skip)
       .limit(limitNum)
       .lean() // Use `.lean()` to convert to plain JavaScript objects
