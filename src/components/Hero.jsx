@@ -1,7 +1,6 @@
 import { useState } from "react"
 import { useRouter } from "next/router"
 import Image from "next/image"
-import Logo from "../assets/pictures/logo_transparent.webp"
 import LogoNew from "../assets/pictures/bear-black-big.png"
 import { FaDiscord } from "react-icons/fa" // Import Discord icon
 import { useTranslation } from "react-i18next"
@@ -46,14 +45,18 @@ const Hero = () => {
         }}
       >
         <div
-          className="flex flex-col items-center justify-center px-10 py-20"
+          className="flex flex-col items-center justify-center px-8 py-20"
           style={{ maxWidth: "900px", margin: "0 auto" }}
         >
           <div className="mb-6">
-            <Image alt="Logo" src={LogoNew} width="250" height="250" priority />
+            <Image alt="Logo" src={LogoNew} width={250} height={250} priority />
           </div>
-          <div className="text-center w-12/12 mb-6">
-            <h1 className="text font-bold text-gray-900 sm:text-6xl">
+          <div
+            className={`text-center ${
+              i18n.language === "ja" ? "w-full" : "w-full sm:w-8/12"
+            } mb-6`}
+          >
+            <h1 className="text font-bold text-gray-900 text-3xl sm:text-6xl">
               {i18n.language === "ja" && (
                 <>
                   <span style={{ color: "#4f46e5" }}>Kuma </span>
@@ -70,6 +73,7 @@ const Hero = () => {
               {t("hero.subtitle")}
             </p>
           </div>
+
           <div className="w-full p-10 flex flex-col sm:flex-row justify-center items-center">
             <Link
               href="/auth/signin"
