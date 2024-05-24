@@ -79,7 +79,6 @@ export default () => {
                   <h4 className="text-gray-700 font-semibold sm:text-lg">
                     {item.name}
                   </h4>
-                  <p className="text-gray-500">{item.title}</p>
                   <div className="mt-3 flex gap-4 text-gray-400">
                     <a href={item.linkedin}>
                       <svg
