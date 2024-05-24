@@ -57,6 +57,7 @@
     "form-data": "^4.0.0",
     "formidable": "^3.5.1",
     "fs": "^0.0.1-security",
+    "gsap": "^3.12.5",
     "i18next": "^23.11.3",
     "install": "^0.13.0",
     "jsonwebtoken": "^9.0.2",
@@ -87,6 +88,7 @@
     "react-latex-next": "^3.0.0",
     "react-loader-spinner": "^6.1.6",
     "react-notion-x": "^6.16.0",
+    "split-text": "^1.0.0",
     "styled-components": "^6.1.8",
     "tiptap-imagresize": "^1.1.0"
   },

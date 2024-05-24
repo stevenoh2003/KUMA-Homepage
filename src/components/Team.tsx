@@ -80,7 +80,11 @@ export default () => {
                     {item.name}
                   </h4>
                   <div className="mt-3 flex gap-4 text-gray-400">
-                    <a href={item.linkedin}>
+                    <a
+                      href={item.linkedin}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
                       <svg
                         className="w-5 h-5 duration-150 hover:text-gray-500"
                         fill="none"
@@ -109,7 +113,6 @@ export default () => {
         {/* Advisor Section */}
         <div className="mt-12">
           <div className="max-w-xl space-y-3">
-
             {/* Add translation key for advisor title */}
             <p className="text-gray-800 text-3xl font-semibold sm:text-4xl">
               {t("meetAdvisor")}
@@ -133,10 +136,12 @@ export default () => {
               {/* <p className="text-gray-500">{advisor.title}</p> */}
               <p className="text-gray-500 mt-2">{advisor.bio}</p>
               <a
-                href="https://www.aimanmmo.com/"
+                href={advisor.url}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="text-indigo-600 hover:underline mt-2"
               >
-                https://www.aimanmmo.com/
+                {advisor.urlText}
               </a>
             </div>
           </div>

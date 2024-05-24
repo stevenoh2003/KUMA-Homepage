@@ -204,7 +204,7 @@ const FeatureSectionComponent = () => {
     <FeatureSection>
       <FeatureContainer ref={ref}>
         <FeatureHeadingSection>
-          <FeatureHeading>{t("features.title")}</FeatureHeading>
+          {/* <FeatureHeading>{t("features.title")}</FeatureHeading> */}
           <FeatureTitle>{t("features.growWithUs")}</FeatureTitle>
           {/* <FeatureDescription>{t("features.invitation")}</FeatureDescription> */}
         </FeatureHeadingSection>

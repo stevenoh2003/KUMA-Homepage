@@ -6,8 +6,8 @@
   "nav.signup": "Sign Up",
   "nav.profile": "Profile",
   "nav.logout": "Log Out",
-  "hero.title": "Explore the Next Frontier with",
-  "hero.subtitle": "Empowering Tomorrow's Innovators in AI and Robotics",
+  "hero.title": "Explore with next Frontier with",
+  "hero.subtitle": "empowering tomorrow's innovators in AI and robotics",
   "hero.button.getStarted": "Get started",
   "hero.button.joinDiscord": "Join Discord",
   "modal.title": "Join our Discord channel",
@@ -85,11 +85,11 @@
     "description": "Dive into cutting-edge discussions and collaborate on innovative projects in our dynamic intellectual workspace!"
   },
   "step2": {
-    "title": "Sign Up Now",
+    "title": "Sign Up",
     "description": "Share your insights and publish your own blogs on our website by creating an account today!"
   },
   "step3": {
-    "title": "Participate in Exciting Events",
+    "title": "Events",
     "description": "Engage in networking events, hackathons, paper-studying sessions, and more! Don't miss out on the action!"
   },
   "slideshow.project": "Past Projects from Our Members",
