@@ -44,7 +44,7 @@ export default () => {
       avatar: YoshiPortrait,
       name: "Yoshi Sato",
       title: "Full stack engineer",
-      // linkedin: "https://www.linkedin.com/in/tai-inui-9a776a296/",
+      linkedin: "https://www.linkedin.com/in/yoshi-sato/",
       // twitter: "javascript:void(0)",
     },
   ]

@@ -108,9 +108,7 @@ const EventList = () => {
               <div className="space-y-3">
                 <div className="flex items-center gap-x-3">
                   <div>
-                    <span className="block text-sm text-indigo-600 font-medium">
-                      {event.createdBy.name}
-                    </span>
+
                     <h3 className="text-base text-gray-800 font-semibold mt-1">
                       {event.name}
                     </h3>
