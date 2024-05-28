@@ -11,7 +11,7 @@ import { filterPosts } from "src/libs/utils/notion";
 import LogoGrid from "src/components/LogoGrid"
 import Explanation from "src/components/Explanation"
 import { Suspense } from 'react'
-
+import Upcoming from "src/components/Upcoming"
 import Slideshow from "src/components/Slideshow"
 import dynamic from 'next/dynamic';
 import Hero from "src/components/Hero";
@@ -49,6 +49,7 @@ const FeedPage = () => {
       {/* <NavBar /> */}
       <MetaConfig {...meta} />
       <Hero />
+      <Upcoming />
       <Gallery />
       {/* <Quote /> */}
 

@@ -3,13 +3,13 @@ import styled from "styled-components"
 import { useTranslation } from "react-i18next"
 
 const FeatureSection = styled.section`
-  padding: 100px 80px;
+  padding: 100px 40px;
   background-color: #f2f3ef;
   text-align: center;
 `
 
 const FeatureContainer = styled.div`
-  max-width: 80%;
+  max-width: 100%;
   margin: 0 auto;
   text-align: center;
 `
