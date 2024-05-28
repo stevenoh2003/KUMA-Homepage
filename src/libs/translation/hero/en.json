@@ -6,6 +6,7 @@
   "nav.signup": "Sign Up",
   "nav.profile": "Profile",
   "nav.logout": "Log Out",
+  "nav.event": "Events",
   "hero.title": "Explore with next frontier with",
   "hero.subtitle": "Empowering tomorrow's innovators in AI and robotics",
   "hero.button.getStarted": "Get started",
@@ -42,7 +43,7 @@
 
   "trustedByMembers": "Trusted by members from around the world",
       "title": "Team",
-    "meetFounders": "Meet the founders",
+    "meetFounders": "Meet Our Team",
 
 
  "advisorTitle": "Our Advisor",
@@ -110,5 +111,11 @@
       "title": "Networking Opportunity",
       "desc": "Expand your professional network with like-minded individuals."
     }
+  },
+    "upcomingEvents": {
+    "title": "Upcoming Events at Kuma Lab",
+    "subtitle": "Join us at our upcoming events.",
+    "viewAll": "View All Events",
+    "viewDetails": "View Details"
   }
 }

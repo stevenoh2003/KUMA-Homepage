@@ -56,7 +56,7 @@ const Hero = () => {
               i18n.language === "ja" ? "w-full" : "w-full sm:w-8/12"
             } mb-6`}
           >
-            <h1 className="text font-bold text-gray-900 text-3xl sm:text-6xl">
+            <h1 className="text font-bold text-gray-900 text-2xl sm:text-6xl sm:my-4">
               {i18n.language === "ja" && (
                 <>
                   <span style={{ color: "#4f46e5" }}>Kuma </span>

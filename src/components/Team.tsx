@@ -5,6 +5,7 @@ import AlexPortrait from "../assets/pictures/alex.jpeg"
 import StevenPortrait from "../assets/pictures/stevenoh.JPG" // Modified import path
 import MaggiePortrait from "../assets/pictures/maggie.jpg"
 import AdvisorPortrait from "../assets/pictures/omer.jpg" // Add the advisor's picture
+import YoshiPortrait from "../assets/pictures/yoshi.jpeg"
 import { useTranslation } from "react-i18next"
 
 export default () => {
@@ -35,6 +36,13 @@ export default () => {
     {
       avatar: MaggiePortrait,
       name: "Magdeline Kuan",
+      title: "Full stack engineer",
+      // linkedin: "https://www.linkedin.com/in/tai-inui-9a776a296/",
+      // twitter: "javascript:void(0)",
+    },
+    {
+      avatar: YoshiPortrait,
+      name: "Yoshi Sato",
       title: "Full stack engineer",
       // linkedin: "https://www.linkedin.com/in/tai-inui-9a776a296/",
       // twitter: "javascript:void(0)",

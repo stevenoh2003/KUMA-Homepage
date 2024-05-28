@@ -11,7 +11,6 @@ import TextAlign from "@tiptap/extension-text-align"
 import Image from "@tiptap/extension-image"
 import Dropcursor from "@tiptap/extension-dropcursor"
 import Footer from "src/components/Footer.jsx"
-
 import dynamic from "next/dynamic"
 import { NotionRenderer } from "react-notion-x"
 import "react-notion-x/src/styles.css"
@@ -268,7 +267,7 @@ const PostPage = () => {
         />
         <div className="absolute inset-0 bg-black opacity-85 flex justify-center items-center">
           <div className="relative flex items-center space-x-2">
-            <h1 className="text-4xl text-white font-semibold">
+            <h1 className="text-4xl mx-4 text-white font-semibold">
               {postContent.title}
             </h1>
           </div>
@@ -315,18 +314,20 @@ const PostPage = () => {
       />
       <div className="max-w-screen-xl mx-auto px-4 py-4 md:px-8 text-gray-600">
         {postContent.notion_id ? (
-          <NotionRenderer
-            recordMap={postContent.recordMap}
-            disableHeader={true}
-            header={null}
-            components={{
-              Code,
-              Collection,
-              Equation,
-              Modal,
-              Pdf,
-            }}
-          />
+          <div className="overflow-x-auto">
+            <NotionRenderer
+              recordMap={postContent.recordMap}
+              disableHeader={true}
+              header={null}
+              components={{
+                Code,
+                Collection,
+                Equation,
+                Modal,
+                Pdf,
+              }}
+            />
+          </div>
         ) : (
           <StyledEditor>
             {editable && <MenuBar editor={editor} />}

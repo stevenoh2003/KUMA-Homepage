@@ -6,6 +6,7 @@
   "nav.signup": "サインアップ",
   "nav.profile": "プロフィール",
   "nav.logout": "ログアウト",
+  "nav.event": "イベント",
   "hero.title": "と最先端を探検しよう",
   "hero.subtitle": "繋がり、協力し、機械知能の限界を超えよう",
   "hero.button.getStarted": "はじめる",
@@ -110,6 +111,12 @@
       "title": "ネットワーキング",
       "desc": "志を同じくする人々と共にネットワークを広げしよう。"
     }
+  },
+    "upcomingEvents": {
+    "title": "イベント",
+    "subtitle": "今後のイベントに参加しましょう。",
+    "viewAll": "すべてのイベントを見る",
+    "viewDetails": "詳細を見る"
   }
 }
 

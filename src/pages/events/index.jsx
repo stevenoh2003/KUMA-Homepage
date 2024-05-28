@@ -5,6 +5,13 @@ import axios from "axios"
 import Footer from "src/components/Footer"
 import { useSession } from "next-auth/react"
 
+const adminEmails = [
+  "stevenoh2003@gmail.com",
+  "magdeline.kuan@gmail.com",
+  "taiinui556@gmail.com",
+  "alexander.matsumurac@gmail.com",
+]
+
 const EventList = () => {
   const { t } = useTranslation()
   const router = useRouter()
@@ -29,6 +36,21 @@ const EventList = () => {
     fetchEvents()
   }, [])
 
+  const handleDelete = async (id) => {
+    try {
+      await axios.delete("/api/events/delete", {
+        data: { id },
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+      setEvents(events.filter((event) => event._id !== id))
+    } catch (error) {
+      console.error("Failed to delete event:", error)
+      setError("Failed to delete event")
+    }
+  }
+
   if (loading) {
     return <div>Loading...</div>
   }
@@ -52,33 +74,27 @@ const EventList = () => {
               )}
             </p>
           </div>
-          {status === "authenticated" ? (
-            <button
-              onClick={() => router.push("/events/create")}
-              className="px-3 py-3 text-indigo-600 bg-indigo-50 rounded-lg duration-150 hover:bg-indigo-100 active:bg-indigo-200 flex items-center"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                fill="currentColor"
-                className="w-5 h-5 mr-2"
+          {status === "authenticated" &&
+            adminEmails.includes(session.user.email) && (
+              <button
+                onClick={() => router.push("/events/create")}
+                className="px-3 py-3 text-indigo-600 bg-indigo-50 rounded-lg duration-150 hover:bg-indigo-100 active:bg-indigo-200 flex items-center"
               >
-                <path
-                  fillRule="evenodd"
-                  d="M12 5.25a.75.75 0 01.75.75v5.25H18a.75.75 0 010 1.5h-5.25V18a.75.75 0 01-1.5 0v-5.25H6a.75.75 0 010-1.5h5.25V6a.75.75 0 01.75-.75z"
-                  clipRule="evenodd"
-                />
-              </svg>
-              {t("eventList.addNewEvent", "Add New Event")}
-            </button>
-          ) : (
-            <button
-              onClick={() => router.push("/auth/signup")}
-              className="px-3 py-3 text-indigo-600 rounded-lg duration-150 hover:bg-indigo-100 active:bg-indigo-200 flex items-center"
-            >
-              {t("eventList.signUp", "Sign Up")}
-            </button>
-          )}
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                  className="w-5 h-5 mr-2"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M12 5.25a.75.75 0 01.75.75v5.25H18a.75.75 0 010 1.5h-5.25V18a.75.75 0 01-1.5 0v-5.25H6a.75.75 0 010-1.5h5.25V6a.75.75 0 01.75-.75z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+                {t("eventList.addNewEvent", "Add New Event")}
+              </button>
+            )}
         </div>
         <ul className="mt-12 divide-y space-y-3">
           {events.map((event, idx) => (
@@ -123,6 +139,18 @@ const EventList = () => {
                     </svg>
                     {event.location || "No location specified"}
                   </span>
+                  {status === "authenticated" &&
+                    adminEmails.includes(session.user.email) && (
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          handleDelete(event._id)
+                        }}
+                        className="text-red-600 hover:underline"
+                      >
+                        Delete
+                      </button>
+                    )}
                 </div>
               </div>
             </li>

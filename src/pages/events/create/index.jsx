@@ -38,6 +38,12 @@ const CreateEvent = () => {
     }))
   }
 
+  const extractNotionId = (url) => {
+    const regex = /https:\/\/(?:\S+\.)?notion\.site\/(\S+)\??/
+    const match = url.match(regex)
+    return match ? match[1] : ""
+  }
+
   const handleSubmit = async (event) => {
     event.preventDefault()
 
@@ -47,12 +53,13 @@ const CreateEvent = () => {
     }
 
     try {
+      const notionId = extractNotionId(formData.notionLink)
       const response = await axios.post(
         "/api/events/create",
         {
           title: formData.title,
           date: formData.date,
-          notionLink: formData.notionLink,
+          notionLink: notionId,
           location:
             formData.locationType === "Virtual" ? "Virtual" : formData.location,
           startTime: formData.startTime

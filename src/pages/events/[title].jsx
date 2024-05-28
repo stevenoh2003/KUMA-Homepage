@@ -57,7 +57,7 @@ const EventPage = () => {
         />
         <div className="absolute inset-0 bg-black opacity-85 flex justify-center items-center">
           <div className="relative flex items-center space-x-2">
-            <h1 className="text-4xl text-white font-semibold">
+            <h1 className="text-4xl text-white mx-4 font-semibold">
               {eventData.name}
             </h1>
           </div>

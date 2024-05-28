@@ -22,6 +22,11 @@ export default function NavBar() {
       path: "/project",
       current: router.pathname === "/project",
     },
+    {
+      title: t("nav.event"),
+      path: "/project",
+      current: router.pathname === "/events",
+    },
   ]
 
   const isHomePage = router.pathname === "/"
