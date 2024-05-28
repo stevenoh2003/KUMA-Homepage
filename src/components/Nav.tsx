@@ -24,7 +24,7 @@ export default function NavBar() {
     },
     {
       title: t("nav.event"),
-      path: "/project",
+      path: "/events",
       current: router.pathname === "/events",
     },
   ]
