@@ -18,6 +18,15 @@
     /* CSS that should be displayed if width is equal to or less than 800px goes here */
 }
 
+  .notion-equation-inline {
+    margin: 0 !important;
+    padding: 0 !important;
+    display: inline-block; /* Ensure inline equations do not affect block elements */
+  }
+
+  .notion-equation-inline {
+    vertical-align: middle;
+  }
 .slide {
     display: inline-block;
     height: 500px;

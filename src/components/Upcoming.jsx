@@ -28,7 +28,11 @@ const UpcomingEvents = () => {
   }, [])
 
   if (loading) {
-    return <div>Loading...</div>
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <div className="loader">Loading...</div>
+      </div>
+    )
   }
 
   if (error) {
@@ -36,7 +40,7 @@ const UpcomingEvents = () => {
   }
 
   return (
-    <section className="py-20 ">
+    <section className="py-20">
       <div className="mx-auto px-4 md:px-8">
         <div className="flex justify-between items-center">
           <div>
