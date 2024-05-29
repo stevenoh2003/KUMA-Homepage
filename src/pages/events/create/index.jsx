@@ -91,7 +91,7 @@ const CreateEvent = () => {
   }
 
   return (
-    <main className="flex items-center justify-center h-screen bg-gray-100">
+    <main className="flex items-center justify-center h-screen">
       <div className="w-full max-w-md space-y-8 px-4 text-gray-600">
         <div className="mt-5 space-y-2">
           <h3 className="text-gray-800 text-2xl font-bold sm:text-3xl">
