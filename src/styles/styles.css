@@ -89,13 +89,13 @@
 }
 
 /* Update other styles as necessary */
-.notion-equation {
+/* .notion-equation {
     display: flex;
     justify-content: center;
     align-items: center;
     margin: 20px 0;
-    /* Optional: Add some margin for spacing */
-}
+    Optional: Add some margin for spacing
+} */
 
 .notion-equation-block {
     width: 100%;
