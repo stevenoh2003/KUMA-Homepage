@@ -1,11 +1,13 @@
 
 
-
-.katex-display{
+.katex-display {
+    margin: 0 !important;
+    padding: 0 !important;
+    line-height: normal !important;
+}
+.katex-display {
     margin: 0 !important;
 }
-
-
 .slideshow {
     margin: 0 auto;
     overflow: hidden;

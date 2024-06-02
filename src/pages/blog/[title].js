@@ -245,22 +245,6 @@ const PostPage = () => {
 
   return (
     <div style={{ backgroundColor: "#f2f3ef" }}>
-      <style jsx>{`
-        .notion-equation-inline {
-          display: inline-block;
-          margin: 0;
-          padding: 0;
-          vertical-align: middle;
-        }
-        .katex-html .base {
-          display: inline-block;
-          vertical-align: middle;
-        }
-        .katex-html .mord {
-          margin: 0;
-          padding: 0;
-        }
-      `}</style>
       <div className="relative h-[300px] w-full overflow-hidden">
         <img
           src={thumbnailUrl}
