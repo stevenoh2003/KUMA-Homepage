@@ -12,29 +12,42 @@ const BlogIndex = () => {
   const [posts, setPosts] = useState([])
   const [currentPage, setCurrentPage] = useState(1)
   const [totalPages, setTotalPages] = useState(1)
-  const [isLoading, setIsLoading] = useState(false) // Assume initial loading state
+  const [isLoading, setIsLoading] = useState(false)
+  const [selectedTag, setSelectedTag] = useState("")
   const router = useRouter()
   const { data: session, status } = useSession()
   const { t } = useTranslation()
 
-  const fetchPosts = async (page) => {
-    setIsLoading(true) // Set loading state to true while fetching
-    const response = await fetch(`/api/posts?page=${page}&limit=${PAGE_LIMIT}`)
+  const fetchPosts = async (page, tag) => {
+    setIsLoading(true)
+    const tagQuery = tag ? `&tag=${tag}` : ""
+    const response = await fetch(
+      `/api/posts?page=${page}&limit=${PAGE_LIMIT}${tagQuery}`
+    )
     const data = await response.json()
     setPosts(data.posts || [])
     setTotalPages(data.totalPages || 1)
     setCurrentPage(data.currentPage || page)
-    setIsLoading(false) // Set loading state to false after fetching
+    setIsLoading(false)
     console.log(data)
   }
 
   useEffect(() => {
-    fetchPosts(currentPage)
-  }, [currentPage])
+    fetchPosts(currentPage, selectedTag)
+  }, [currentPage, selectedTag])
 
   const changePage = (page) => {
     if (page >= 1 && page <= totalPages) {
       setCurrentPage(page)
+    }
+  }
+
+  const handleTagClick = (tag) => {
+    if (selectedTag === tag) {
+      setSelectedTag("")
+    } else {
+      setSelectedTag(tag)
+      setCurrentPage(1) // Reset to first page when a new tag is selected
     }
   }
 
@@ -50,6 +63,10 @@ const BlogIndex = () => {
 
   const defaultThumbnail =
     "https://images.unsplash.com/photo-1556155092-490a1ba16284?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80"
+
+  const allTags = Array.from(
+    new Set(posts.flatMap((post) => post.tags))
+  ).filter((tag) => tag)
 
   return (
     <div style={{ backgroundColor: "#f2f3ef" }}>
@@ -106,46 +123,79 @@ const BlogIndex = () => {
                   </button>
                 )}
               </div>
-              <ul className="grid gap-x-8 gap-y-10 mt-16 sm:grid-cols-2 lg:grid-cols-3">
-                {posts.map((post) => (
-                  <li
-                    className="w-full mx-auto group sm:max-w-sm"
-                    key={post._id}
+              <div className="flex flex-wrap gap-2 mt-8">
+                {allTags.map((tag) => (
+                  <button
+                    key={tag}
+                    className={`px-3 py-2 rounded-lg duration-150 ${
+                      selectedTag === tag
+                        ? "bg-indigo-600 text-white"
+                        : "bg-indigo-50 text-indigo-600"
+                    }`}
+                    onClick={() => handleTagClick(tag)}
                   >
-                    <Link
-                      href={`/blog/${encodeURIComponent(post.title)}`}
-                      legacyBehavior
-                    >
-                      <a>
-                        <div className="h-48 w-full overflow-hidden rounded-lg">
-                          <img
-                            src={post.thumbnail_url || defaultThumbnail}
-                            alt={post.title}
-                            className="object-cover h-full w-full"
-                            loading="lazy"
-                          />
-                        </div>
-                        <div className="mt-3 space-y-2">
-                          <div className="flex justify-between items-center text-sm">
-                            <span className="block text-indigo-600">
-                              {new Date(post.created_at).toLocaleDateString()}
-                            </span>
-                            <span className="block text-gray-600">
-                              {post.ownerName || "Unknown Author"}
-                            </span>
-                          </div>
-                          <h3 className="text-lg text-gray-800 duration-150 group-hover:text-indigo-600 font-semibold">
-                            {post.title}
-                          </h3>
-                          <p className="text-gray-600 text-sm duration-150 group-hover:text-gray-800">
-                            {post.description ||
-                              "Read this blog post to find out more!"}
-                          </p>
-                        </div>
-                      </a>
-                    </Link>
-                  </li>
+                    {tag}
+                  </button>
                 ))}
+              </div>
+              <ul className="grid gap-x-8 gap-y-10 mt-16 sm:grid-cols-2 lg:grid-cols-3">
+                {posts.map((post) => {
+                  const cleanTags = (post.tags || [])
+                    .map((tag) => tag.trim())
+                    .filter((tag) => tag)
+
+                  return (
+                    <li
+                      className="w-full mx-auto group sm:max-w-sm"
+                      key={post._id}
+                    >
+                      <Link
+                        href={`/blog/${encodeURIComponent(post.title)}`}
+                        legacyBehavior
+                      >
+                        <a>
+                          <div className="h-48 w-full overflow-hidden rounded-lg">
+                            <img
+                              src={post.thumbnail_url || defaultThumbnail}
+                              alt={post.title}
+                              className="object-cover h-full w-full"
+                              loading="lazy"
+                            />
+                          </div>
+                          <div className="mt-3 space-y-2">
+                            <div className="flex justify-between items-center text-sm">
+                              <span className="block text-indigo-600">
+                                {new Date(post.created_at).toLocaleDateString()}
+                              </span>
+                              <span className="block text-gray-600">
+                                {post.ownerName || "Unknown Author"}
+                              </span>
+                            </div>
+                            <h3 className="text-lg text-gray-800 duration-150 group-hover:text-indigo-600 font-semibold">
+                              {post.title}
+                            </h3>
+                            <p className="text-gray-600 text-sm duration-150 group-hover:text-gray-800">
+                              {post.description ||
+                                "Read this blog post to find out more!"}
+                            </p>
+                            {cleanTags.length > 0 && (
+                              <div className="flex flex-wrap gap-2 mt-2">
+                                {cleanTags.map((tag) => (
+                                  <span
+                                    key={tag}
+                                    className="bg-indigo-100 text-indigo-600 px-2 py-1 rounded-full text-xs"
+                                  >
+                                    {tag}
+                                  </span>
+                                ))}
+                              </div>
+                            )}
+                          </div>
+                        </a>
+                      </Link>
+                    </li>
+                  )
+                })}
               </ul>
               {/* Pagination Component */}
               <div className="flex items-center justify-between mt-10">

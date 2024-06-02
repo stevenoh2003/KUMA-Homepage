@@ -8,7 +8,6 @@ import dbConnect from "src/libs/mongoose"
 import User from "src/libs/model/User"
 
 export default function Profile({ user }) {
-  // Ensure user is destructured here
   const { data: session, status } = useSession()
   const loading = status === "loading"
 
@@ -20,12 +19,11 @@ export default function Profile({ user }) {
   const [imagePreview, setImagePreview] = useState(user.image || null)
   const [updating, setUpdating] = useState(false)
 
-  const [fileName, setFileName] = useState(null);
-
+  const [fileName, setFileName] = useState(null)
   const [fileType, setFileType] = useState(null)
 
-    const defaultThumbnail =
-      "https://images.unsplash.com/photo-1556155092-490a1ba16284?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80"
+  const defaultThumbnail =
+    "https://images.unsplash.com/photo-1556155092-490a1ba16284?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80"
 
   useEffect(() => {
     if (session?.user) {
@@ -59,66 +57,87 @@ export default function Profile({ user }) {
       </div>
     )
   }
-const handleImageChange = (e) => {
-  const file = e.target.files[0]
-  if (file) {
-    setImage(file)
-    setImagePreview(URL.createObjectURL(file)) // More efficient than FileReader for previews
-    setFileName(file.name) // Capturing file name
-    setFileType(file.type) // Capturing file type
-  }
-}
 
-const handleSubmit = async (event) => {
-  event.preventDefault()
-  setUpdating(true)
-
-  if (!name) {
-    // Ensuring required fields are not empty
-    alert("Please check your name and user identification")
-    setUpdating(false)
-    return
+  const handleImageChange = (e) => {
+    const file = e.target.files[0]
+    if (file) {
+      setImage(file)
+      setImagePreview(URL.createObjectURL(file))
+      setFileName(file.name)
+      setFileType(file.type)
+    }
   }
 
-  const formData = new FormData()
-  formData.append("name", name)
+  const handleSubmit = async (event) => {
+    event.preventDefault()
+    setUpdating(true)
 
-  if (image) {
-    if (!fileName || !fileType) {
-      alert("Missing file details")
+    if (!name) {
+      alert("Please check your name and user identification")
       setUpdating(false)
       return
     }
-    formData.append("file", image)
-    formData.append("fileName", fileName) // Pass file name
-    formData.append("fileType", fileType) // Pass file type
-  }
 
-  // Append user ID to formData
-  if (session?.user?.id) {
-    formData.append("userId", session.user.id)
-  } else {
-    alert("Session user ID not found")
+    const formData = new FormData()
+    formData.append("name", name)
+
+    if (image) {
+      if (!fileName || !fileType) {
+        alert("Missing file details")
+        setUpdating(false)
+        return
+      }
+      formData.append("file", image)
+      formData.append("fileName", fileName)
+      formData.append("fileType", fileType)
+    }
+
+    if (session?.user?.id) {
+      formData.append("userId", session.user.id)
+    } else {
+      alert("Session user ID not found")
+      setUpdating(false)
+      return
+    }
+
+    const response = await fetch("/api/users/profile-update", {
+      method: "POST",
+      body: formData,
+    })
+
+    if (response.ok) {
+      const updatedUser = await response.json()
+
+      if (updatedUser.presignedPostData) {
+        const { url, ...fields } = updatedUser.presignedPostData
+        const s3FormData = new FormData()
+        Object.entries(fields).forEach(([key, value]) => {
+          s3FormData.append(key, value)
+        })
+        s3FormData.append("file", image)
+
+        const s3Response = await fetch(updatedUser.url, {
+          method: "POST",
+          body: s3FormData,
+        })
+
+        if (!s3Response.ok) {
+          console.error("Failed to upload to S3:", s3Response.statusText)
+          alert(`Failed to upload image: ${s3Response.statusText}`)
+          setUpdating(false)
+          return
+        }
+      }
+
+      setImagePreview(updatedUser.profilePicUrl)
+      alert("Profile updated successfully!")
+    } else {
+      console.error("Failed to update profile:", response.statusText)
+      alert(`Failed to update profile: ${response.statusText}`)
+    }
+
     setUpdating(false)
-    return
   }
-
-  const response = await fetch("/api/users/profile-update", {
-    method: "POST",
-    body: formData,
-  })
-
-  setUpdating(false)
-  if (response.ok) {
-    const updatedUser = await response.json()
-    setImagePreview(updatedUser.profilePicUrl)
-    alert("Profile updated successfully!")
-  } else {
-    console.error("Failed to update profile:", response.statusText)
-    alert(`Failed to update profile: ${response.statusText}`)
-  }
-}
-
 
   const handlePageChange = (newPage) => {
     setPage(newPage)
@@ -176,31 +195,35 @@ const handleSubmit = async (event) => {
           <h2 className="text-2xl font-bold mb-4">My Posts</h2>
           <ul className="space-y-6">
             {posts.map((post) => (
-              <li key={post._id} className="group">
-                <Link href={`/blog/${encodeURIComponent(post.title)}`}>
-                  <div className="h-48 w-full overflow-hidden rounded-lg bg-white shadow">
-                    <Image
-                      src={post.thumbnail_url || defaultThumbnail}
-                      alt={post.title}
-                      className="object-cover h-full w-full"
-                      loading="lazy"
-                      width={100}
-                      height={100}
-                    />
-                  </div>
-                  <div className="mt-3 space-y-2">
-                    <span className="text-sm text-gray-500">
-                      {new Date(post.created_at).toLocaleDateString()}
-                    </span>
-                    <h3 className="text-lg font-semibold text-gray-800">
-                      {post.title}
-                    </h3>
-                    <p className="text-gray-600">
-                      {post.description ||
-                        "Read this blog post to find out more!"}
-                    </p>
-                  </div>
-                </Link>
+              <li
+                key={post._id}
+                className="flex flex-col md:flex-row items-start md:items-center gap-4 bg-white p-4 rounded-lg shadow-md"
+              >
+                <div className="flex-shrink-0 w-full md:w-32 h-32 relative">
+                  <Image
+                    src={post.thumbnail_url || defaultThumbnail}
+                    alt={post.title}
+                    className="object-cover w-full h-full rounded-lg"
+                    layout="fill"
+                  />
+                </div>
+                <div className="flex-grow">
+                  <span className="text-sm text-gray-500">
+                    {new Date(post.created_at).toLocaleDateString()}
+                  </span>
+                  <h3 className="text-lg font-semibold text-gray-800 mt-1 md:mt-0">
+                    {post.title}
+                  </h3>
+                  <p className="text-gray-600">
+                    {post.description ||
+                      "Read this blog post to find out more!"}
+                  </p>
+                  <Link
+                    href={`/blog/${encodeURIComponent(post.title)}`}
+                    className="text-blue-600 hover:underline mt-2 block"
+                  >
+Read More                  </Link>
+                </div>
               </li>
             ))}
           </ul>
@@ -238,11 +261,9 @@ const handleSubmit = async (event) => {
   )
 }
 
-
 export async function getServerSideProps(context) {
   const session = await getSession(context)
 
-  // Redirect to sign-in page if not logged in
   if (!session || !session.user) {
     return {
       redirect: {
@@ -254,8 +275,7 @@ export async function getServerSideProps(context) {
 
   await dbConnect()
 
-  // Fetch user details from the database
-  const user = await User.findById(session.user.id).lean() // Using lean() for plain JavaScript objects
+  const user = await User.findById(session.user.id).lean()
   if (!user) {
     return {
       redirect: {
@@ -265,13 +285,11 @@ export async function getServerSideProps(context) {
     }
   }
 
-  // Ensure all values are serializable
   const serializableUser = {
     name: user.name || null,
-    image: user.profilePicUrl || null, // Default to null if undefined
+    image: user.profilePicUrl || null,
   }
 
-  // Pass the user details to the client
   return {
     props: {
       session,

@@ -1,4 +1,3 @@
-// src/pages/Editor.js
 import React from "react"
 import { StyledEditor } from "src/components/Blog/StyledComponents"
 import MenuBar from "src/components/Blog/MenuBar"
@@ -11,10 +10,7 @@ const EditorPage = () => {
   return (
     <div style={{ backgroundColor: "#f2f3ef" }}>
       <StyledEditor>
-        <div className="max-w-lg my-8 mx-auto space-y-3 sm:text-center">
-          <h3 className="text-indigo-600 font-semibold">Create a Blog Post</h3>
-          <p>Fill out the form below to share your ideas and stories!</p>
-        </div>
+
         <hr
           style={{
             color: "black",
@@ -22,13 +18,7 @@ const EditorPage = () => {
             height: 1,
           }}
         />
-        <EditorProvider
-          slotBefore={<MenuBar />}
-          extensions={extensions}
-          content={content}
-        >
-          <CreateBlog />
-        </EditorProvider>
+        <CreateBlog />
       </StyledEditor>
       <Footer />
     </div>

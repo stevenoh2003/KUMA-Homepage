@@ -1,4 +1,3 @@
-// src/pages/api/posts/index.js
 import dbConnect from "src/libs/mongoose"
 import BlogPost from "src/libs/model/BlogPost"
 import User from "src/libs/model/User"
@@ -6,7 +5,7 @@ import User from "src/libs/model/User"
 export default async function handler(req, res) {
   await dbConnect()
 
-  const { page = 1, limit = 15 } = req.query
+  const { page = 1, limit = 15, tag } = req.query
 
   try {
     // Convert page and limit to integers
@@ -16,8 +15,14 @@ export default async function handler(req, res) {
     // Calculate the number of documents to skip
     const skip = (pageNum - 1) * limitNum
 
+    // Build the query object
+    const query = { isPublic: true }
+    if (tag) {
+      query.tags = { $in: [tag] }
+    }
+
     // Fetch paginated posts with `isPublic` set to true, sorted by `created_at` in descending order
-    const posts = await BlogPost.find({ isPublic: true })
+    const posts = await BlogPost.find(query)
       .sort({ created_at: -1 }) // Sort by created_at field in descending order
       .skip(skip)
       .limit(limitNum)
@@ -34,8 +39,8 @@ export default async function handler(req, res) {
       })
     )
 
-    // Count total number of documents with `isPublic` set to true
-    const totalPosts = await BlogPost.countDocuments({ isPublic: true })
+    // Count total number of documents with `isPublic` set to true and matching the tag filter if provided
+    const totalPosts = await BlogPost.countDocuments(query)
 
     res.status(200).json({
       posts: populatedPosts, // Include posts with owner names

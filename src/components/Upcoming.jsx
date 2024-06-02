@@ -3,6 +3,7 @@ import axios from "axios"
 import { useTranslation } from "react-i18next"
 import { useRouter } from "next/router"
 import Link from "next/link"
+import { RotatingLines } from "react-loader-spinner"
 
 const UpcomingEvents = () => {
   const { t } = useTranslation()
@@ -30,13 +31,25 @@ const UpcomingEvents = () => {
   if (loading) {
     return (
       <div className="flex justify-center items-center h-screen">
-        <div className="loader">Loading...</div>
+        <RotatingLines
+          visible={true}
+          height="80"
+          width="80"
+          color="#4f46e5"
+          strokeWidth="5"
+          animationDuration="0.75"
+          ariaLabel="rotating-lines-loading"
+        />
       </div>
     )
   }
 
   if (error) {
-    return <div>{error}</div>
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <p className="text-red-600">{error}</p>
+      </div>
+    )
   }
 
   return (

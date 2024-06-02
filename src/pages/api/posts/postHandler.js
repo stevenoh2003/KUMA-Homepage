@@ -15,6 +15,7 @@ async function handler(req, res) {
     userId,
     thumbnailUrl,
     isPublic,
+    tags, // Get tags from the request body
   } = req.body
   let s3Key = req.body.s3Key || null
 
@@ -47,6 +48,7 @@ async function handler(req, res) {
         thumbnail_url: thumbnailUrl,
         owner: userId,
         isPublic: isPublic,
+        tags: tags, // Save tags to the database
       })
       await newPost.save()
       return res.status(201).json(newPost)

@@ -31,11 +31,12 @@ export default async function handler(req, res) {
       ? fields.userId[0]
       : fields.userId
     const file = files.file
-    const fileName = fields.fileName // Extracted from the fields
-    const fileType = fields.fileType // Extracted from the fields
-
-    console.log(fileName)
-    console.log(fileType)
+    const fileName = Array.isArray(fields.fileName)
+      ? fields.fileName[0]
+      : fields.fileName
+    const fileType = Array.isArray(fields.fileType)
+      ? fields.fileType[0]
+      : fields.fileType
 
     if (!userId || !name || !fileName || !fileType) {
       return res.status(400).json({
@@ -51,7 +52,7 @@ export default async function handler(req, res) {
       user.name = name
 
       let profilePicUrl = user.profilePicUrl
-      let presignedPost = null // Declare presignedPost outside the if block
+      let presignedPost = null
 
       if (file) {
         const s3Key = `profile/${Date.now()}_${fileName}`
@@ -69,7 +70,6 @@ export default async function handler(req, res) {
 
         profilePicUrl = `https://${process.env.S3_BUCKET_NAME}.s3.${process.env.S3_REGION}.amazonaws.com/${s3Key}`
         user.profilePicUrl = profilePicUrl
-        console.log(presignedPost)
       }
 
       await user.save()
@@ -77,14 +77,14 @@ export default async function handler(req, res) {
         message: "Profile updated successfully",
         name: user.name,
         profilePicUrl,
-        presignedPostData: presignedPost ? presignedPost.fields : null, // Now presignedPost is accessible
+        presignedPostData: presignedPost ? presignedPost.fields : null,
+        url: presignedPost ? presignedPost.url : null,
       })
     } catch (error) {
       console.error("Failed to update user profile:", error)
-      res.status(500).json({
-        message: "Failed to update profile",
-        error: error.message,
-      })
+      res
+        .status(500)
+        .json({ message: "Failed to update profile", error: error.message })
     }
   })
 }

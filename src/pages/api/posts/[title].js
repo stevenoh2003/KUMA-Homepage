@@ -20,6 +20,8 @@ export default async function handler(req, res) {
       const recordMap = await notion.getPage(post.notion_id)
       res.status(200).json({
         title: post.title,
+        description: post.description,
+        tags: post.tags,
         notion_id: post.notion_id,
         recordMap: recordMap,
         created_at: post.created_at,
@@ -44,6 +46,8 @@ export default async function handler(req, res) {
 
       res.status(200).json({
         title: post.title,
+        description: post.description,
+        tags: post.tags,
         content: content,
         created_at: post.created_at,
         owner: post.owner,

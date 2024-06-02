@@ -12,6 +12,7 @@ import Image from "@tiptap/extension-image"
 import Dropcursor from "@tiptap/extension-dropcursor"
 import Footer from "src/components/Footer.jsx"
 import dynamic from "next/dynamic"
+import { RotatingLines } from "react-loader-spinner"
 import { NotionRenderer } from "react-notion-x"
 import "react-notion-x/src/styles.css"
 
@@ -41,6 +42,8 @@ const Modal = dynamic(
   }
 )
 
+const predefinedTags = ["Paper Note", "AI", "Robotics"]
+
 const PostPage = () => {
   const router = useRouter()
   const { title } = router.query
@@ -53,6 +56,7 @@ const PostPage = () => {
     isPublic: false,
     created_at: "",
     notion_id: "",
+    tags: [],
   })
   const [userInfo, setUserInfo] = useState(null)
   const { data: session } = useSession()
@@ -61,8 +65,10 @@ const PostPage = () => {
   const [newTitle, setNewTitle] = useState("")
   const [newDescription, setNewDescription] = useState("")
   const [newThumbnail, setNewThumbnail] = useState(null)
-  const [isPublic, setIsPublic] = useState(postContent.isPublic)
+  const [isPublic, setIsPublic] = useState(false)
+  const [selectedTags, setSelectedTags] = useState([])
   const [editorFocused, setEditorFocused] = useState(false)
+  const [authorLoading, setAuthorLoading] = useState(true)
 
   const editor = useEditor({
     extensions: [
@@ -82,10 +88,10 @@ const PostPage = () => {
     ],
     content: "",
     editable: false,
-    onFocus: ({ editor }) => {
+    onFocus: () => {
       setEditorFocused(true)
     },
-    onBlur: ({ editor }) => {
+    onBlur: () => {
       setEditorFocused(false)
     },
   })
@@ -100,103 +106,55 @@ const PostPage = () => {
 
   useEffect(() => {
     if (title && editor) {
-      const localContent = localStorage.getItem(`editorContent-${title}`)
-      if (localContent && editable) {
-        editor.commands.setContent(localContent)
-      } else {
-        fetch(`/api/posts/${encodeURIComponent(title)}`)
-          .then((response) => response.json())
-          .then((data) => {
-            setPostContent(data)
-            setNewTitle(data.title)
-            setNewDescription(data.description || "")
-            setIsPublic(data.isPublic)
-            if (!data.notion_id) {
-              editor.commands.setContent(
-                data.content || "<p>No content available</p>"
-              )
-            }
-            if (data.owner) fetchUserInfo(data.owner)
-            setEditable(
-              session && session.user && data.owner === session.user.id
+      fetch(`/api/posts/${encodeURIComponent(title)}`)
+        .then((response) => response.json())
+        .then((data) => {
+          setPostContent(data)
+          setNewTitle(data.title)
+          setNewDescription(data.description || "")
+          setIsPublic(data.isPublic)
+          setSelectedTags(data.tags || [])
+          if (!data.notion_id) {
+            editor.commands.setContent(
+              data.content || "<p>No content available</p>"
             )
-          })
-          .catch((error) =>
-            console.error("Error fetching post details:", error)
-          )
-      }
+          }
+          if (data.owner) fetchUserInfo(data.owner)
+          setEditable(session && session.user && data.owner === session.user.id)
+        })
+        .catch((error) => console.error("Error fetching post details:", error))
     }
-  }, [title, editor, editable, session])
-
-  useEffect(() => {
-    if (editor && editable) {
-      const updateStorage = () => {
-        localStorage.setItem(`editorContent-${title}`, editor.getHTML())
-      }
-
-      editor.on("update", updateStorage)
-      return () => {
-        editor.off("update", updateStorage)
-      }
-    }
-  }, [editor, editable, title])
+  }, [title, editor, session])
 
   const fetchUserInfo = (userId) => {
+    setAuthorLoading(true)
     fetch(`/api/users/${userId}`)
       .then((response) => {
         if (!response.ok) throw new Error(`HTTP status ${response.status}`)
         return response.json()
       })
-      .then((user) => setUserInfo(user))
-      .catch((error) => console.error("Error fetching user info:", error))
+      .then((user) => {
+        setUserInfo(user)
+        setAuthorLoading(false)
+      })
+      .catch((error) => {
+        console.error("Error fetching user info:", error)
+        setAuthorLoading(false)
+      })
   }
 
   const handleThumbnailChange = (event) => {
     setNewThumbnail(event.target.files[0])
   }
 
-  const updatePost = () => {
-    if (!editor || !editable) return
-    const htmlContent = editor.getHTML()
-
-    fetch(`/api/posts/updatePost`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ title, content: htmlContent }),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log("Post updated:", data)
-        router.push("/blog")
-      })
-      .catch((error) => console.error("Error updating post:", error))
-  }
-
-  const deletePost = async () => {
-    if (!editable) return
-    const confirmed = confirm("Are you sure you want to delete this post?")
-    if (!confirmed) return
-
-    try {
-      const response = await fetch(`/api/posts/delete`, {
-        method: "DELETE",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ title: postContent.title }),
-      })
-
-      if (response.ok) {
-        console.log("Post deleted successfully")
-        router.push("/blog")
-      } else {
-        console.error("Failed to delete post:", await response.json())
-      }
-    } catch (error) {
-      console.error("Error deleting post:", error)
-    }
+  const handleTagChange = (event) => {
+    const { value, checked } = event.target
+    setSelectedTags((prevTags) =>
+      checked ? [...prevTags, value] : prevTags.filter((tag) => tag !== value)
+    )
   }
 
   const updateTitleAndThumbnail = async () => {
-    updatePost()
     const response = await fetch(`/api/posts/updateTitleAndThumbnail`, {
       method: "POST",
       body: new URLSearchParams({
@@ -207,6 +165,7 @@ const PostPage = () => {
         isPublic: String(isPublic),
         thumbnailName: newThumbnail ? newThumbnail.name : "",
         thumbnailType: newThumbnail ? newThumbnail.type : "",
+        tags: selectedTags.join(","),
       }),
     })
 
@@ -235,6 +194,7 @@ const PostPage = () => {
         description: result.description,
         thumbnail_url: result.thumbnailUrl,
         isPublic: result.isPublic,
+        tags: result.tags,
       }))
       setShowModal(false)
     } else if (response.ok) {
@@ -244,10 +204,36 @@ const PostPage = () => {
         description: result.description,
         thumbnail_url: result.thumbnail_url,
         isPublic: result.isPublic,
+        tags: result.tags,
       }))
+      router.push("/blog")
+
       setShowModal(false)
     } else {
       console.error("Error updating title and thumbnail:", result.error)
+    }
+  }
+
+  const deletePost = async () => {
+    if (!editable) return
+    const confirmed = confirm("Are you sure you want to delete this post?")
+    if (!confirmed) return
+
+    try {
+      const response = await fetch(`/api/posts/delete`, {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ title: postContent.title }),
+      })
+
+      if (response.ok) {
+        console.log("Post deleted successfully")
+        router.push("/blog")
+      } else {
+        console.error("Failed to delete post:", await response.json())
+      }
+    } catch (error) {
+      console.error("Error deleting post:", error)
     }
   }
 
@@ -274,7 +260,19 @@ const PostPage = () => {
         </div>
       </div>
       <div className="mt-8">
-        {userInfo ? (
+        {authorLoading ? (
+          <div className="flex justify-center items-center min-h-[150px]">
+            <RotatingLines
+              visible={true}
+              height="50"
+              width="50"
+              color="#4f46e5"
+              strokeWidth="5"
+              animationDuration="0.75"
+              ariaLabel="rotating-lines-loading"
+            />
+          </div>
+        ) : userInfo ? (
           <div className="flex justify-between items-center mt-4 mb-4 mx-auto max-w-screen-lg px-4 sm:px-0 md:px-14">
             <div className="flex items-center space-x-2 md:space-x-4">
               {userInfo.profilePicUrl ? (
@@ -349,91 +347,110 @@ const PostPage = () => {
             />
           </StyledEditor>
         )}
-        {editable && !postContent.notion_id && (
-          <>
-            <hr
-              style={{
-                color: "black",
-                backgroundColor: "black",
-                height: 1,
-              }}
-            />
-            <div className="flex justify-end mt-4">
-              <button
-                className="px-4 py-2 text-white font-medium bg-indigo-600 hover:bg-indigo-500 active:bg-indigo-700 rounded-lg"
-                onClick={() => setShowModal(true)}
-              >
-                Update Post
-              </button>
-            </div>
-          </>
-        )}
+
         {showModal && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-            <div className="bg-white rounded-lg shadow-lg p-6 max-w-lg w-full">
-              <h3 className="text-2xl font-semibold mb-4">
-                Edit Title, Thumbnail, Description, and Visibility
+            <div className="bg-white rounded-lg shadow-lg p-8 max-w-lg w-full">
+              <h3 className="text-3xl font-bold mb-6 text-center text-indigo-600">
+                Edit Post
               </h3>
-              <label className="block mb-2">
-                New Title
-                <input
-                  type="text"
-                  value={newTitle}
-                  onChange={(e) => setNewTitle(e.target.value)}
-                  className="w-full mt-1 px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-600"
-                />
-              </label>
-              <label className="block mb-4">
-                New Description
-                <textarea
-                  value={newDescription}
-                  onChange={(e) => setNewDescription(e.target.value)}
-                  className="w-full mt-1 px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-600"
-                  rows="3"
-                />
-              </label>
-              <label className="block mb-4">
-                New Thumbnail
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={handleThumbnailChange}
-                  className="w-full mt-1 px-3 py-2 border rounded-lg focus:outline-none"
-                />
-              </label>
-              <label className="block mb-4">
-                <input
-                  type="checkbox"
-                  checked={isPublic}
-                  onChange={(e) => setIsPublic(e.target.checked)}
-                  className="mr-2"
-                />
-                Public Post
-              </label>
-              <div className="flex justify-end space-x-4">
-                <button
-                  className="px-4 py-2 text-gray-600 font-medium rounded-lg border hover:bg-gray-50"
-                  onClick={() => setShowModal(false)}
-                >
-                  Cancel
-                </button>
-                <button
-                  className="px-4 py-2 text-white font-medium bg-indigo-600 hover:bg-indigo-500 rounded-lg"
-                  onClick={updateTitleAndThumbnail}
-                >
-                  Update
-                </button>
-              </div>
+              <form className="space-y-6" onSubmit={(e) => e.preventDefault()}>
+                <div>
+                  <label className="block text-lg font-medium">New Title</label>
+                  <input
+                    type="text"
+                    value={newTitle}
+                    onChange={(e) => setNewTitle(e.target.value)}
+                    className="w-full mt-2 px-4 py-2 text-gray-700 bg-gray-100 rounded-lg border border-gray-300 focus:border-indigo-600"
+                  />
+                </div>
+                <div>
+                  <label className="block text-lg font-medium">
+                    New Description
+                  </label>
+                  <textarea
+                    value={newDescription}
+                    onChange={(e) => setNewDescription(e.target.value)}
+                    className="w-full mt-2 px-4 py-2 text-gray-700 bg-gray-100 rounded-lg border border-gray-300 focus:border-indigo-600"
+                    rows="3"
+                  />
+                </div>
+                <div>
+                  <label className="block text-lg font-medium">
+                    New Thumbnail
+                  </label>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleThumbnailChange}
+                    className="w-full mt-2 px-4 py-2 text-gray-700 bg-gray-100 rounded-lg border border-gray-300 focus:border-indigo-600"
+                  />
+                </div>
+                <div>
+                  <label className="block text-lg font-medium">
+                    Visibility
+                  </label>
+                  <div className="mt-2 flex items-center">
+                    <input
+                      type="checkbox"
+                      checked={isPublic}
+                      onChange={(e) => setIsPublic(e.target.checked)}
+                      className="mr-2"
+                    />
+                    <span>Make Public</span>
+                  </div>
+                </div>
+                <div>
+                  <label className="block text-lg font-medium">Tags</label>
+                  <div className="mt-2 flex flex-wrap gap-2">
+                    {predefinedTags.map((tag) => (
+                      <label
+                        key={tag}
+                        className="flex items-center bg-gray-200 rounded-lg px-3 py-1"
+                      >
+                        <input
+                          type="checkbox"
+                          value={tag}
+                          checked={selectedTags.includes(tag)}
+                          onChange={handleTagChange}
+                          className="mr-2"
+                        />
+                        {tag}
+                      </label>
+                    ))}
+                  </div>
+                </div>
+                <div className="flex justify-end space-x-4">
+                  <button
+                    className="px-4 py-2 text-gray-600 font-medium rounded-lg border hover:bg-gray-50"
+                    onClick={() => setShowModal(false)}
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    className="px-4 py-2 text-white font-medium bg-indigo-600 hover:bg-indigo-500 rounded-lg"
+                    onClick={updateTitleAndThumbnail}
+                  >
+                    Update
+                  </button>
+                </div>
+              </form>
             </div>
           </div>
         )}
         {editable && (
-          <div className="flex justify-end mt-4">
+          <div className="flex gap-4 justify-end mt-4">
             <button
               className="px-4 py-2 text-white font-medium bg-red-600 hover:bg-red-500 active:bg-red-700 rounded-lg ml-4"
               onClick={deletePost}
             >
               Delete Post
+            </button>
+            <button
+              className="px-4 py-2 text-white font-medium bg-indigo-600 hover:bg-indigo-500 active:bg-indigo-700 rounded-lg"
+              onClick={() => setShowModal(true)}
+            >
+              Update Post
             </button>
           </div>
         )}
