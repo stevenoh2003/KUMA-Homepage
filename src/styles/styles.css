@@ -5,24 +5,6 @@
     /* Ensure proper vertical alignment */
 }
 
-/* Adjust KaTeX-specific styles */
-.notion-equation-inline .katex-html {
-    display: inline-block !important;
-    vertical-align: middle !important;
-}
-
-.notion-equation-inline .katex .base {
-    margin: 0 !important;
-    padding: 0 !important;
-    line-height: normal !important;
-}
-
-.notion-equation-inline .katex .mord {
-    margin: 0 !important;
-    padding: 0 !important;
-    line-height: normal !important;
-}
-
 
 
 .slideshow {

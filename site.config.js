@@ -23,14 +23,15 @@ const CONFIG = {
   },
   projects: [
     {
-      name: `kuma`,
-      href: "",
+      name: `KumaLab Projects`,
+      href: "https://www.kuma2024.tech/projects",
     },
   ],
   // blog setting (required)
   blog: {
     title: "kuma",
-    description: "kuma is a community started from Waseda University. We hope to build a platform to help people share and collaborate on state-of-the-art AI projects and discussions.  ",
+    description:
+      "kuma is a community started from Waseda University. We hope to build a platform to help people share and collaborate on state-of-the-art AI projects and discussions.  ",
   },
 
   // CONFIG configration (required)
