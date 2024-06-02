@@ -1,6 +1,14 @@
+.notion-equation-block .katex-display {
+    margin: 1.2em !important;
+
+}
+.notion-list li {
+    line-height: 1.7;
+        font-size: 1.2em;
+}
 
 .notion-text{
-    line-height: 1.9;
+    line-height: 1.7;
     font-size: 1.2em;
 }
 .katex-display {
