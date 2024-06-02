@@ -1,37 +1,8 @@
-/* Ensure that inline equations have no extra padding or margins */
-.notion-equation-inline {
-    display: inline-block !important;
-    vertical-align: middle !important;
-    /* Ensure proper vertical alignment */
-}
 
-.notion-text {
-    line-height: 2.0;
-    /* Adjust this value to increase or decrease spacing */
-}
-.notion-equation-inline {
-    display: inline-block;
-    /* Ensure it stays inline */
-    margin: 0;
-    /* Remove default margins */
-    padding: 0;
-    /* Remove default padding */
-    vertical-align: middle;
-    /* Align it with the middle of the text */
-}
 
-.katex-html .base {
-    display: inline-block;
-    /* Ensure the equation stays inline */
-    vertical-align: middle;
-    /* Align the equation with the middle of the text */
-}
 
-.katex-html .mord {
-    margin: 0;
-    /* Remove default margins */
-    padding: 0;
-    /* Remove default padding */
+.katex-display{
+    margin: 0 !important;
 }
 
 
@@ -97,12 +68,6 @@
     Optional: Add some margin for spacing
 } */
 
-.notion-equation-block {
-    width: 100%;
-    /* Ensure the block takes up full width */
-    display: flex;
-    justify-content: center;
-}
 
 div.notion-collection-page-properties {
     display: none !important;
