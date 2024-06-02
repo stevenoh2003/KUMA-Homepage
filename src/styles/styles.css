@@ -1,3 +1,38 @@
+
+.notion-equation-inline {
+    display: inline-block;
+    vertical-align: middle;
+    /* Ensure proper vertical alignment */
+}
+
+/* Adjust KaTeX-specific styles */
+.notion-equation-inline .katex-html {
+    display: inline-block;
+    vertical-align: middle;
+}
+.notion-equation-inline .katex .base {
+    margin: 0;
+    padding: 0;
+    line-height: normal;
+}
+
+.notion-equation-inline .katex .mord {
+    margin: 0;
+    padding: 0;
+    line-height: normal;
+}
+.notion-equation-inline .katex .mspace {
+    margin: 0 !important;
+    padding: 0 !important;
+    line-height: normal;
+}
+
+/* Remove specific top and bottom spacers */
+.notion-equation-inline .katex .strut {
+    height: 0 !important;
+}
+
+
 .slideshow {
     margin: 0 auto;
     overflow: hidden;
@@ -17,6 +52,8 @@
     }
     /* CSS that should be displayed if width is equal to or less than 800px goes here */
 }
+
+
 
   .notion-equation-inline {
     margin: 0 !important;
