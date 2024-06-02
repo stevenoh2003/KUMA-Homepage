@@ -1,5 +1,8 @@
 
-
+.notion-text{
+    line-height: 1.9;
+    font-size: 1.2em;
+}
 .katex-display {
     margin: 0 !important;
     padding: 0 !important;
