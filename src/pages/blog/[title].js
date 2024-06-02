@@ -245,6 +245,22 @@ const PostPage = () => {
 
   return (
     <div style={{ backgroundColor: "#f2f3ef" }}>
+      <style jsx>{`
+        .notion-equation-inline {
+          display: inline-block;
+          margin: 0;
+          padding: 0;
+          vertical-align: middle;
+        }
+        .katex-html .base {
+          display: inline-block;
+          vertical-align: middle;
+        }
+        .katex-html .mord {
+          margin: 0;
+          padding: 0;
+        }
+      `}</style>
       <div className="relative h-[300px] w-full overflow-hidden">
         <img
           src={thumbnailUrl}
@@ -312,7 +328,9 @@ const PostPage = () => {
       />
       <div className="max-w-screen-xl mx-auto px-4 py-4 md:px-8 text-gray-600">
         {postContent.notion_id ? (
-          <div className="overflow-x-auto">
+          <div className="notion overflow-x-auto">
+            {" "}
+            {/* Apply notion class here */}
             <NotionRenderer
               recordMap={postContent.recordMap}
               disableHeader={true}
