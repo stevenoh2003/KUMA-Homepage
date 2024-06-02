@@ -1,36 +1,28 @@
-
+/* Ensure that inline equations have no extra padding or margins */
 .notion-equation-inline {
-    display: inline-block;
-    vertical-align: middle;
+    display: inline-block !important;
+    vertical-align: middle !important;
     /* Ensure proper vertical alignment */
 }
 
 /* Adjust KaTeX-specific styles */
 .notion-equation-inline .katex-html {
-    display: inline-block;
-    vertical-align: middle;
+    display: inline-block !important;
+    vertical-align: middle !important;
 }
+
 .notion-equation-inline .katex .base {
-    margin: 0;
-    padding: 0;
-    line-height: normal;
+    margin: 0 !important;
+    padding: 0 !important;
+    line-height: normal !important;
 }
 
 .notion-equation-inline .katex .mord {
-    margin: 0;
-    padding: 0;
-    line-height: normal;
-}
-.notion-equation-inline .katex .mspace {
     margin: 0 !important;
     padding: 0 !important;
-    line-height: normal;
+    line-height: normal !important;
 }
 
-/* Remove specific top and bottom spacers */
-.notion-equation-inline .katex .strut {
-    height: 0 !important;
-}
 
 
 .slideshow {
