@@ -5,6 +5,34 @@
     /* Ensure proper vertical alignment */
 }
 
+.notion-text {
+    line-height: 2.0;
+    /* Adjust this value to increase or decrease spacing */
+}
+.notion-equation-inline {
+    display: inline-block;
+    /* Ensure it stays inline */
+    margin: 0;
+    /* Remove default margins */
+    padding: 0;
+    /* Remove default padding */
+    vertical-align: middle;
+    /* Align it with the middle of the text */
+}
+
+.katex-html .base {
+    display: inline-block;
+    /* Ensure the equation stays inline */
+    vertical-align: middle;
+    /* Align the equation with the middle of the text */
+}
+
+.katex-html .mord {
+    margin: 0;
+    /* Remove default margins */
+    padding: 0;
+    /* Remove default padding */
+}
 
 
 .slideshow {
@@ -18,6 +46,7 @@
     white-space: nowrap;
     transition: ease 1000ms;
 }
+
 @media (max-width: 800px) {
 .slideshow {
         margin: 0 auto;
@@ -29,15 +58,6 @@
 
 
 
-  .notion-equation-inline {
-    margin: 0 !important;
-    padding: 0 !important;
-    display: inline-block; /* Ensure inline equations do not affect block elements */
-  }
-
-  .notion-equation-inline {
-    vertical-align: middle;
-  }
 .slide {
     display: inline-block;
     height: 500px;
