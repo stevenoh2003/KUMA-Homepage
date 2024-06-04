@@ -15,6 +15,7 @@ import dynamic from "next/dynamic"
 import { RotatingLines } from "react-loader-spinner"
 import { NotionRenderer } from "react-notion-x"
 import "react-notion-x/src/styles.css"
+import { FaArrowLeft } from "react-icons/fa"
 
 const Code = dynamic(() =>
   import("react-notion-x/build/third-party/code").then((m) => m.Code)
@@ -252,6 +253,10 @@ const PostPage = () => {
           className="w-full h-full object-cover"
         />
         <div className="absolute inset-0 bg-black opacity-85 flex justify-center items-center">
+          <FaArrowLeft
+            className="text-white text-xl sm:text-2xl cursor-pointer absolute top-5 left-4 md:left-25"
+            onClick={() => router.push("/blog")}
+          />
           <div className="relative flex items-center space-x-2">
             <h1 className="text-4xl mx-4 text-white font-semibold">
               {postContent.title}
@@ -259,6 +264,7 @@ const PostPage = () => {
           </div>
         </div>
       </div>
+
       <div className="mt-8">
         {authorLoading ? (
           <div className="flex justify-center items-center min-h-[150px]">
