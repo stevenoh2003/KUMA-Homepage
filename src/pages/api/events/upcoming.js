@@ -11,8 +11,8 @@ export default async function handler(req, res) {
   try {
     const events = await Event.find({ date: { $gte: new Date() } })
       .sort({ date: 1 })
-      .limit(3) // Fetch the next 3 upcoming events
-      .populate("createdBy", "name") // Populate the createdBy field with the user's name
+      .limit(3)
+      .populate("createdBy", "name")
 
     return res.status(200).json(events)
   } catch (error) {

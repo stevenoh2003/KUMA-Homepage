@@ -117,5 +117,11 @@
     "subtitle": "Join us at our upcoming events.",
     "viewAll": "View All Events",
     "viewDetails": "View Details"
+  },
+  "ourVision": {
+    "step1Title": "Our Vision",
+    "title": "Building a Global Community of Innovators",
+    "description": "Our vision is to create a open laboratory in Tokyo where diverse individuals can engage in innovative research using state-of-the-art GPUs and robot arms. We aim to break cultural barriers, empowering anyone, including undergraduates, to innovate and drive a brighter future.",
+    "robotImageAlt": "An animated robot demonstrating our cutting-edge technology"
   }
 }

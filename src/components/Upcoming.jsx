@@ -1,39 +1,27 @@
-import React, { useEffect, useState } from "react"
+import React, { useState } from "react"
+import { useQuery } from "@tanstack/react-query"
 import axios from "axios"
 import { useTranslation } from "react-i18next"
 import { useRouter } from "next/router"
 import Link from "next/link"
 import { RotatingLines } from "react-loader-spinner"
 
-const MAX_RETRIES = 3
+// Fetch events function
+const fetchEvents = async () => {
+  const { data } = await axios.get("/api/events/upcoming")
+  return data
+}
 
 const UpcomingEvents = () => {
   const { t } = useTranslation()
   const router = useRouter()
-  const [events, setEvents] = useState([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState(null)
+  const {
+    data: events,
+    error,
+    isLoading,
+  } = useQuery(["upcomingEvents"], fetchEvents)
 
-  const fetchEvents = async (retries = 0) => {
-    try {
-      const response = await axios.get("/api/events/upcoming")
-      setEvents(response.data)
-      setLoading(false)
-    } catch (error) {
-      if (retries < MAX_RETRIES) {
-        setTimeout(() => fetchEvents(retries + 1), 1000)
-      } else {
-        setError("Failed to fetch events after several attempts")
-        setLoading(false)
-      }
-    }
-  }
-
-  useEffect(() => {
-    fetchEvents()
-  }, [])
-
-  if (loading) {
+  if (isLoading) {
     return (
       <div className="flex justify-center items-center h-screen">
         <RotatingLines
@@ -52,7 +40,7 @@ const UpcomingEvents = () => {
   if (error) {
     return (
       <div className="flex justify-center items-center h-screen">
-        <p className="text-red-600">{error}</p>
+        <p className="text-red-600">Failed to fetch events</p>
       </div>
     )
   }
@@ -82,7 +70,9 @@ const UpcomingEvents = () => {
               key={event.name}
               className="bg-white rounded-lg shadow-lg p-6 flex-none w-80 transform transition duration-300 hover:scale-105 cursor-pointer"
               onClick={() =>
-                router.push(`/events/${encodeURIComponent(event.name)}`)
+                router.push(
+                  `/events/${encodeURIComponent(event.name.replace(/ /g, "-"))}`
+                )
               }
             >
               <h3 className="text-lg font-semibold text-gray-800">

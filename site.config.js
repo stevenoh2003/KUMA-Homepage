@@ -12,7 +12,7 @@ const CONFIG = {
   },
   // profile setting (required)
   profile: {
-    name: "kuma",
+    name: "Kuma Lab",
     image: "", // If you want to create your own notion avatar, check out https://notion-avatar.vercel.app
     role: "",
     bio: "",
@@ -29,9 +29,9 @@ const CONFIG = {
   ],
   // blog setting (required)
   blog: {
-    title: "kuma",
+    title: "Kuma Lab",
     description:
-      "kuma is a community started from Waseda University. We hope to build a platform to help people share and collaborate on state-of-the-art AI projects and discussions.  ",
+      "Our vision is to create a open laboratory in Tokyo where diverse individuals can engage in innovative research using state-of-the-art GPUs and robot arms. We aim to break cultural barriers, empowering anyone, including undergraduates, to innovate and drive a brighter future.",
   },
 
   // CONFIG configration (required)
