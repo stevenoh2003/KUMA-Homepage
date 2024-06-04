@@ -5,6 +5,8 @@ import { useRouter } from "next/router"
 import Link from "next/link"
 import { RotatingLines } from "react-loader-spinner"
 
+const MAX_RETRIES = 3
+
 const UpcomingEvents = () => {
   const { t } = useTranslation()
   const router = useRouter()
@@ -12,19 +14,23 @@ const UpcomingEvents = () => {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
 
-  useEffect(() => {
-    const fetchEvents = async () => {
-      try {
-        const response = await axios.get("/api/events/upcoming")
-        setEvents(response.data)
-      } catch (error) {
+  const fetchEvents = async (retries = 0) => {
+    try {
+      const response = await axios.get("/api/events/upcoming")
+      setEvents(response.data)
+    } catch (error) {
+      if (retries < MAX_RETRIES) {
+        fetchEvents(retries + 1)
+      } else {
         console.error("Failed to fetch events:", error)
-        setError("Failed to fetch events")
-      } finally {
-        setLoading(false)
+        setError("Failed to fetch events after several attempts")
       }
+    } finally {
+      setLoading(false)
     }
+  }
 
+  useEffect(() => {
     fetchEvents()
   }, [])
 
