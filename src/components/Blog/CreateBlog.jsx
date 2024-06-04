@@ -1,88 +1,92 @@
-import React, { useState } from "react"
-import { useSession } from "next-auth/react"
-import { useRouter } from "next/router"
-import { EditorProvider, useEditor, EditorContent } from "@tiptap/react" // Ensure EditorContent is imported
-import { extensions, content } from "src/components/Blog/editorSettings"
-import MenuBar from "src/components/Blog/MenuBar"
-import "katex/dist/katex.min.css"
+import React, { useState } from "react";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/router";
+import { EditorProvider, useEditor, EditorContent } from "@tiptap/react";
+import { extensions, content } from "src/components/Blog/editorSettings";
+// import MenuBar from "src/components/Blog/MenuBar";
+import "katex/dist/katex.min.css";
+import MenuBar from "src/components/Blog/UpdateMenuBar"
 
-const predefinedTags = ["Paper Note", "AI", "Robotics"]
+const predefinedTags = ["Paper Note", "AI", "Robotics"];
 
 const CreateBlog = () => {
-  const { data: session } = useSession()
-  const router = useRouter()
-  const [s3Key, setS3Key] = useState(null)
-  const [thumbnail, setThumbnail] = useState(null)
-  const [title, setTitle] = useState("")
-  const [description, setDescription] = useState("")
-  const [notionLink, setNotionLink] = useState("")
-  const [isPublic, setIsPublic] = useState(false)
-  const [tags, setTags] = useState([])
-  const [errorMessage, setErrorMessage] = useState("")
+  const { data: session } = useSession();
+  const router = useRouter();
+  const [s3Key, setS3Key] = useState(null);
+  const [thumbnail, setThumbnail] = useState(null);
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [notionLink, setNotionLink] = useState("");
+  const [isPublic, setIsPublic] = useState(false);
+  const [tags, setTags] = useState([]);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [useNotion, setUseNotion] = useState(false);
 
   const editor = useEditor({
     extensions,
     content,
-  })
+  });
 
   const handleThumbnailChange = (event) => {
-    setThumbnail(event.target.files[0])
-  }
+    setThumbnail(event.target.files[0]);
+  };
 
   const handleTagChange = (event) => {
-    const { value, checked } = event.target
+    const { value, checked } = event.target;
     setTags((prevTags) =>
       checked ? [...prevTags, value] : prevTags.filter((tag) => tag !== value)
-    )
-  }
+    );
+  };
 
   const validateForm = async () => {
     if (!title.trim()) {
-      setErrorMessage("Title is required.")
-      return false
+      setErrorMessage("Title is required.");
+      return false;
     }
 
     const response = await fetch(
       `/api/posts/checkTitle?title=${encodeURIComponent(title)}`
-    )
-    const result = await response.json()
+    );
+    const result = await response.json();
 
     if (response.ok && result.exists) {
-      setErrorMessage("The title has already been used.")
-      return false
+      setErrorMessage("The title has already been used.");
+      return false;
     }
 
-    return true
-  }
+    return true;
+  };
 
   const extractNotionId = (url) => {
-    const regex = /https:\/\/(?:\S+\.)?notion\.site\/(\S+)\??/
-    const match = url.match(regex)
-    return match ? match[1] : ""
-  }
+    const regex = /https:\/\/(?:\S+\.)?notion\.site\/(\S+)\??/;
+    const match = url.match(regex);
+    return match ? match[1] : "";
+  };
 
   const handlePost = async (isNew) => {
-    const isFormValid = await validateForm()
+    const isFormValid = await validateForm();
     if (!isFormValid || !session) {
-      return
+      return;
     }
 
-    let postContent = null
-    if (!notionLink.trim() && editor) {
-      postContent = editor.getHTML()
-      if (postContent.trim() === "") {
-        setErrorMessage("Content or Notion link is required.")
-        return
+    let postContent = null;
+    if (useNotion) {
+      postContent = extractNotionId(notionLink);
+      if (!postContent) {
+        setErrorMessage("Invalid Notion link provided.");
+        return;
       }
     } else {
-      postContent = extractNotionId(notionLink)
-      if (!postContent) {
-        setErrorMessage("Invalid Notion link provided.")
-        return
+      if (editor) {
+        postContent = editor.getHTML();
+        if (postContent.trim() === "") {
+          setErrorMessage("Content or Notion link is required.");
+          return;
+        }
       }
     }
 
-    let thumbnailUrl = ""
+    let thumbnailUrl = "";
 
     if (thumbnail) {
       try {
@@ -92,32 +96,32 @@ const CreateBlog = () => {
             filename: thumbnail.name,
             filetype: thumbnail.type,
           }),
-        })
+        });
 
-        const presignedData = await presignedResponse.json()
+        const presignedData = await presignedResponse.json();
 
-        const formData = new FormData()
+        const formData = new FormData();
         Object.keys(presignedData.presignedPost.fields).forEach((key) => {
-          formData.append(key, presignedData.presignedPost.fields[key])
-        })
-        formData.append("file", thumbnail)
+          formData.append(key, presignedData.presignedPost.fields[key]);
+        });
+        formData.append("file", thumbnail);
 
         const s3Response = await fetch(presignedData.presignedPost.url, {
           method: "POST",
           body: formData,
-        })
+        });
 
         if (s3Response.ok) {
-          thumbnailUrl = presignedData.thumbnailUrl
+          thumbnailUrl = presignedData.thumbnailUrl;
         } else {
-          console.error("Thumbnail upload failed to S3")
-          setErrorMessage("Thumbnail upload failed")
-          return
+          console.error("Thumbnail upload failed to S3");
+          setErrorMessage("Thumbnail upload failed");
+          return;
         }
       } catch (error) {
-        console.error("Error getting presigned URL or uploading to S3:", error)
-        setErrorMessage("Error getting presigned URL or uploading")
-        return
+        console.error("Error getting presigned URL or uploading to S3:", error);
+        setErrorMessage("Error getting presigned URL or uploading");
+        return;
       }
     }
 
@@ -141,29 +145,29 @@ const CreateBlog = () => {
           isPublic,
           tags,
         }),
-      })
+      });
 
-      const data = await response.json()
+      const data = await response.json();
 
       if (response.ok) {
-        console.log("Post created successfully:", data)
+        console.log("Post created successfully:", data);
         if (isNew && data.s3_key) {
-          setS3Key(data.s3_key)
+          setS3Key(data.s3_key);
         }
-        setErrorMessage("")
-        router.push("/blog")
+        setErrorMessage("");
+        router.push("/blog");
       } else {
-        console.error("Error creating post:", data)
+        console.error("Error creating post:", data);
         setErrorMessage(
           data.message ||
             "An unexpected error occurred while creating the post."
-        )
+        );
       }
     } catch (error) {
-      console.error("Error during fetch operation:", error)
-      setErrorMessage("An unexpected error occurred while creating the post.")
+      console.error("Error during fetch operation:", error);
+      setErrorMessage("An unexpected error occurred while creating the post.");
     }
-  }
+  };
 
   return (
     <main className="py-8">
@@ -197,32 +201,58 @@ const CreateBlog = () => {
               <p className="text-red-600 text-sm">{errorMessage}</p>
             )}
             <div>
-              <label className="block text-lg font-medium">Notion Link</label>
-              <input
-                type="text"
-                placeholder="Enter Notion link"
-                value={notionLink}
-                onChange={(e) => setNotionLink(e.target.value)}
-                className="w-full mt-2 px-4 py-2 text-gray-700 bg-gray-100 rounded-lg border border-gray-300 focus:border-indigo-600"
-              />
+              <label className="block text-lg font-medium">
+                Notion Link or Editor Content
+              </label>
+              <div className="flex items-center mt-2">
+                <input
+                  type="radio"
+                  name="contentType"
+                  checked={useNotion}
+                  onChange={() => setUseNotion(true)}
+                  className="mr-2"
+                />
+                <span>Notion Link</span>
+                <input
+                  type="radio"
+                  name="contentType"
+                  checked={!useNotion}
+                  onChange={() => setUseNotion(false)}
+                  className="ml-4 mr-2"
+                />
+                <span>Editor Content</span>
+              </div>
             </div>
-            <div>
-              {/* <EditorProvider
-                slotBefore={editor ? <MenuBar editor={editor} /> : null}
-                extensions={extensions}
-                content={content}
-              >
-                <div>
-                  <label className="block text-lg font-medium">
+            {useNotion ? (
+              <div>
+                <label className="block text-lg font-medium">Notion Link</label>
+                <input
+                  type="text"
+                  placeholder="Enter Notion link"
+                  value={notionLink}
+                  onChange={(e) => setNotionLink(e.target.value)}
+                  className="w-full mt-2 px-4 py-2 text-gray-700 bg-gray-100 rounded-lg border border-gray-300 focus:border-indigo-600"
+                />
+              </div>
+            ) : (
+              <div>
+                {/* <EditorProvider
+                  slotBefore={editor ? <MenuBar editor={editor} /> : null}
+                  extensions={extensions}
+                  // content={content}
+                  editor={editor}
+                >
+                  <label className="block text-lg font-medium mt-6">
                     Editor Content
-                  </label>
+                  </label> */}
+                  <MenuBar editor={editor} />
                   <EditorContent
                     editor={editor}
                     className="mt-2 mb-6 border border-gray-300 rounded-lg p-4 bg-gray-100"
                   />
-                </div>
-              </EditorProvider> */}
-            </div>
+                {/* </EditorProvider> */}
+              </div>
+            )}
             <div>
               <label className="block text-lg font-medium">
                 Upload Thumbnail
@@ -280,7 +310,7 @@ const CreateBlog = () => {
         </div>
       </div>
     </main>
-  )
-}
+  );
+};
 
-export default CreateBlog
+export default CreateBlog;

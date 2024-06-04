@@ -312,9 +312,7 @@ const PostPage = () => {
       />
       <div className="max-w-screen-xl mx-auto px-4 py-4 md:px-8 text-gray-600">
         {postContent.notion_id ? (
-          <div className="notion overflow-x-auto">
-            {" "}
-            {/* Apply notion class here */}
+          <div className="overflow-x-auto">
             <NotionRenderer
               recordMap={postContent.recordMap}
               disableHeader={true}
