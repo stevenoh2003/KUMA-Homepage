@@ -16,6 +16,7 @@ import { RotatingLines } from "react-loader-spinner"
 import { NotionRenderer } from "react-notion-x"
 import "react-notion-x/src/styles.css"
 import { FaArrowLeft } from "react-icons/fa"
+import Head from "next/head" // Import next/head for meta tags
 
 const Code = dynamic(() =>
   import("react-notion-x/build/third-party/code").then((m) => m.Code)
@@ -245,224 +246,239 @@ const PostPage = () => {
   const thumbnailUrl = postContent.thumbnail_url || defaultThumbnail
 
   return (
-    <div style={{ backgroundColor: "#f2f3ef" }}>
-      <div className="relative h-[300px] w-full overflow-hidden">
-        <img
-          src={thumbnailUrl}
-          alt="Thumbnail"
-          className="w-full h-full object-cover"
-        />
-        <div className="absolute inset-0 bg-black opacity-85 flex justify-center items-center">
-          <FaArrowLeft
-            className="text-white text-xl sm:text-2xl cursor-pointer absolute top-5 left-4 md:left-25"
-            onClick={() => router.push("/blog")}
+    <>
+      <Head>
+        <title>{postContent.title}</title>
+        <meta name="description" content={postContent.description} />
+        <meta property="og:title" content={postContent.title} />
+        <meta property="og:description" content={postContent.description} />
+        <meta property="og:image" content={thumbnailUrl} />
+        <meta property="og:type" content="article" />
+      </Head>
+      <div style={{ backgroundColor: "#f2f3ef" }}>
+        <div className="relative h-[300px] w-full overflow-hidden">
+          <img
+            src={thumbnailUrl}
+            alt="Thumbnail"
+            className="w-full h-full object-cover"
           />
-          <div className="relative flex items-center space-x-2">
-            <h1 className="text-4xl mx-4 text-white font-semibold">
-              {postContent.title}
-            </h1>
+          <div className="absolute inset-0 bg-black opacity-85 flex justify-center items-center">
+            <FaArrowLeft
+              className="text-white text-xl sm:text-2xl cursor-pointer absolute top-5 left-4 md:left-25"
+              onClick={() => router.push("/blog")}
+            />
+            <div className="relative flex items-center space-x-2">
+              <h1 className="text-4xl mx-4 text-white font-semibold">
+                {postContent.title}
+              </h1>
+            </div>
           </div>
         </div>
-      </div>
 
-      <div className="mt-8">
-        {authorLoading ? (
-          <div className="flex justify-center items-center min-h-[150px]">
-            <RotatingLines
-              visible={true}
-              height="50"
-              width="50"
-              color="#4f46e5"
-              strokeWidth="5"
-              animationDuration="0.75"
-              ariaLabel="rotating-lines-loading"
-            />
-          </div>
-        ) : userInfo ? (
-          <div className="flex justify-between items-center mt-4 mb-4 mx-auto max-w-screen-lg px-4 sm:px-0 md:px-14">
-            <div className="flex items-center space-x-2 md:space-x-4">
-              {userInfo.profilePicUrl ? (
-                <img
-                  src={userInfo.profilePicUrl}
-                  alt="Profile"
-                  className="w-12 h-12 sm:w-16 sm:h-16 md:w-24 md:h-24 rounded-full object-cover"
-                />
-              ) : (
-                <div className="w-12 h-12 sm:w-16 sm:h-16 md:w-24 md:h-24 bg-gray-200 rounded-full" />
-              )}
-              <div>
-                <h4 className="text-sm sm:text-lg md:text-xl font-medium text-gray-700">
-                  {userInfo.name}
-                </h4>
+        <div className="mt-8">
+          {authorLoading ? (
+            <div className="flex justify-center items-center min-h-[150px]">
+              <RotatingLines
+                visible={true}
+                height="50"
+                width="50"
+                color="#4f46e5"
+                strokeWidth="5"
+                animationDuration="0.75"
+                ariaLabel="rotating-lines-loading"
+              />
+            </div>
+          ) : userInfo ? (
+            <div className="flex justify-between items-center mt-4 mb-4 mx-auto max-w-screen-lg px-4 sm:px-0 md:px-14">
+              <div className="flex items-center space-x-2 md:space-x-4">
+                {userInfo.profilePicUrl ? (
+                  <img
+                    src={userInfo.profilePicUrl}
+                    alt="Profile"
+                    className="w-12 h-12 sm:w-16 sm:h-16 md:w-24 md:h-24 rounded-full object-cover"
+                  />
+                ) : (
+                  <div className="w-12 h-12 sm:w-16 sm:h-16 md:w-24 md:h-24 bg-gray-200 rounded-full" />
+                )}
+                <div>
+                  <h4 className="text-sm sm:text-lg md:text-xl font-medium text-gray-700">
+                    {userInfo.name}
+                  </h4>
+                </div>
+              </div>
+              <div className="text-right flex flex-col space-y-1 sm:space-y-0 sm:space-x-2 sm:flex-row items-center">
+                <p className="text-xs sm:text-sm md:text-base text-gray-500">
+                  {new Date(postContent.created_at).toLocaleDateString()}{" "}
+                </p>
+                <p className="text-xs sm:text-sm md:text-base text-gray-500">
+                  {new Date(postContent.created_at).toLocaleTimeString()}{" "}
+                </p>
               </div>
             </div>
-            <div className="text-right flex flex-col space-y-1 sm:space-y-0 sm:space-x-2 sm:flex-row items-center">
-              <p className="text-xs sm:text-sm md:text-base text-gray-500">
-                {new Date(postContent.created_at).toLocaleDateString()}{" "}
-              </p>
-              <p className="text-xs sm:text-sm md:text-base text-gray-500">
-                {new Date(postContent.created_at).toLocaleTimeString()}{" "}
-              </p>
-            </div>
-          </div>
-        ) : (
-          <p className="mt-4 text-gray-600">No user information available.</p>
-        )}
-      </div>
-      <hr
-        style={{
-          color: "black",
-          backgroundColor: "black",
-          height: 1,
-        }}
-      />
-      <div className="max-w-screen-xl mx-auto px-4 py-4 md:px-8 text-gray-600">
-        {postContent.notion_id ? (
-          <div className="overflow-x-auto">
-            <NotionRenderer
-              recordMap={postContent.recordMap}
-              disableHeader={true}
-              header={null}
-              components={{
-                Code,
-                Collection,
-                Equation,
-                Modal,
-                Pdf,
-              }}
-            />
-          </div>
-        ) : (
-          <StyledEditor>
-            {editable && <MenuBar editor={editor} />}
-            {editable && (
-              <hr
-                style={{
-                  color: "black",
-                  backgroundColor: "black",
-                  opacity: "70%",
-                  height: 1,
+          ) : (
+            <p className="mt-4 text-gray-600">No user information available.</p>
+          )}
+        </div>
+        <hr
+          style={{
+            color: "black",
+            backgroundColor: "black",
+            height: 1,
+          }}
+        />
+        <div className="max-w-screen-xl mx-auto px-4 py-4 md:px-8 text-gray-600">
+          {postContent.notion_id ? (
+            <div className="overflow-x-auto">
+              <NotionRenderer
+                recordMap={postContent.recordMap}
+                disableHeader={true}
+                header={null}
+                components={{
+                  Code,
+                  Collection,
+                  Equation,
+                  Modal,
+                  Pdf,
                 }}
               />
-            )}
-            <EditorContent
-              editor={editor}
-              style={{
-                backgroundColor: editorFocused ? "white" : "transparent",
-              }}
-            />
-          </StyledEditor>
-        )}
-
-        {showModal && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-            <div className="bg-white rounded-lg shadow-lg p-8 max-w-lg w-full">
-              <h3 className="text-3xl font-bold mb-6 text-center text-indigo-600">
-                Edit Post
-              </h3>
-              <form className="space-y-6" onSubmit={(e) => e.preventDefault()}>
-                <div>
-                  <label className="block text-lg font-medium">New Title</label>
-                  <input
-                    type="text"
-                    value={newTitle}
-                    onChange={(e) => setNewTitle(e.target.value)}
-                    className="w-full mt-2 px-4 py-2 text-gray-700 bg-gray-100 rounded-lg border border-gray-300 focus:border-indigo-600"
-                  />
-                </div>
-                <div>
-                  <label className="block text-lg font-medium">
-                    New Description
-                  </label>
-                  <textarea
-                    value={newDescription}
-                    onChange={(e) => setNewDescription(e.target.value)}
-                    className="w-full mt-2 px-4 py-2 text-gray-700 bg-gray-100 rounded-lg border border-gray-300 focus:border-indigo-600"
-                    rows="3"
-                  />
-                </div>
-                <div>
-                  <label className="block text-lg font-medium">
-                    New Thumbnail
-                  </label>
-                  <input
-                    type="file"
-                    accept="image/*"
-                    onChange={handleThumbnailChange}
-                    className="w-full mt-2 px-4 py-2 text-gray-700 bg-gray-100 rounded-lg border border-gray-300 focus:border-indigo-600"
-                  />
-                </div>
-                <div>
-                  <label className="block text-lg font-medium">
-                    Visibility
-                  </label>
-                  <div className="mt-2 flex items-center">
-                    <input
-                      type="checkbox"
-                      checked={isPublic}
-                      onChange={(e) => setIsPublic(e.target.checked)}
-                      className="mr-2"
-                    />
-                    <span>Make Public</span>
-                  </div>
-                </div>
-                <div>
-                  <label className="block text-lg font-medium">Tags</label>
-                  <div className="mt-2 flex flex-wrap gap-2">
-                    {predefinedTags.map((tag) => (
-                      <label
-                        key={tag}
-                        className="flex items-center bg-gray-200 rounded-lg px-3 py-1"
-                      >
-                        <input
-                          type="checkbox"
-                          value={tag}
-                          checked={selectedTags.includes(tag)}
-                          onChange={handleTagChange}
-                          className="mr-2"
-                        />
-                        {tag}
-                      </label>
-                    ))}
-                  </div>
-                </div>
-                <div className="flex justify-end space-x-4">
-                  <button
-                    className="px-4 py-2 text-gray-600 font-medium rounded-lg border hover:bg-gray-50"
-                    onClick={() => setShowModal(false)}
-                  >
-                    Cancel
-                  </button>
-                  <button
-                    className="px-4 py-2 text-white font-medium bg-indigo-600 hover:bg-indigo-500 rounded-lg"
-                    onClick={updateTitleAndThumbnail}
-                  >
-                    Update
-                  </button>
-                </div>
-              </form>
             </div>
-          </div>
-        )}
-        {editable && (
-          <div className="flex gap-4 justify-end mt-4">
-            <button
-              className="px-4 py-2 text-white font-medium bg-red-600 hover:bg-red-500 active:bg-red-700 rounded-lg ml-4"
-              onClick={deletePost}
-            >
-              Delete Post
-            </button>
-            <button
-              className="px-4 py-2 text-white font-medium bg-indigo-600 hover:bg-indigo-500 active:bg-indigo-700 rounded-lg"
-              onClick={() => setShowModal(true)}
-            >
-              Update Post
-            </button>
-          </div>
-        )}
+          ) : (
+            <StyledEditor>
+              {editable && <MenuBar editor={editor} />}
+              {editable && (
+                <hr
+                  style={{
+                    color: "black",
+                    backgroundColor: "black",
+                    opacity: "70%",
+                    height: 1,
+                  }}
+                />
+              )}
+              <EditorContent
+                editor={editor}
+                style={{
+                  backgroundColor: editorFocused ? "white" : "transparent",
+                }}
+              />
+            </StyledEditor>
+          )}
+
+          {showModal && (
+            <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+              <div className="bg-white rounded-lg shadow-lg p-8 max-w-lg w-full">
+                <h3 className="text-3xl font-bold mb-6 text-center text-indigo-600">
+                  Edit Post
+                </h3>
+                <form
+                  className="space-y-6"
+                  onSubmit={(e) => e.preventDefault()}
+                >
+                  <div>
+                    <label className="block text-lg font-medium">
+                      New Title
+                    </label>
+                    <input
+                      type="text"
+                      value={newTitle}
+                      onChange={(e) => setNewTitle(e.target.value)}
+                      className="w-full mt-2 px-4 py-2 text-gray-700 bg-gray-100 rounded-lg border border-gray-300 focus:border-indigo-600"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-lg font-medium">
+                      New Description
+                    </label>
+                    <textarea
+                      value={newDescription}
+                      onChange={(e) => setNewDescription(e.target.value)}
+                      className="w-full mt-2 px-4 py-2 text-gray-700 bg-gray-100 rounded-lg border border-gray-300 focus:border-indigo-600"
+                      rows="3"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-lg font-medium">
+                      New Thumbnail
+                    </label>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={handleThumbnailChange}
+                      className="w-full mt-2 px-4 py-2 text-gray-700 bg-gray-100 rounded-lg border border-gray-300 focus:border-indigo-600"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-lg font-medium">
+                      Visibility
+                    </label>
+                    <div className="mt-2 flex items-center">
+                      <input
+                        type="checkbox"
+                        checked={isPublic}
+                        onChange={(e) => setIsPublic(e.target.checked)}
+                        className="mr-2"
+                      />
+                      <span>Make Public</span>
+                    </div>
+                  </div>
+                  <div>
+                    <label className="block text-lg font-medium">Tags</label>
+                    <div className="mt-2 flex flex-wrap gap-2">
+                      {predefinedTags.map((tag) => (
+                        <label
+                          key={tag}
+                          className="flex items-center bg-gray-200 rounded-lg px-3 py-1"
+                        >
+                          <input
+                            type="checkbox"
+                            value={tag}
+                            checked={selectedTags.includes(tag)}
+                            onChange={handleTagChange}
+                            className="mr-2"
+                          />
+                          {tag}
+                        </label>
+                      ))}
+                    </div>
+                  </div>
+                  <div className="flex justify-end space-x-4">
+                    <button
+                      className="px-4 py-2 text-gray-600 font-medium rounded-lg border hover:bg-gray-50"
+                      onClick={() => setShowModal(false)}
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      className="px-4 py-2 text-white font-medium bg-indigo-600 hover:bg-indigo-500 rounded-lg"
+                      onClick={updateTitleAndThumbnail}
+                    >
+                      Update
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          )}
+          {editable && (
+            <div className="flex gap-4 justify-end mt-4">
+              <button
+                className="px-4 py-2 text-white font-medium bg-red-600 hover:bg-red-500 active:bg-red-700 rounded-lg ml-4"
+                onClick={deletePost}
+              >
+                Delete Post
+              </button>
+              <button
+                className="px-4 py-2 text-white font-medium bg-indigo-600 hover:bg-indigo-500 active:bg-indigo-700 rounded-lg"
+                onClick={() => setShowModal(true)}
+              >
+                Update Post
+              </button>
+            </div>
+          )}
+        </div>
+        <Footer />
       </div>
-      <Footer />
-    </div>
+    </>
   )
 }
 

@@ -18,15 +18,14 @@ const UpcomingEvents = () => {
     try {
       const response = await axios.get("/api/events/upcoming")
       setEvents(response.data)
+      setLoading(false)
     } catch (error) {
       if (retries < MAX_RETRIES) {
-        fetchEvents(retries + 1)
+        setTimeout(() => fetchEvents(retries + 1), 1000)
       } else {
-        console.error("Failed to fetch events:", error)
         setError("Failed to fetch events after several attempts")
+        setLoading(false)
       }
-    } finally {
-      setLoading(false)
     }
   }
 

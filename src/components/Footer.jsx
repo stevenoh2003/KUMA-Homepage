@@ -1,4 +1,5 @@
-import Logo from "../assets/pictures/logo.jpg"
+import Logo from "../assets/pictures/bear-black-big.png"
+
 import Image from "next/image"
 
 export default () => {

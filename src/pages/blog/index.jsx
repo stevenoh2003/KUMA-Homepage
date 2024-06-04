@@ -43,12 +43,8 @@ const BlogIndex = () => {
   }
 
   const handleTagClick = (tag) => {
-    if (selectedTag === tag) {
-      setSelectedTag("")
-    } else {
-      setSelectedTag(tag)
-      setCurrentPage(1) // Reset to first page when a new tag is selected
-    }
+    setSelectedTag(selectedTag === tag ? "" : tag)
+    setCurrentPage(1) // Reset to first page when a new tag is selected or deselected
   }
 
   const generatePageList = () => {
