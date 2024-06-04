@@ -222,7 +222,7 @@ const CreateBlog = () => {
                   name="contentType"
                   checked={useNotion}
                   onChange={() => setUseNotion(true)}
-                  className="mr-2"
+                  className="mr-2 bg-gray-200"
                 />
                 <span>Notion Link</span>
                 <input
@@ -230,7 +230,7 @@ const CreateBlog = () => {
                   name="contentType"
                   checked={!useNotion}
                   onChange={() => setUseNotion(false)}
-                  className="ml-4 mr-2"
+                  className="ml-4 mr-2 bg-gray-200"
                 />
                 <span>Editor Content</span>
               </div>
