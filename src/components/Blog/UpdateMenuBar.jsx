@@ -5,7 +5,7 @@ import ImageUploadModal from "../../components/ImageUploadModal" // Ensure the p
 
 const MenuBar = ({ editor: passedEditor }) => {
   const currentEditor = useCurrentEditor()
-  const editor = passedEditor || currentEditor
+  const editor = passedEditor 
   const [isModalOpen, setIsModalOpen] = useState(false)
 
   const openModal = () => {

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { EditorProvider, useEditor, EditorContent } from "@tiptap/react";
@@ -21,11 +21,23 @@ const CreateBlog = () => {
   const [tags, setTags] = useState([]);
   const [errorMessage, setErrorMessage] = useState("");
   const [useNotion, setUseNotion] = useState(false);
+  const [editable, setEditable] = useState(true)
+
 
   const editor = useEditor({
     extensions,
     content,
-  });
+    editable: true,
+  })
+
+
+    useEffect(() => {
+      const canEdit = editable === null ? false : editable
+
+      if (editor) {
+        editor.setEditable(canEdit)
+      }
+    }, [editor, editable])
 
   const handleThumbnailChange = (event) => {
     setThumbnail(event.target.files[0]);
@@ -245,11 +257,12 @@ const CreateBlog = () => {
                   <label className="block text-lg font-medium mt-6">
                     Editor Content
                   </label> */}
-                  <MenuBar editor={editor} />
-                  <EditorContent
-                    editor={editor}
-                    className="mt-2 mb-6 border border-gray-300 rounded-lg p-4 bg-gray-100"
-                  />
+                {editable && <MenuBar editor={editor} />}
+                <EditorContent
+                  editor={editor}
+                  content={content}
+                  className="mt-2 mb-6 border border-gray-300 rounded-lg p-4 bg-gray-100"
+                />
                 {/* </EditorProvider> */}
               </div>
             )}
@@ -310,7 +323,7 @@ const CreateBlog = () => {
         </div>
       </div>
     </main>
-  );
+  )
 };
 
 export default CreateBlog;
