@@ -12,6 +12,10 @@ const FeatureContainer = styled.div`
   max-width: 100%;
   margin: 0 auto;
   text-align: center;
+
+  @media (min-width: 624px) {
+    max-width: 70%; /* Take 60% of the width on large screens */
+  }
 `
 
 const FeatureHeading = styled.h3`
@@ -97,7 +101,6 @@ const FeatureItem = styled.li`
   @media (max-width: 767px) {
     width: 100%; /* Take full width */
     margin: 0; /* Remove margin */
-
   }
 `
 
