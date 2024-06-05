@@ -17,7 +17,7 @@ import { NotionRenderer } from "react-notion-x"
 import "react-notion-x/src/styles.css"
 import { FaArrowLeft } from "react-icons/fa"
 import Head from "next/head" // Import next/head for meta tags
-
+import LoadingPage from "src/components/LoadingPage.jsx"
 const Code = dynamic(() =>
   import("react-notion-x/build/third-party/code").then((m) => m.Code)
 )
@@ -277,17 +277,7 @@ const PostPage = () => {
 
         <div className="mt-8">
           {authorLoading ? (
-            <div className="flex justify-center items-center min-h-[150px]">
-              <RotatingLines
-                visible={true}
-                height="50"
-                width="50"
-                color="#4f46e5"
-                strokeWidth="5"
-                animationDuration="0.75"
-                ariaLabel="rotating-lines-loading"
-              />
-            </div>
+            <LoadingPage/>
           ) : userInfo ? (
             <div className="flex justify-between items-center mt-4 mb-4 mx-auto max-w-screen-lg px-4 sm:px-0 md:px-14">
               <div className="flex items-center space-x-2 md:space-x-4">
