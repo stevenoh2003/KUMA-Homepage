@@ -4,8 +4,7 @@ import axios from "axios"
 import { useTranslation } from "react-i18next"
 import { useRouter } from "next/router"
 import Link from "next/link"
-import { RotatingLines } from "react-loader-spinner"
-
+import LoadingPage from "./LoadingPage"
 // Fetch events function
 const fetchEvents = async () => {
   const { data } = await axios.get("/api/events/upcoming")
@@ -24,17 +23,7 @@ const UpcomingEvents = () => {
 
   if (isLoading) {
     return (
-      <div className="flex justify-center items-center h-screen">
-        <RotatingLines
-          visible={true}
-          height="80"
-          width="80"
-          color="#4f46e5"
-          strokeWidth="5"
-          animationDuration="0.75"
-          ariaLabel="rotating-lines-loading"
-        />
-      </div>
+      <LoadingPage />
     )
   }
 
