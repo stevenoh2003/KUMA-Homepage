@@ -4,6 +4,7 @@ import { useRouter } from "next/router"
 import axios from "axios"
 import Footer from "src/components/Footer"
 import { useSession } from "next-auth/react"
+import LoadingPage from "src/components/LoadingPage"
 
 const adminEmails = [
   "stevenoh2003@gmail.com",
@@ -52,7 +53,7 @@ const EventList = () => {
   }
 
   if (loading) {
-    return <div>Loading...</div>
+    return <LoadingPage/>
   }
 
   if (error) {

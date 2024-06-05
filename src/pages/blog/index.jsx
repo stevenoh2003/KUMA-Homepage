@@ -5,6 +5,7 @@ import Footer from "src/components/Footer"
 import { useSession } from "next-auth/react"
 import { useTranslation } from "react-i18next"
 import { RotatingLines } from "react-loader-spinner"
+import LoadingPage from "src/components/LoadingPage"
 
 const PAGE_LIMIT = 15
 
@@ -69,19 +70,7 @@ const BlogIndex = () => {
       <section className="py-12">
         <div className="max-w-screen-xl mx-auto px-4 md:px-8">
           {isLoading ? (
-            <div className="flex justify-center items-center min-h-screen">
-              <RotatingLines
-                visible={true}
-                height="90"
-                width="90"
-                color="#4f46e5"
-                strokeWidth="5"
-                animationDuration="0.75"
-                ariaLabel="rotating-lines-loading"
-                wrapperStyle={{}}
-                wrapperClass=""
-              />
-            </div>
+<LoadingPage />
           ) : (
             <div>
               <div className="flex items-center justify-between sm:max-w-full sm:mx-auto">

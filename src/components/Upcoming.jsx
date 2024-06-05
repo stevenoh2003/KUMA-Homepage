@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React from "react"
 import { useQuery } from "@tanstack/react-query"
 import axios from "axios"
 import { useTranslation } from "react-i18next"
@@ -9,6 +9,7 @@ import { RotatingLines } from "react-loader-spinner"
 // Fetch events function
 const fetchEvents = async () => {
   const { data } = await axios.get("/api/events/upcoming")
+  console.log("Fetched events data:", data) // Debug log
   return data
 }
 
@@ -38,6 +39,7 @@ const UpcomingEvents = () => {
   }
 
   if (error) {
+    console.error("Error fetching events:", error) // Debug log
     return (
       <div className="flex justify-center items-center h-screen">
         <p className="text-red-600">Failed to fetch events</p>

@@ -7,12 +7,14 @@ export default async function handler(req, res) {
   }
 
   await dbConnect()
+  console.log("Connected to database") // Debug log
 
   try {
     const events = await Event.find({ date: { $gte: new Date() } })
       .sort({ date: 1 })
       .limit(3)
       .populate("createdBy", "name")
+    console.log("Fetched events:", events) // Debug log
 
     return res.status(200).json(events)
   } catch (error) {

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import Footer from "src/components/Footer"
 import { useTranslation } from "react-i18next"
+import LoadingPage from "src/components/LoadingPage"
 
 const PAGE_SIZE = 15
 
@@ -62,7 +63,7 @@ const DiscordPosts = () => {
     }
   }
 
-  if (loading) return <p>{t("loading")}</p>
+  if (loading) return <LoadingPage />
   if (error) return <p>Error: {error}</p>
 
   return (
