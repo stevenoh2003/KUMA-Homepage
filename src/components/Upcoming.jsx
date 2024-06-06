@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next"
 import { useRouter } from "next/router"
 import Link from "next/link"
 import LoadingPage from "./LoadingPage"
+
 // Fetch events function
 const fetchEvents = async () => {
   const { data } = await axios.get("/api/events/upcoming")
@@ -22,18 +23,12 @@ const UpcomingEvents = () => {
   } = useQuery(["upcomingEvents"], fetchEvents)
 
   if (isLoading) {
-    return (
-      <LoadingPage />
-    )
+    return <LoadingPage />
   }
 
   if (error) {
     console.error("Error fetching events:", error) // Debug log
-    return (
-      <div className="flex justify-center items-center h-screen">
-        <p className="text-red-600">Failed to fetch events</p>
-      </div>
-    )
+    return <></>
   }
 
   return (
@@ -61,9 +56,7 @@ const UpcomingEvents = () => {
               key={event.name}
               className="bg-white rounded-lg shadow-lg p-6 flex-none w-80 transform transition duration-300 hover:scale-105 cursor-pointer"
               onClick={() =>
-                router.push(
-                  `/events/${encodeURIComponent(event.name.replace(/ /g, "-"))}`
-                )
+                router.push(`/events/${encodeURIComponent(event.name)}`)
               }
             >
               <h3 className="text-lg font-semibold text-gray-800">

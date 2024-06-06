@@ -5,7 +5,7 @@ import { getPosts } from "../apis"
 import { queryClient } from "src/libs/react-query"
 import { queryKey } from "src/constants/queryKey"
 import { GetStaticProps } from "next"
-import { dehydrate } from "@tanstack/react-query"
+import { dehydrate, Hydrate } from "@tanstack/react-query"
 import { filterPosts } from "src/libs/utils/notion"
 import dynamic from "next/dynamic"
 import axios from "axios"
@@ -48,7 +48,7 @@ export const getStaticProps: GetStaticProps = async () => {
   }
 }
 
-const FeedPage = () => {
+const FeedPage = ({ dehydratedState }) => {
   const meta = {
     title: CONFIG.blog.title,
     description: CONFIG.blog.description,
@@ -59,30 +59,32 @@ const FeedPage = () => {
   return (
     <>
       <MetaConfig {...meta} />
-      <Suspense fallback={<LoadingPage />}>
-        <Hero />
-      </Suspense>
-      <Suspense fallback={<LoadingPage />}>
-        <Upcoming />
-      </Suspense>
-      <Suspense fallback={<LoadingPage />}>
-        <Gallery />
-      </Suspense>
-      <Suspense fallback={<LoadingPage />}>
-        <Features />
-      </Suspense>
-      <Suspense fallback={<LoadingPage />}>
-        <Explanation />
-      </Suspense>
-      <Suspense fallback={<LoadingPage />}>
-        <LogoGrid />
-      </Suspense>
-      <Suspense fallback={<LoadingPage />}>
-        <Team />
-      </Suspense>
-      <Suspense fallback={<LoadingPage />}>
-        <Footer />
-      </Suspense>
+      <Hydrate state={dehydratedState}>
+        <Suspense fallback={<LoadingPage />}>
+          <Hero />
+        </Suspense>
+        <Suspense fallback={<LoadingPage />}>
+          <Upcoming />
+        </Suspense>
+        <Suspense fallback={<LoadingPage />}>
+          <Gallery />
+        </Suspense>
+        <Suspense fallback={<LoadingPage />}>
+          <Features />
+        </Suspense>
+        <Suspense fallback={<LoadingPage />}>
+          <Explanation />
+        </Suspense>
+        <Suspense fallback={<LoadingPage />}>
+          <LogoGrid />
+        </Suspense>
+        <Suspense fallback={<LoadingPage />}>
+          <Team />
+        </Suspense>
+        <Suspense fallback={<LoadingPage />}>
+          <Footer />
+        </Suspense>
+      </Hydrate>
     </>
   )
 }
