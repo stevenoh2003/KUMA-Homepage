@@ -45,8 +45,51 @@ const images = [
   },
 ]
 
+const GallerySection = styled.section`
+  padding: 0px 40px 100px 40px;
+  background-color: #f2f3ef;
+  text-align: center;
+`
+
+const GalleryContainer = styled.div`
+  max-width: 100%;
+  margin: 0 auto;
+  text-align: center;
+
+  @media (min-width: 624px) {
+    max-width: 70%; /* Take 60% of the width on large screens */
+  }
+`
+
+const GalleryHeading = styled.h3`
+  color: #4f46e5;
+  font-weight: 700; /* Make heading more bold */
+  font-size: 2rem; /* Increase the size of the heading */
+  margin-bottom: 10px;
+
+  @media (max-width: 767px) {
+    font-size: 1.5rem; /* Adjust the size of the heading for small screens */
+  }
+`
+
+const GalleryTitle = styled.p`
+  color: #1f2937;
+  font-size: 3rem; /* Increase font size */
+  font-weight: 700; /* Make the font weight bolder */
+  margin-bottom: 20px;
+
+  @media (max-width: 767px) {
+    font-size: 2rem; /* Adjust the size of the title for small screens */
+  }
+
+  @media (max-width: 480px) {
+    font-size: 1.75rem; /* Adjust the size of the title for extra small screens */
+  }
+`
 
 const Container = styled.div`
+  width: 90%;
+  margin: auto;
   margin-top: 60px;
   padding: 20px;
   display: grid;
@@ -199,7 +242,11 @@ const ImageGallery = () => {
   }
 
   return (
-    <>
+    <GallerySection>
+      <GalleryContainer>
+        <GalleryHeading >Gallery</GalleryHeading>
+        <GalleryTitle>Pasty Community Projects</GalleryTitle>
+      </GalleryContainer>
       <Container>
         {images.map((image, index) => (
           <ImageWrapper key={index} onClick={() => handleImageClick(index)}>
@@ -223,7 +270,7 @@ const ImageGallery = () => {
         </SlideWrapper>
         <NextArrow onClick={nextSlide}>&#9654;</NextArrow>
       </SlideshowContainer>
-    </>
+    </GallerySection>
   )
 }
 

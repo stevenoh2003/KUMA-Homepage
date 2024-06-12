@@ -3,7 +3,6 @@ import styled from "styled-components"
 import { useTranslation } from "react-i18next"
 
 const FeatureSection = styled.section`
-  padding: 100px 40px;
   background-color: #f2f3ef;
   text-align: center;
 `
@@ -99,8 +98,8 @@ const FeatureItem = styled.li`
   }
 
   @media (max-width: 767px) {
-    width: 100%; /* Take full width */
-    margin: 0; /* Remove margin */
+    width: 80%; /* Take full width */
+    margin: auto; /* Remove margin */
   }
 `
 
@@ -207,7 +206,7 @@ const FeatureSectionComponent = () => {
     <FeatureSection>
       <FeatureContainer ref={ref}>
         <FeatureHeadingSection>
-          {/* <FeatureHeading>{t("features.title")}</FeatureHeading> */}
+          <FeatureHeading>{t("features.title")}</FeatureHeading>
           <FeatureTitle>{t("features.growWithUs")}</FeatureTitle>
           {/* <FeatureDescription>{t("features.invitation")}</FeatureDescription> */}
         </FeatureHeadingSection>

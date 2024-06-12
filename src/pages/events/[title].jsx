@@ -4,6 +4,8 @@ import dynamic from "next/dynamic"
 import "react-notion-x/src/styles.css"
 import { NotionRenderer } from "react-notion-x"
 import Footer from "src/components/Footer"
+import LoadingPage from "src/components/LoadingPage"
+
 const Code = dynamic(() =>
   import("react-notion-x/build/third-party/code").then((m) => m.Code)
 )
@@ -44,7 +46,7 @@ const EventPage = () => {
   }
 
   if (!eventData) {
-    return <div>Loading...</div>
+    return <LoadingPage />
   }
 
   return (

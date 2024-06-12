@@ -1,14 +1,16 @@
-import { useState } from "react"
-import { useRouter } from "next/router"
-import { useSession, signOut } from "next-auth/react"
-import { useTranslation } from "react-i18next"
-import { UserCircleIcon, Bars3Icon, XMarkIcon } from "@heroicons/react/24/solid"
+import { useState } from "react";
+import { useRouter } from "next/router";
+import { useSession, signOut } from "next-auth/react";
+import { useTranslation } from "react-i18next";
+import { UserCircleIcon, Bars3Icon, XMarkIcon } from "@heroicons/react/24/solid";
+import Image from "next/image";
+import LogoNew from "../assets/pictures/kuma-lab-4.png"; // Import the logo
 
-export default function NavBar() {
-  const [isMenuOpen, setIsMenuOpen] = useState(false)
-  const router = useRouter()
-  const { data: session } = useSession()
-  const { t, i18n } = useTranslation()
+const NavBar = () => {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const router = useRouter();
+  const { data: session } = useSession();
+  const { t, i18n } = useTranslation();
 
   const navigation = [
     { title: t("nav.home"), path: "/", current: router.pathname === "/" },
@@ -27,59 +29,86 @@ export default function NavBar() {
       path: "/events",
       current: router.pathname === "/events",
     },
-  ]
+  ];
 
-  const isHomePage = router.pathname === "/"
-  const navBarStyle = isHomePage
-    ? { backgroundColor: "#f2f3ef", color: "#1F2937" }
-    : { backgroundColor: "#1F2937", color: "#fff" }
+  const isHomePage = router.pathname === "/";
+  const navBarStyle = { backgroundColor: "#f2f3ef", color: "#1F2937" };
 
   const linkStyle = (isHomePage, current) => {
     if (isHomePage) {
-      return "text-gray-900 hover:bg-indigo-600 hover:text-white hover:rounded-md"
+      return "text-gray-900";
     } else if (current) {
-      return "text-white bg-indigo-600 rounded-md"
+      return "text-gray-900";
     } else {
-      return "text-white hover:bg-indigo-600 hover:text-white hover:rounded-md"
+      return "text-gray-900";
     }
-  }
+  };
 
   const switchLanguage = () => {
-    const lang = i18n.language === "en" ? "ja" : "en"
-    i18n.changeLanguage(lang)
-  }
+    const lang = i18n.language === "en" ? "ja" : "en";
+    i18n.changeLanguage(lang);
+  };
 
-  const languageButtonStyle = isHomePage
-    ? "text-black"
-    : "text-white hover:bg-indigo-600 hover:text-white hover:rounded-md"
+  const languageButtonStyle = "text-gray-900";
 
-  const toggleMenu = () => setIsMenuOpen(!isMenuOpen)
+  const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
   return (
-    <nav className="bg-transparent w-full py-2 relative" style={navBarStyle}>
-      <div className="max-w-screen-xl mx-auto px-4 md:px-8 flex items-center justify-between relative">
-        {/* Semi-transparent overlay */}
-        {isMenuOpen && (
-          <div
-            className="fixed top-0 left-0 w-full h-full bg-black opacity-50 z-40"
-            onClick={toggleMenu}
-          />
-        )}
-
-        {/* Switch Language Icon (Left for Small Screens) */}
-        <div className="md:hidden flex-none z-50">
-          <button
-            className={`text-lg rounded-full py-2 px-4 flex items-center justify-center ${languageButtonStyle}`}
-            onClick={switchLanguage}
-          >
-            {i18n.language === "en" ? "日本語" : "English"}
-          </button>
+    <nav className="bg-transparent w-full pt-4 relative" style={navBarStyle}>
+      <div className="max-w-screen-xl mx-auto px-4 py-2 md:px-32 flex items-center justify-between relative">
+        {/* Logo on the Left Side */}
+        <div className="flex-none z-50">
+          <Image src={LogoNew} alt="Logo" width={120} height={150} />
         </div>
 
-        {/* Right Side (Language Switcher - for Desktop) */}
-        <div className="flex-none hidden md:block z-50">
+        {/* Center Spacer */}
+        <div className="flex-grow"></div>
+
+        {/* Navigation Items for Large Screens */}
+        <div className="hidden md:flex items-center space-x-6">
+          {navigation.map((item, idx) => (
+            <a
+              key={idx}
+              href={item.path}
+              className={`text-lg ${linkStyle(isHomePage, item.current)}`}
+            >
+              {item.title}
+            </a>
+          ))}
+          {!session && (
+            <>
+              <a
+                href="/auth/signin"
+                className="text-lg"
+              >
+                {t("nav.login")}
+              </a>
+              <a
+                href="/auth/signup"
+                className="text-lg"
+              >
+                {t("nav.signup")}
+              </a>
+            </>
+          )}
+          {session && (
+            <>
+              <a
+                href="/profile"
+                className="text-lg"
+              >
+                {t("nav.profile")}
+              </a>
+              <a
+                className="text-lg"
+                onClick={() => signOut()}
+              >
+                {t("nav.logout")}
+              </a>
+            </>
+          )}
           <button
-            className={`text-lg rounded-full py-2 px-4 flex items-center justify-center ${languageButtonStyle}`}
+            className={`text-lg rounded-full py-2 px-4 ${languageButtonStyle}`}
             onClick={switchLanguage}
           >
             {i18n.language === "en" ? "日本語" : "English"}
@@ -87,17 +116,19 @@ export default function NavBar() {
         </div>
 
         {/* Hamburger Menu for Mobile */}
-        <button
-          onClick={toggleMenu}
-          className="text-gray-500 hover:text-gray-700 z-50"
-          aria-label="Open menu"
-        >
-          {isMenuOpen ? (
-            <XMarkIcon className="h-8 w-8" />
-          ) : (
-            <Bars3Icon className="h-8 w-8" />
-          )}
-        </button>
+        <div className="flex md:hidden flex-none z-50">
+          <button
+            onClick={toggleMenu}
+            className="text-gray-500 hover:text-gray-700"
+            aria-label="Open menu"
+          >
+            {isMenuOpen ? (
+              <XMarkIcon className="h-8 w-8" />
+            ) : (
+              <Bars3Icon className="h-8 w-8" />
+            )}
+          </button>
+        </div>
       </div>
 
       {/* Slide-in Mobile Menu */}
@@ -116,22 +147,20 @@ export default function NavBar() {
             <li key={idx}>
               <a
                 href={item.path}
-                className={`block py-2 px-4 text-sm md:text-base ${linkStyle(
-                  false,
-                  item.current
-                )}`}
+                className={`block py-2 px-4 text-sm md:text-base text-white hover:bg-indigo-600 hover:text-white hover:rounded-md`}
                 onClick={toggleMenu} // Close the menu when an item is clicked
               >
                 {item.title}
               </a>
             </li>
+            
           ))}
           {!session && (
             <>
               <li>
                 <a
                   href="/auth/signin"
-                  className="block py-2 px-4 text-sm md:text-base hover:bg-indigo-600 hover:text-white hover:rounded-md"
+                  className="block py-2 px-4 text-sm md:text-base text-white hover:bg-indigo-600 hover:text-white hover:rounded-md"
                   onClick={toggleMenu}
                 >
                   {t("nav.login")}
@@ -140,7 +169,7 @@ export default function NavBar() {
               <li>
                 <a
                   href="/auth/signup"
-                  className="block py-2 px-4 text-sm md:text-base hover:bg-indigo-600 hover:text-white hover:rounded-md"
+                  className="block py-2 px-4 text-sm md:text-base text-white hover:bg-indigo-600 hover:text-white hover:rounded-md"
                   onClick={toggleMenu}
                 >
                   {t("nav.signup")}
@@ -153,7 +182,7 @@ export default function NavBar() {
               <li>
                 <a
                   href="/profile"
-                  className="block py-2 px-4 text-sm md:text-base hover:bg-indigo-600 hover:text-white hover:rounded-md"
+                  className="block py-2 px-4 text-sm md:text-base text-white hover:bg-indigo-600 hover:text-white hover:rounded-md"
                   onClick={toggleMenu}
                 >
                   {t("nav.profile")}
@@ -161,16 +190,27 @@ export default function NavBar() {
               </li>
               <li>
                 <a
-                  className="block py-2 px-4 text-sm md:text-base hover:bg-indigo-600 hover:text-white hover:rounded-md"
+                  className="block py-2 px-4 text-sm md:text-base text-white hover:bg-indigo-600 hover:text-white hover:rounded-md"
                   onClick={() => signOut()}
                 >
                   {t("nav.logout")}
                 </a>
               </li>
+
             </>
           )}
+          <li>
+                <a
+                  className="block py-2 px-4 text-sm md:text-base text-white hover:bg-indigo-600 hover:text-white hover:rounded-md"
+                  onClick={switchLanguage}
+                >
+                  {i18n.language === "en" ? "日本語" : "English"}
+                </a>
+              </li>
         </ul>
       </div>
     </nav>
-  )
-}
+  );
+};
+
+export default NavBar;

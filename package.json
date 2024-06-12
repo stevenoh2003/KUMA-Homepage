@@ -94,6 +94,8 @@
     "react-latex-next": "^3.0.0",
     "react-loader-spinner": "^6.1.6",
     "react-notion-x": "^6.16.0",
+    "react-slick": "^0.30.2",
+    "slick-carousel": "^1.8.1",
     "split-text": "^1.0.0",
     "styled-components": "^6.1.11",
     "tiptap-imagresize": "^1.1.0"

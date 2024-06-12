@@ -63,9 +63,9 @@ const FeedPage = ({ dehydratedState }) => {
         <Suspense fallback={<LoadingPage />}>
           <Hero />
         </Suspense>
-        <Suspense fallback={<LoadingPage />}>
+        {/* <Suspense fallback={<LoadingPage />}>
           <Upcoming />
-        </Suspense>
+        </Suspense> */}
         <Suspense fallback={<LoadingPage />}>
           <Gallery />
         </Suspense>

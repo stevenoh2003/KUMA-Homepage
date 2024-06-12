@@ -78,7 +78,7 @@ const BlogIndex = () => {
                   <h1 className="text-gray-800 text-3xl font-extrabold sm:text-4xl">
                     {t("blogIndex.title")}
                   </h1>
-                  <p className="text-gray-600">{t("blogIndex.subtitle")}</p>
+                  {/* <p className="text-gray-600">{t("blogIndex.subtitle")}</p> */}
                 </div>
                 {status === "authenticated" ? (
                   <button
