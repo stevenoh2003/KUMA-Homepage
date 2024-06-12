@@ -1,47 +1,40 @@
 import React, { useState } from "react"
 import styled from "styled-components"
+import { useTranslation } from "react-i18next"
 
-// Sample images with descriptions
+// Sample images with translation keys for descriptions
 const images = [
   {
     src: "gallery/cointbot.jpg",
-    description:
-      "Coinbot leverages computer vision to pick up nearby coins and analyzes your saving patterns.",
+    descriptionKey: "cointbot",
   },
   {
     src: "gallery/mane.jpeg",
-    description:
-      "The Mimic Robot (真似っ子ロボット) imitates your movements when you interact with others.",
+    descriptionKey: "mimicRobot",
   },
   {
     src: "gallery/diffusion.png",
-    description:
-      "A visualization showcasing the capabilities of a state-of-the-art diffusion model.",
+    descriptionKey: "diffusion",
   },
   {
     src: "gallery/tart.png",
-    description:
-      "An intelligent retail trolley prototype that uses path-planning algorithms to follow you around the supermarket.",
+    descriptionKey: "tart",
   },
   {
     src: "gallery/robot_twin.jpg",
-    description:
-      "Developing a digital twin of a dexterous robot arm using ROS and MoveIt.",
+    descriptionKey: "robotTwin",
   },
   {
     src: "gallery/robot_drawing.jpeg",
-    description:
-      "A research project exploring the ability of robots to draw using state-of-the-art stroke generation algorithms to sketch images in pencil.",
+    descriptionKey: "robotDrawing",
   },
   {
     src: "gallery/realsense.jpg",
-    description:
-      "Experimenting with the RealSense camera to produce depth-enhanced image data.",
+    descriptionKey: "realsense",
   },
   {
     src: "gallery/LLM.png",
-    description:
-      "Training a cutting-edge Large Language Model (LLM) from scratch!",
+    descriptionKey: "llm",
   },
 ]
 
@@ -221,6 +214,7 @@ const Overlay = styled.div`
 const ImageGallery = () => {
   const [currentSlide, setCurrentSlide] = useState(0)
   const [showOverlay, setShowOverlay] = useState(false)
+  const { t } = useTranslation()
 
   const handleImageClick = (index) => {
     console.log(`Image ${index} clicked`)
@@ -244,14 +238,16 @@ const ImageGallery = () => {
   return (
     <GallerySection>
       <GalleryContainer>
-        <GalleryHeading >Gallery</GalleryHeading>
-        <GalleryTitle>Pasty Community Projects</GalleryTitle>
+        <GalleryHeading>{t("gallery")}</GalleryHeading>
+        <GalleryTitle>{t("communityProjects")}</GalleryTitle>
       </GalleryContainer>
       <Container>
         {images.map((image, index) => (
           <ImageWrapper key={index} onClick={() => handleImageClick(index)}>
             <Image src={image.src} alt={`Image ${index + 1}`} />
-            <Overlay className="Overlay">{image.description}</Overlay>
+            <Overlay className="Overlay">
+              {t(`descriptions.${image.descriptionKey}`)}
+            </Overlay>
           </ImageWrapper>
         ))}
       </Container>
@@ -264,7 +260,7 @@ const ImageGallery = () => {
           />
           {showOverlay && (
             <Overlay className="Overlay">
-              {images[currentSlide].description}
+              {t(`descriptions.${images[currentSlide].descriptionKey}`)}
             </Overlay>
           )}
         </SlideWrapper>

@@ -137,6 +137,19 @@
   "communityJoin": "Want to be part of the community?",
   "discordChannel": "Join our discord channel",
   "join": "Join",
-  "readMore": "Read More"
+  "readMore": "Read More",
+  
+  "gallery": "Gallery",
+  "communityProjects": "Past Community Projects",
+  "descriptions": {
+    "cointbot": "Coinbot leverages computer vision to pick up nearby coins and analyzes your saving patterns.",
+    "mimicRobot": "The Mimic Robot (真似っ子ロボット) imitates your movements when you interact with others.",
+    "diffusion": "A visualization showcasing the capabilities of a state-of-the-art diffusion model.",
+    "tart": "An intelligent retail trolley prototype that uses path-planning algorithms to follow you around the supermarket.",
+    "robotTwin": "Developing a digital twin of a dexterous robot arm using ROS and MoveIt.",
+    "robotDrawing": "A research project exploring the ability of robots to draw using state-of-the-art stroke generation algorithms to sketch images in pencil.",
+    "realsense": "Experimenting with the RealSense camera to produce depth-enhanced image data.",
+    "llm": "Training a cutting-edge Large Language Model (LLM) from scratch!"
+  }
 
 }

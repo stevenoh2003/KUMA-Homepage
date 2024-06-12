@@ -96,8 +96,8 @@
   "slideshow.project": "過去のプロジェクト",
 
     "features": {
-    "title": "kumaって何？",
-    "growWithUs": "共に成長しよう",
+    "title": "Kuma Lab",
+    "growWithUs": "一緒に成長しよう",
     "invitation": "",
     "research": {
       "title": "誰でも最先端研究",
@@ -136,7 +136,21 @@
   "secondAdvisorName": "林 家宇 博士",
   "secondAdvisorTitleText": "アドバイザー",
   "secondAdvisorBio": "早稲田大学助教｜ロボティクスとインテリジェント機械工学",
-  "secondAdvisorUrlText": ""
+  "secondAdvisorUrlText": "",
+  
+  "gallery": "ギャラリー",
+  "communityProjects": "過去コミュニティプロジェクト",
+  "descriptions": {
+    "cointbot": "Coinbotはコンピュータビジョンを活用して近くのコインを拾い、貯蓄パターンを分析します。",
+    "mimicRobot": "真似っ子ロボットは他人と交流する際にあなたの動きを模倣します。",
+    "diffusion": "最先端の拡散モデルの能力を示すビジュアライゼーション。",
+    "tart": "スーパーであなたを追跡するために経路計画アルゴリズムを使用するインテリジェントな小売トロリープロトタイプ。",
+    "robotTwin": "ROSとMoveItを使用して巧妙なロボットアームのデジタルツインを開発しています。",
+    "robotDrawing": "最先端のストローク生成アルゴリズムを使用して鉛筆で画像をスケッチする能力を探る研究プロジェクト。",
+    "realsense": "RealSenseカメラを使用して深度強化画像データを生成する実験。",
+    "llm": "最先端の大規模言語モデル（LLM）をゼロからトレーニングしています！"
+  
+}
 
 
 
