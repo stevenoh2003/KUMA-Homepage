@@ -5,6 +5,7 @@ import axios from "axios"
 import Footer from "src/components/Footer"
 import { useSession } from "next-auth/react"
 import LoadingPage from "src/components/LoadingPage"
+import MetaConfig from "src/components/MetaConfig"
 
 const adminEmails = [
   "stevenoh2003@gmail.com",
@@ -14,6 +15,14 @@ const adminEmails = [
 ]
 
 const EventList = () => {
+    const meta = {
+      title: "Events",
+      description: "Kuma Lab's workshops and events",
+      type: "website",
+      url: "https://www.kuma2024.tech/events",
+    }
+
+
   const { t } = useTranslation()
   const router = useRouter()
   const { data: session, status } = useSession()
@@ -67,6 +76,8 @@ const EventList = () => {
 
   return (
     <section className="py-12">
+      <MetaConfig {...meta} />
+
       <div className="max-w-screen-lg mx-auto px-4 md:px-8 pb-32">
         <div className="flex items-center justify-between max-w-md">
           {status === "authenticated" &&

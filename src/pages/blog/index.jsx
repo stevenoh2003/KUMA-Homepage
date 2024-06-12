@@ -6,10 +6,18 @@ import { useSession } from "next-auth/react"
 import { useTranslation } from "react-i18next"
 import { RotatingLines } from "react-loader-spinner"
 import LoadingPage from "src/components/LoadingPage"
+import MetaConfig from "src/components/MetaConfig"
 
 const PAGE_LIMIT = 15
 
 const BlogIndex = () => {
+      const meta = {
+        title: "Blog",
+        description: "Kuma Lab's community blog.",
+        type: "website",
+        url: "https://www.kuma2024.tech/blog",
+      }
+
   const [posts, setPosts] = useState([])
   const [currentPage, setCurrentPage] = useState(1)
   const [totalPages, setTotalPages] = useState(1)
@@ -67,10 +75,11 @@ const BlogIndex = () => {
 
   return (
     <div style={{ backgroundColor: "#f2f3ef" }}>
+      <MetaConfig {...meta} />
       <section className="py-12">
         <div className="max-w-screen-xl mx-auto px-4 md:px-8">
           {isLoading ? (
-<LoadingPage />
+            <LoadingPage />
           ) : (
             <div>
               <div className="flex items-center justify-between sm:max-w-full sm:mx-auto">
