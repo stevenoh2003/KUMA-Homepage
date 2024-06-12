@@ -6,6 +6,7 @@ import StevenPortrait from "../assets/pictures/stevenoh.JPG" // Modified import 
 import MaggiePortrait from "../assets/pictures/maggie.jpg"
 import AdvisorPortrait from "../assets/pictures/omer.jpg" // Add the advisor's picture
 import YoshiPortrait from "../assets/pictures/yoshi.jpeg"
+import SecondAdvisorPortrait from "../assets/pictures/LinPortrait.jpeg" // Add the second advisor's picture
 import { useTranslation } from "react-i18next"
 
 export default () => {
@@ -49,14 +50,24 @@ export default () => {
     },
   ]
 
-  const advisor = {
-    avatar: AdvisorPortrait,
-    name: t("advisorName"),
-    title: t("advisorTitleText"),
-    bio: t("advisorBio"),
-    url: "https://example.com", // Add the advisor's URL
-    urlText: t("advisorUrlText"),
-  }
+  const advisors = [
+    {
+      avatar: AdvisorPortrait,
+      name: t("advisorName"),
+      title: t("advisorTitleText"),
+      bio: t("advisorBio"),
+      url: "https://example.com", // Add the advisor's URL
+      urlText: t("advisorUrlText"),
+    },
+    {
+      avatar: SecondAdvisorPortrait,
+      name: t("secondAdvisorName"),
+      title: t("secondAdvisorTitleText"),
+      bio: t("secondAdvisorBio"),
+      url: "https://example.com", // Add the second advisor's URL
+      urlText: t("secondAdvisorUrlText"),
+    },
+  ]
 
   return (
     <section className="py-14 mb-24" style={{ backgroundColor: "#f2f3ef" }}>
@@ -118,41 +129,40 @@ export default () => {
           </ul>
         </div>
 
-        {/* Advisor Section */}
+        {/* Advisors Section */}
         <div className="mt-12">
           <div className="max-w-xl space-y-3">
-            {/* Add translation key for advisor title */}
             <p className="text-gray-800 text-3xl font-semibold sm:text-4xl">
-              {t("meetAdvisor")}
-            </p>{" "}
-            {/* Add translation key for meet advisor */}
+              {t("meetAdvisors")}
+            </p>
           </div>
-          <div className="mt-12 flex gap-4 items-center">
-            <div className="flex-none w-24 h-24">
-              <Image
-                src={advisor.avatar}
-                alt={advisor.name}
-                className="w-full h-full rounded-full"
-                objectFit="cover" // Use cover instead of contain
-                priority
-              />
+          {advisors.map((advisor, idx) => (
+            <div key={idx} className="mt-12 flex gap-4 items-center">
+              <div className="flex-none w-24 h-24">
+                <Image
+                  src={advisor.avatar}
+                  alt={advisor.name}
+                  className="w-full h-full rounded-full"
+                  objectFit="cover" // Use cover instead of contain
+                  priority
+                />
+              </div>
+              <div>
+                <h4 className="text-gray-700 font-semibold sm:text-lg">
+                  {advisor.name}
+                </h4>
+                <p className="text-gray-500 mt-2">{advisor.bio}</p>
+                <a
+                  href={advisor.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-indigo-600 hover:underline mt-2"
+                >
+                  {advisor.urlText}
+                </a>
+              </div>
             </div>
-            <div>
-              <h4 className="text-gray-700 font-semibold sm:text-lg">
-                {advisor.name}
-              </h4>
-              {/* <p className="text-gray-500">{advisor.title}</p> */}
-              <p className="text-gray-500 mt-2">{advisor.bio}</p>
-              <a
-                href={advisor.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-indigo-600 hover:underline mt-2"
-              >
-                Website
-              </a>
-            </div>
-          </div>
+          ))}
         </div>
       </div>
     </section>
