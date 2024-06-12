@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next";
 import { UserCircleIcon, Bars3Icon, XMarkIcon } from "@heroicons/react/24/solid";
 import Image from "next/image";
 import LogoNew from "../assets/pictures/kuma-lab-4.png"; // Import the logo
-
+import Link from "next/link"
 const NavBar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const router = useRouter();
@@ -13,7 +13,6 @@ const NavBar = () => {
   const { t, i18n } = useTranslation();
 
   const navigation = [
-    { title: t("nav.home"), path: "/", current: router.pathname === "/" },
     {
       title: t("nav.blog"),
       path: "/blog",
@@ -57,9 +56,9 @@ const NavBar = () => {
     <nav className="bg-transparent w-full pt-4 relative" style={navBarStyle}>
       <div className="max-w-screen-xl mx-auto px-4 py-2 md:px-32 flex items-center justify-between relative">
         {/* Logo on the Left Side */}
-        <div className="flex-none z-50">
-          <Image src={LogoNew} alt="Logo" width={120} height={150} />
-        </div>
+          <a href="/">
+              <Image src={LogoNew} alt="Logo" width={120} height={150} />
+          </a>
 
         {/* Center Spacer */}
         <div className="flex-grow"></div>

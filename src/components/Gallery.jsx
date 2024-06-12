@@ -72,11 +72,11 @@ const GalleryTitle = styled.p`
   margin-bottom: 20px;
 
   @media (max-width: 767px) {
-    font-size: 2rem; /* Adjust the size of the title for small screens */
+    font-size: 1.5rem; /* Adjust the size of the title for small screens */
   }
 
   @media (max-width: 480px) {
-    font-size: 1.75rem; /* Adjust the size of the title for extra small screens */
+    font-size: 1.5rem; /* Adjust the size of the title for extra small screens */
   }
 `
 

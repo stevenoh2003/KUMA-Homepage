@@ -8,7 +8,8 @@ const FeatureSection = styled.section`
 `
 
 const FeatureContainer = styled.div`
-  max-width: 100%;
+
+  max-width: 80%;
   margin: 0 auto;
   text-align: center;
 
@@ -35,7 +36,7 @@ const FeatureTitle = styled.p`
   margin-bottom: 20px;
 
   @media (max-width: 767px) {
-    font-size: 2rem; /* Adjust the size of the title for small screens */
+    font-size: 1.5rem; /* Adjust the size of the title for small screens */
   }
 `
 
