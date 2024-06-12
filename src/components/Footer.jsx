@@ -1,4 +1,4 @@
-import Logo from "../assets/pictures/bear-black-big.png"
+import Logo from "../assets/pictures/kuma-lab-4.png"
 
 import Image from "next/image"
 

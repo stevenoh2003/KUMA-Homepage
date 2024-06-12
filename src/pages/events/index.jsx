@@ -52,8 +52,13 @@ const EventList = () => {
     }
   }
 
+  const today = new Date()
+
+  const upcomingEvents = events.filter((event) => new Date(event.date) >= today)
+  const pastEvents = events.filter((event) => new Date(event.date) < today)
+
   if (loading) {
-    return <LoadingPage/>
+    return <LoadingPage />
   }
 
   if (error) {
@@ -61,20 +66,9 @@ const EventList = () => {
   }
 
   return (
-    <section className="py-28">
-      <div className="max-w-screen-lg mx-auto px-4 md:px-8">
+    <section className="py-12">
+      <div className="max-w-screen-lg mx-auto px-4 md:px-8 pb-32">
         <div className="flex items-center justify-between max-w-md">
-          <div>
-            <h1 className="text-gray-800 text-2xl font-extrabold sm:text-3xl">
-              {t("eventList.title", "Upcoming Events")}
-            </h1>
-            <p className="text-gray-600 mt-2">
-              {t(
-                "eventList.subtitle",
-                "Join us at our upcoming events and be part of our community."
-              )}
-            </p>
-          </div>
           {status === "authenticated" &&
             adminEmails.includes(session.user.email) && (
               <button
@@ -97,64 +91,134 @@ const EventList = () => {
               </button>
             )}
         </div>
-        <ul className="mt-12 divide-y space-y-3">
-          {events.map((event, idx) => (
-            <li
-              key={event._id}
-              className="px-4 py-5 duration-150 hover:border-white hover:rounded-xl hover:bg-gray-50 cursor-pointer"
-              onClick={() =>
-                router.push(`/events/${encodeURIComponent(event.name)}`)
-              }
-            >
-              <div className="space-y-3">
-                <div className="flex items-center gap-x-3">
-                  <div>
 
-                    <h3 className="text-base text-gray-800 font-semibold mt-1">
-                      {event.name}
-                    </h3>
+        {/* Upcoming Events */}
+        <div className="mt-12">
+          <h2 className="text-gray-800 text-xl font-semibold">
+            {t("eventList.upcoming", "Upcoming Events")}
+          </h2>
+          <ul className="mt-6 divide-y space-y-3">
+            {upcomingEvents.map((event, idx) => (
+              <li
+                key={event._id}
+                className="px-4 py-5 duration-150 hover:border-white hover:rounded-xl hover:bg-gray-50 cursor-pointer"
+                onClick={() =>
+                  router.push(`/events/${encodeURIComponent(event.name)}`)
+                }
+              >
+                <div className="space-y-3">
+                  <div className="flex items-center gap-x-3">
+                    <div>
+                      <h3 className="text-base text-gray-800 font-semibold mt-1">
+                        {event.name}
+                      </h3>
+                    </div>
+                  </div>
+                  <p className="text-gray-600 sm:text-sm">
+                    Date: {new Date(event.date).toLocaleDateString()}
+                    <span className="ml-2">
+                      {event.startTime} - {event.endTime}
+                    </span>
+                  </p>
+                  <div className="text-sm text-gray-600 flex items-center gap-6">
+                    <span className="flex items-center gap-2">
+                      <svg
+                        className="w-5 h-5 text-gray-500"
+                        viewBox="0 0 20 20"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          clipRule="evenodd"
+                          d="M5.05025 4.05025C7.78392 1.31658 12.2161 1.31658 14.9497 4.05025C17.6834 6.78392 17.6834 11.2161 14.9497 13.9497L10 18.8995L5.05025 13.9497C2.31658 11.2161 2.31658 6.78392 5.05025 4.05025ZM10 11C11.1046 11 12 10.1046 12 9C12 7.89543 11.1046 7 10 7C8.89543 7 8 7.89543 8 9C8 10.1046 8.89543 11 10 11Z"
+                          fill="#9CA3AF"
+                        />
+                      </svg>
+                      {event.location || "No location specified"}
+                    </span>
+                    {status === "authenticated" &&
+                      adminEmails.includes(session.user.email) && (
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            handleDelete(event._id)
+                          }}
+                          className="text-red-600 hover:underline"
+                        >
+                          Delete
+                        </button>
+                      )}
                   </div>
                 </div>
-                <p className="text-gray-600 sm:text-sm">
-                  Date: {new Date(event.date).toLocaleDateString()}
-                  <span className="ml-2">
-                    {event.startTime} - {event.endTime}
-                  </span>
-                </p>
-                <div className="text-sm text-gray-600 flex items-center gap-6">
-                  <span className="flex items-center gap-2">
-                    <svg
-                      className="w-5 h-5 text-gray-500"
-                      viewBox="0 0 20 20"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        fillRule="evenodd"
-                        clipRule="evenodd"
-                        d="M5.05025 4.05025C7.78392 1.31658 12.2161 1.31658 14.9497 4.05025C17.6834 6.78392 17.6834 11.2161 14.9497 13.9497L10 18.8995L5.05025 13.9497C2.31658 11.2161 2.31658 6.78392 5.05025 4.05025ZM10 11C11.1046 11 12 10.1046 12 9C12 7.89543 11.1046 7 10 7C8.89543 7 8 7.89543 8 9C8 10.1046 8.89543 11 10 11Z"
-                        fill="#9CA3AF"
-                      />
-                    </svg>
-                    {event.location || "No location specified"}
-                  </span>
-                  {status === "authenticated" &&
-                    adminEmails.includes(session.user.email) && (
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation()
-                          handleDelete(event._id)
-                        }}
-                        className="text-red-600 hover:underline"
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        {/* Past Events */}
+        <div className="mt-12">
+          <h2 className="text-gray-800 text-xl font-semibold">
+            {t("eventList.past", "Past Events")}
+          </h2>
+          <ul className="mt-6 divide-y space-y-3">
+            {pastEvents.map((event, idx) => (
+              <li
+                key={event._id}
+                className="px-4 py-5 duration-150 hover:border-white hover:rounded-xl hover:bg-gray-50 cursor-pointer"
+                onClick={() =>
+                  router.push(`/events/${encodeURIComponent(event.name)}`)
+                }
+              >
+                <div className="space-y-3">
+                  <div className="flex items-center gap-x-3">
+                    <div>
+                      <h3 className="text-base text-gray-800 font-semibold mt-1">
+                        {event.name}
+                      </h3>
+                    </div>
+                  </div>
+                  <p className="text-gray-600 sm:text-sm">
+                    Date: {new Date(event.date).toLocaleDateString()}
+                    <span className="ml-2">
+                      {event.startTime} - {event.endTime}
+                    </span>
+                  </p>
+                  <div className="text-sm text-gray-600 flex items-center gap-6">
+                    <span className="flex items-center gap-2">
+                      <svg
+                        className="w-5 h-5 text-gray-500"
+                        viewBox="0 0 20 20"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
                       >
-                        Delete
-                      </button>
-                    )}
+                        <path
+                          fillRule="evenodd"
+                          clipRule="evenodd"
+                          d="M5.05025 4.05025C7.78392 1.31658 12.2161 1.31658 14.9497 4.05025C17.6834 6.78392 17.6834 11.2161 14.9497 13.9497L10 18.8995L5.05025 13.9497C2.31658 11.2161 2.31658 6.78392 5.05025 4.05025ZM10 11C11.1046 11 12 10.1046 12 9C12 7.89543 11.1046 7 10 7C8.89543 7 8 7.89543 8 9C8 10.1046 8.89543 11 10 11Z"
+                          fill="#9CA3AF"
+                        />
+                      </svg>
+                      {event.location || "No location specified"}
+                    </span>
+                    {status === "authenticated" &&
+                      adminEmails.includes(session.user.email) && (
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            handleDelete(event._id)
+                          }}
+                          className="text-red-600 hover:underline"
+                        >
+                          Delete
+                        </button>
+                      )}
+                  </div>
                 </div>
-              </div>
-            </li>
-          ))}
-        </ul>
+              </li>
+            ))}
+          </ul>
+        </div>
       </div>
       <Footer />
     </section>

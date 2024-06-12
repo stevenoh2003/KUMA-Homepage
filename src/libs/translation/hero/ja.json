@@ -120,10 +120,26 @@
   },
   "ourVision": {
     "step1Title": "私たちのビジョン",
-    "title": "革新者のグローバルコミュニティを築く",
-    "description": "私たちは、東京に物理的なオープンラボを作り、GPUやロボットアームなどの高度なツールを使用して革新的な研究に参加できるようにします。文化的な障壁を打破し、学部生を含む誰もが革新を起こし、包摂と多様性を通じて明るい未来を築くことを目指しています。",
+    "title": "次世代のオープンラボを築く",
+    "description": "私たちの目標はバイリンガルの「オープンラボ」を設立し、GPUやロボットアームなどの研究材料が学生でも手が届く環境を作ることです。",
     "robotImageAlt": "最先端技術を示すアニメーションロボット"
-  }
+  },
+
+  "roboticArtPossible": "ロボットアート、可能？",
+  "roboticArtDescription": "6月20日 3PM、早稲田 Bdg. 19-2",
+  "exploreMachineIntelligence": "機械知能を探る",
+  "exploreMachineIntelligenceDescription": "毎週土曜日5PMのワークショップ",
+  "communityJoin": "コミュニティに参加しませんか？",
+  "discordChannel": "私たちのディスコードチャンネルに参加してください",
+  "join": "参加する",
+  "readMore": "もっと読む",
+  "secondAdvisorName": "林 家宇 博士",
+  "secondAdvisorTitleText": "アドバイザー",
+  "secondAdvisorBio": "早稲田大学助教｜ロボティクスとインテリジェント機械工学",
+  "secondAdvisorUrlText": ""
+
+
+
 }
 
 

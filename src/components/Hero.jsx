@@ -68,21 +68,27 @@ const Hero = () => {
   const slides = [
     {
       image: BackgroundImage3,
-      title: "Robotic art, possible?",
-      description: "June 20th 3PM, Waseda Bdg. 19-2",
+      title: t("roboticArtPossible", "ロボットアート、可能？"),
+      description: t("roboticArtDescription", "6月20日 3PM、早稲田 Bdg. 19-2"),
       link: "events/Workshop%3A%20Intersection%20of%20Robot%20and%20Art",
     },
     {
       image: BackgroundImage2,
-      title: "Explore machine intelligence",
-      description: "Weekly workshops on Saturday 5PM",
+      title: t("exploreMachineIntelligence", "機械知能を探る"),
+      description: t(
+        "exploreMachineIntelligenceDescription",
+        "毎週土曜日5PMのワークショップ"
+      ),
       link: "/events",
     },
 
     {
       image: BackgroundImage1,
-      title: "Want to be part of the community?",
-      description: "Join our discord channel",
+      title: t("communityJoin", "コミュニティに参加しませんか？"),
+      description: t(
+        "discordChannel",
+        "私たちのディスコードチャンネルに参加してください"
+      ),
       link: "https://discord.gg/GGnfYADaBa",
     },
   ]
@@ -133,10 +139,10 @@ const Hero = () => {
                       {index === 2 ? (
                         <>
                           <FaDiscord className="mr-2" />
-                          Join
+                          {t("join", "参加する")}
                         </>
                       ) : (
-                        "Read More"
+                        t("readMore", "もっと読む")
                       )}
                     </Link>
                   </div>
