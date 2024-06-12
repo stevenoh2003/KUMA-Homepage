@@ -89,20 +89,16 @@ const handleChange = (event) => {
 
   return (
     <main className="w-full flex">
-      <div className="relative flex-1 hidden items-center justify-center h-screen bg-gray-900 lg:flex">
+      <div className="relative flex-1 hidden items-center justify-center h-screen lg:flex">
         <div className="relative z-10 w-full max-w-md">
           <div className="mt-16 space-y-3">
-            <h3 className="text-white text-3xl font-bold">
+            <h3 className="text-black text-3xl font-bold">
               {t("signUp.welcomeMessage")}
             </h3>
-            <p className="text-gray-300">{t("signUp.description")}</p>
+            <p className="text-indigo-600">{t("signUp.description")}</p>
           </div>
         </div>
-        <img
-          src="/network.gif" // Adjust the path to your GIF file
-          alt="Background GIF"
-          className="absolute inset-0 h-full w-full object-cover opacity-50"
-        />
+
       </div>
       <div className="flex-1 flex items-center justify-center h-screen">
         <div className="w-full max-w-md space-y-8 px-4 text-gray-600 sm:px-0">

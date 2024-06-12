@@ -30,18 +30,14 @@ const SignIn = () => {
       <div className="relative flex-1 hidden items-center justify-center h-screen lg:flex">
         <div className="relative z-10 w-full max-w-md">
           <div className="mt-16 space-y-3">
-            <h3 className="text-white text-3xl font-bold">
+            <h3 className="text-black text-3xl font-bold">
               {t("signIn.welcomeBack")}
             </h3>
-            <p className="text-gray-300">{t("signIn.logInToContinue")}</p>
+            <p className="text-indigo-600">{t("signIn.logInToContinue")}</p>
           </div>
         </div>
         {/* GIF as the background */}
-        <img
-          src="https://kuma2024.s3.ap-southeast-2.amazonaws.com/robot.webp" // Adjust the path to your GIF file
-          alt="Background GIF"
-          className="absolute inset-0 h-full w-full object-cover opacity-80"
-        />
+
       </div>
 
       {/* Right panel (login form) */}
