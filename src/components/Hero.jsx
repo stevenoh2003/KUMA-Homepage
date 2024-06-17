@@ -59,10 +59,12 @@ const Hero = () => {
     slidesToScroll: 1,
     autoplay: true,
     autoplaySpeed: 3000,
-    arrows: false,
+    arrows: true, // Enable navigation arrows
     swipe: true,
     touchMove: true,
     cssEase: "linear", // Smooth scrolling effect
+    prevArrow: <button className="slick-prev">←</button>,
+    nextArrow: <button className="slick-next">→</button>,
   }
 
   const slides = [
