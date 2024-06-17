@@ -59,14 +59,14 @@ export default () => {
       url: "https://example.com", // Add the advisor's URL
       urlText: t("advisorUrlText"),
     },
-    {
-      avatar: SecondAdvisorPortrait,
-      name: t("secondAdvisorName"),
-      title: t("secondAdvisorTitleText"),
-      bio: t("secondAdvisorBio"),
-      url: "https://example.com", // Add the second advisor's URL
-      urlText: t("secondAdvisorUrlText"),
-    },
+    // {
+    //   avatar: SecondAdvisorPortrait,
+    //   name: t("secondAdvisorName"),
+    //   title: t("secondAdvisorTitleText"),
+    //   bio: t("secondAdvisorBio"),
+    //   url: "https://example.com", // Add the second advisor's URL
+    //   urlText: t("secondAdvisorUrlText"),
+    // },
   ]
 
   return (
