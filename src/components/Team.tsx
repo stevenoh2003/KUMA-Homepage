@@ -6,7 +6,7 @@ import StevenPortrait from "../assets/pictures/stevenoh.JPG" // Modified import 
 import MaggiePortrait from "../assets/pictures/maggie.jpg"
 import AdvisorPortrait from "../assets/pictures/omer.jpg" // Add the advisor's picture
 import YoshiPortrait from "../assets/pictures/yoshi.jpeg"
-import SecondAdvisorPortrait from "../assets/pictures/LinPortrait.jpeg" // Add the second advisor's picture
+import SecondAdvisorPortrait from "../assets/pictures/lin.jpg" // Add the second advisor's picture
 import { useTranslation } from "react-i18next"
 
 export default () => {
@@ -59,14 +59,14 @@ export default () => {
       url: "https://example.com", // Add the advisor's URL
       urlText: t("advisorUrlText"),
     },
-    // {
-    //   avatar: SecondAdvisorPortrait,
-    //   name: t("secondAdvisorName"),
-    //   title: t("secondAdvisorTitleText"),
-    //   bio: t("secondAdvisorBio"),
-    //   url: "https://example.com", // Add the second advisor's URL
-    //   urlText: t("secondAdvisorUrlText"),
-    // },
+    {
+      avatar: SecondAdvisorPortrait,
+      name: t("secondAdvisorName"),
+      title: t("secondAdvisorTitleText"),
+      bio: t("secondAdvisorBio"),
+      url: "https://example.com", // Add the second advisor's URL
+      urlText: t("secondAdvisorUrlText"),
+    },
   ]
 
   return (
