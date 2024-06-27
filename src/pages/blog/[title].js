@@ -3,7 +3,7 @@ import { useRouter } from "next/router"
 import { useEditor, EditorContent } from "@tiptap/react"
 import StarterKit from "@tiptap/starter-kit"
 import { StyledEditor } from "src/components/Blog/StyledComponents"
-import { useSession } from "next-auth/react"
+import { useSession, getCsrfToken, signIn } from "next-auth/react"
 import "katex/dist/katex.min.css"
 import Mathematics from "@tiptap-pro/extension-mathematics"
 import MenuBar from "src/components/Blog/UpdateMenuBar"
@@ -12,12 +12,12 @@ import Image from "@tiptap/extension-image"
 import Dropcursor from "@tiptap/extension-dropcursor"
 import Footer from "src/components/Footer.jsx"
 import dynamic from "next/dynamic"
-import { RotatingLines } from "react-loader-spinner"
 import { NotionRenderer } from "react-notion-x"
 import "react-notion-x/src/styles.css"
 import { FaArrowLeft } from "react-icons/fa"
-import Head from "next/head" // Import next/head for meta tags
+import Head from "next/head"
 import LoadingPage from "src/components/LoadingPage.jsx"
+
 const Code = dynamic(() =>
   import("react-notion-x/build/third-party/code").then((m) => m.Code)
 )
@@ -46,9 +46,39 @@ const Modal = dynamic(
 
 const predefinedTags = ["Paper Note", "AI", "Robotics"]
 
+const Comment = ({ comment, onDelete }) => {
+  const { data: session } = useSession()
+
+  const handleDelete = () => {
+    if (confirm("Are you sure you want to delete this comment?")) {
+      onDelete(comment._id)
+    }
+  }
+
+  return (
+    <div className="comment">
+      <div className="comment-author">
+        <img
+          src={comment.author.profilePicUrl || "/default-profile.png"}
+          alt={comment.author.name}
+        />
+        <p>{comment.author.name}</p>
+      </div>
+      <p>{comment.content}</p>
+      <small>{new Date(comment.createdAt).toLocaleString()}</small>
+      {session && session.user.id === comment.author._id && (
+        <button onClick={handleDelete} className="ml-2 text-red-500">
+          Delete
+        </button>
+      )}
+    </div>
+  )
+}
+
 const PostPage = () => {
   const router = useRouter()
   const { title } = router.query
+  const { data: session } = useSession()
   const [postContent, setPostContent] = useState({
     title: "",
     description: "",
@@ -61,7 +91,6 @@ const PostPage = () => {
     tags: [],
   })
   const [userInfo, setUserInfo] = useState(null)
-  const { data: session } = useSession()
   const [editable, setEditable] = useState(false)
   const [showModal, setShowModal] = useState(false)
   const [newTitle, setNewTitle] = useState("")
@@ -71,6 +100,11 @@ const PostPage = () => {
   const [selectedTags, setSelectedTags] = useState([])
   const [editorFocused, setEditorFocused] = useState(false)
   const [authorLoading, setAuthorLoading] = useState(true)
+  const [comments, setComments] = useState([])
+  const [newComment, setNewComment] = useState("")
+  const [wordLimitExceeded, setWordLimitExceeded] = useState(false)
+
+  const WORD_LIMIT = 50 // Set your word limit here
 
   const editor = useEditor({
     extensions: [
@@ -111,6 +145,7 @@ const PostPage = () => {
       fetch(`/api/posts/${encodeURIComponent(title)}`)
         .then((response) => response.json())
         .then((data) => {
+          console.log("Post data:", data) // Debugging
           setPostContent(data)
           setNewTitle(data.title)
           setNewDescription(data.description || "")
@@ -128,6 +163,12 @@ const PostPage = () => {
     }
   }, [title, editor, session])
 
+  useEffect(() => {
+    if (postContent.title) {
+      fetchComments(postContent.title)
+    }
+  }, [postContent.title])
+
   const fetchUserInfo = (userId) => {
     setAuthorLoading(true)
     fetch(`/api/users/${userId}`)
@@ -143,6 +184,24 @@ const PostPage = () => {
         console.error("Error fetching user info:", error)
         setAuthorLoading(false)
       })
+  }
+
+  const fetchComments = async (postTitle) => {
+    try {
+      const response = await fetch(
+        `/api/comments?title=${encodeURIComponent(postTitle)}`
+      )
+      const data = await response.json()
+      console.log("Fetched comments:", data) // Ensure this is an array
+
+      if (Array.isArray(data)) {
+        setComments(data)
+      } else {
+        console.error("Expected array but received:", data)
+      }
+    } catch (error) {
+      console.error("Error fetching comments:", error)
+    }
   }
 
   const handleThumbnailChange = (event) => {
@@ -239,6 +298,71 @@ const PostPage = () => {
     }
   }
 
+  const countWords = (text) => {
+    return text.trim().split(/\s+/).length
+  }
+
+  const handleCommentSubmit = async (e) => {
+    e.preventDefault()
+    if (!newComment || wordLimitExceeded) return
+
+    try {
+      const csrfToken = await getCsrfToken()
+      const response = await fetch("/api/comments", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRF-Token": csrfToken,
+          Authorization: `Bearer ${session?.accessToken}`, // Include session token
+        },
+        body: JSON.stringify({
+          content: newComment,
+          postTitle: postContent.title,
+        }),
+      })
+
+      if (response.ok) {
+        setNewComment("")
+        fetchComments(postContent.title) // Fetch the updated list of comments
+      } else {
+        const errorText = await response.text()
+        console.error("Failed to submit comment", errorText)
+      }
+    } catch (error) {
+      console.error("Failed to submit comment", error)
+    }
+  }
+
+  const handleCommentDelete = async (commentId) => {
+    try {
+      const csrfToken = await getCsrfToken()
+
+      const response = await fetch(`/api/comments/${commentId}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRF-Token": csrfToken,
+          Authorization: `Bearer ${session?.accessToken}`,
+        },
+      })
+
+      if (response.ok) {
+        setComments(comments.filter((comment) => comment._id !== commentId))
+      } else {
+        const errorText = await response.json()
+        console.error("Failed to delete comment", errorText)
+      }
+    } catch (error) {
+      console.error("Failed to delete comment", error)
+    }
+  }
+
+  const handleCommentChange = (e) => {
+    const text = e.target.value
+    setNewComment(text)
+    setWordLimitExceeded(countWords(text) > WORD_LIMIT)
+  }
+
   if (!editor) return null
 
   const defaultThumbnail =
@@ -277,7 +401,7 @@ const PostPage = () => {
 
         <div className="mt-8">
           {authorLoading ? (
-            <LoadingPage/>
+            <LoadingPage />
           ) : userInfo ? (
             <div className="flex justify-between items-center mt-4 mb-4 mx-auto max-w-screen-lg px-4 sm:px-0 md:px-14">
               <div className="flex items-center space-x-2 md:space-x-4">
@@ -354,101 +478,55 @@ const PostPage = () => {
             </StyledEditor>
           )}
 
-          {showModal && (
-            <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-              <div className="bg-white rounded-lg shadow-lg p-8 max-w-lg w-full">
-                <h3 className="text-3xl font-bold mb-6 text-center text-indigo-600">
-                  Edit Post
-                </h3>
-                <form
-                  className="space-y-6"
-                  onSubmit={(e) => e.preventDefault()}
+          <hr
+            className="my-8"
+            style={{ backgroundColor: "black", height: 1 }}
+          />
+
+          <div className="comment-section mt-8">
+            <h3 className="text-2xl font-bold mb-4">Comments</h3>
+            {Array.isArray(comments) &&
+              comments.map((comment) => (
+                <Comment
+                  key={comment._id}
+                  comment={comment}
+                  onDelete={handleCommentDelete}
+                />
+              ))}
+
+            {session ? (
+              <form
+                onSubmit={handleCommentSubmit}
+                className="mt-4 bg-white p-4 rounded-lg shadow-md"
+              >
+                <textarea
+                  value={newComment}
+                  onChange={handleCommentChange}
+                  placeholder="Write a comment..."
+                  className="w-full p-2 border rounded-lg bg-white"
+                />
+                {wordLimitExceeded && (
+                  <p className="text-red-500 text-sm">
+                    Word limit exceeded. Maximum {WORD_LIMIT} words allowed.
+                  </p>
+                )}
+                <button
+                  type="submit"
+                  className="mt-2 px-4 py-2 bg-blue-600 text-white rounded-lg bg-indigo-600"
+                  disabled={wordLimitExceeded}
                 >
-                  <div>
-                    <label className="block text-lg font-medium">
-                      New Title
-                    </label>
-                    <input
-                      type="text"
-                      value={newTitle}
-                      onChange={(e) => setNewTitle(e.target.value)}
-                      className="w-full mt-2 px-4 py-2 text-gray-700 bg-gray-100 rounded-lg border border-gray-300 focus:border-indigo-600"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-lg font-medium">
-                      New Description
-                    </label>
-                    <textarea
-                      value={newDescription}
-                      onChange={(e) => setNewDescription(e.target.value)}
-                      className="w-full mt-2 px-4 py-2 text-gray-700 bg-gray-100 rounded-lg border border-gray-300 focus:border-indigo-600"
-                      rows="3"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-lg font-medium">
-                      New Thumbnail
-                    </label>
-                    <input
-                      type="file"
-                      accept="image/*"
-                      onChange={handleThumbnailChange}
-                      className="w-full mt-2 px-4 py-2 text-gray-700 bg-gray-100 rounded-lg border border-gray-300 focus:border-indigo-600"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-lg font-medium">
-                      Visibility
-                    </label>
-                    <div className="mt-2 flex items-center">
-                      <input
-                        type="checkbox"
-                        checked={isPublic}
-                        onChange={(e) => setIsPublic(e.target.checked)}
-                        className="mr-2"
-                      />
-                      <span>Make Public</span>
-                    </div>
-                  </div>
-                  <div>
-                    <label className="block text-lg font-medium">Tags</label>
-                    <div className="mt-2 flex flex-wrap gap-2">
-                      {predefinedTags.map((tag) => (
-                        <label
-                          key={tag}
-                          className="flex items-center bg-gray-200 rounded-lg px-3 py-1"
-                        >
-                          <input
-                            type="checkbox"
-                            value={tag}
-                            checked={selectedTags.includes(tag)}
-                            onChange={handleTagChange}
-                            className="mr-2"
-                          />
-                          {tag}
-                        </label>
-                      ))}
-                    </div>
-                  </div>
-                  <div className="flex justify-end space-x-4">
-                    <button
-                      className="px-4 py-2 text-gray-600 font-medium rounded-lg border hover:bg-gray-50"
-                      onClick={() => setShowModal(false)}
-                    >
-                      Cancel
-                    </button>
-                    <button
-                      className="px-4 py-2 text-white font-medium bg-indigo-600 hover:bg-indigo-500 rounded-lg"
-                      onClick={updateTitleAndThumbnail}
-                    >
-                      Update
-                    </button>
-                  </div>
-                </form>
-              </div>
-            </div>
-          )}
+                  Submit
+                </button>
+              </form>
+            ) : (
+              <button
+                onClick={() => signIn()}
+                className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg bg-indigo-600"
+              >
+                Log in to comment
+              </button>
+            )}
+          </div>
           {editable && (
             <div className="flex gap-4 justify-end mt-4">
               <button
@@ -468,6 +546,94 @@ const PostPage = () => {
         </div>
         <Footer />
       </div>
+      {showModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+          <div className="bg-white rounded-lg shadow-lg p-8 max-w-lg w-full">
+            <h3 className="text-3xl font-bold mb-6 text-center text-indigo-600">
+              Edit Post
+            </h3>
+            <form className="space-y-6" onSubmit={(e) => e.preventDefault()}>
+              <div>
+                <label className="block text-lg font-medium">New Title</label>
+                <input
+                  type="text"
+                  value={newTitle}
+                  onChange={(e) => setNewTitle(e.target.value)}
+                  className="w-full mt-2 px-4 py-2 text-gray-700 bg-gray-100 rounded-lg border border-gray-300 focus:border-indigo-600"
+                />
+              </div>
+              <div>
+                <label className="block text-lg font-medium">
+                  New Description
+                </label>
+                <textarea
+                  value={newDescription}
+                  onChange={(e) => setNewDescription(e.target.value)}
+                  className="w-full mt-2 px-4 py-2 text-gray-700 bg-gray-100 rounded-lg border border-gray-300 focus:border-indigo-600"
+                  rows="3"
+                />
+              </div>
+              <div>
+                <label className="block text-lg font-medium">
+                  New Thumbnail
+                </label>
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleThumbnailChange}
+                  className="w-full mt-2 px-4 py-2 text-gray-700 bg-gray-100 rounded-lg border border-gray-300 focus:border-indigo-600"
+                />
+              </div>
+              <div>
+                <label className="block text-lg font-medium">Visibility</label>
+                <div className="mt-2 flex items-center">
+                  <input
+                    type="checkbox"
+                    checked={isPublic}
+                    onChange={(e) => setIsPublic(e.target.checked)}
+                    className="mr-2"
+                  />
+                  <span>Make Public</span>
+                </div>
+              </div>
+              <div>
+                <label className="block text-lg font-medium">Tags</label>
+                <div className="mt-2 flex flex-wrap gap-2">
+                  {predefinedTags.map((tag) => (
+                    <label
+                      key={tag}
+                      className="flex items-center bg-gray-200 rounded-lg px-3 py-1"
+                    >
+                      <input
+                        type="checkbox"
+                        value={tag}
+                        checked={selectedTags.includes(tag)}
+                        onChange={handleTagChange}
+                        className="mr-2"
+                      />
+                      {tag}
+                    </label>
+                  ))}
+                </div>
+              </div>
+              <div className="flex justify-end space-x-4">
+                <button
+                  className="px-4 py-2 text-gray-600 font-medium rounded-lg border hover:bg-gray-50"
+                  onClick={() => setShowModal(false)}
+                >
+                  Cancel
+                </button>
+                <button
+                  className="px-4 py-2 text-white font-medium bg-indigo-600 hover:bg-indigo-500 rounded-lg"
+                  onClick={updateTitleAndThumbnail}
+                >
+                  Update
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </>
   )
 }

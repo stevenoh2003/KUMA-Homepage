@@ -1,3 +1,28 @@
+.comment-section {
+    margin-top: 2rem;
+}
+
+.comment {
+    border-bottom: 1px solid #ccc;
+    padding: 1rem 0;
+}
+
+.comment-author {
+    display: flex;
+    align-items: center;
+}
+
+.comment-author img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.comment-author p {
+    font-weight: bold;
+}
+
 .loading-page {
     display: flex;
     justify-content: center;
