@@ -139,17 +139,17 @@
 }
 
 .notion-equation-block .katex-display {
-    margin: 1.2em !important;
+    margin: 1.0em !important;
 
 }
 .notion-list li {
-    line-height: 1.7;
-        font-size: 1.2em;
+    line-height: 1.8;
+        font-size: 1.0em;
 }
 
 .notion-text{
-    line-height: 1.7;
-    font-size: 1.2em;
+    line-height: 1.8;
+    font-size: 1.0em;
 }
 .katex-display {
     margin: 0 !important;
