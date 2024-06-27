@@ -64,7 +64,7 @@ const Comment = ({ comment, onDelete }) => {
         />
         <p>{comment.author.name}</p>
       </div>
-      <p>{comment.content}</p>
+      <p className="mt-2">{comment.content}</p>
       <small>{new Date(comment.createdAt).toLocaleString()}</small>
       {session && session.user.id === comment.author._id && (
         <button onClick={handleDelete} className="ml-2 text-red-500">
@@ -482,50 +482,51 @@ const PostPage = () => {
             className="my-8"
             style={{ backgroundColor: "black", height: 1 }}
           />
+          <div className="max-w-screen-xl mx-auto px-2 py-4 md:px-8 text-gray-600">
+            <div className="comment-section mt-8 sm:w-full md:w-3/4 mx-auto">
+              <h3 className="text-2xl font-bold mb-4">Comments</h3>
+              {Array.isArray(comments) &&
+                comments.map((comment) => (
+                  <Comment
+                    key={comment._id}
+                    comment={comment}
+                    onDelete={handleCommentDelete}
+                  />
+                ))}
 
-          <div className="comment-section mt-8">
-            <h3 className="text-2xl font-bold mb-4">Comments</h3>
-            {Array.isArray(comments) &&
-              comments.map((comment) => (
-                <Comment
-                  key={comment._id}
-                  comment={comment}
-                  onDelete={handleCommentDelete}
-                />
-              ))}
-
-            {session ? (
-              <form
-                onSubmit={handleCommentSubmit}
-                className="mt-4 bg-white p-4 rounded-lg shadow-md"
-              >
-                <textarea
-                  value={newComment}
-                  onChange={handleCommentChange}
-                  placeholder="Write a comment..."
-                  className="w-full p-2 border rounded-lg bg-white"
-                />
-                {wordLimitExceeded && (
-                  <p className="text-red-500 text-sm">
-                    Word limit exceeded. Maximum {WORD_LIMIT} words allowed.
-                  </p>
-                )}
-                <button
-                  type="submit"
-                  className="mt-2 px-4 py-2 bg-blue-600 text-white rounded-lg bg-indigo-600"
-                  disabled={wordLimitExceeded}
+              {session ? (
+                <form
+                  onSubmit={handleCommentSubmit}
+                  className="mt-4 bg-white p-4 rounded-lg shadow-md"
                 >
-                  Submit
+                  <textarea
+                    value={newComment}
+                    onChange={handleCommentChange}
+                    placeholder="Write a comment..."
+                    className="w-full p-2 border rounded-lg bg-white"
+                  />
+                  {wordLimitExceeded && (
+                    <p className="text-red-500 text-sm">
+                      Word limit exceeded. Maximum {WORD_LIMIT} words allowed.
+                    </p>
+                  )}
+                  <button
+                    type="submit"
+                    className="mt-2 px-4 py-2 bg-blue-600 text-white rounded-lg bg-indigo-600"
+                    disabled={wordLimitExceeded}
+                  >
+                    Submit
+                  </button>
+                </form>
+              ) : (
+                <button
+                  onClick={() => signIn()}
+                  className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg bg-indigo-600"
+                >
+                  Log in to comment
                 </button>
-              </form>
-            ) : (
-              <button
-                onClick={() => signIn()}
-                className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg bg-indigo-600"
-              >
-                Log in to comment
-              </button>
-            )}
+              )}
+            </div>
           </div>
           {editable && (
             <div className="flex gap-4 justify-end mt-4">
