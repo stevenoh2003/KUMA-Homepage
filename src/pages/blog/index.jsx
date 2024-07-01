@@ -4,19 +4,20 @@ import { useRouter } from "next/router"
 import Footer from "src/components/Footer"
 import { useSession } from "next-auth/react"
 import { useTranslation } from "react-i18next"
-import { RotatingLines } from "react-loader-spinner"
 import LoadingPage from "src/components/LoadingPage"
 import MetaConfig from "src/components/MetaConfig"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { faThumbsUp } from "@fortawesome/free-solid-svg-icons"
 
 const PAGE_LIMIT = 15
 
 const BlogIndex = () => {
-      const meta = {
-        title: "Blog",
-        description: "Kuma Lab's community blog.",
-        type: "website",
-        url: "https://www.kuma2024.tech/blog",
-      }
+  const meta = {
+    title: "Blog",
+    description: "Kuma Lab's community blog.",
+    type: "website",
+    url: "https://www.kuma2024.tech/blog",
+  }
 
   const [posts, setPosts] = useState([])
   const [currentPage, setCurrentPage] = useState(1)
@@ -172,8 +173,8 @@ const BlogIndex = () => {
                               {post.description ||
                                 "Read this blog post to find out more!"}
                             </p>
-                            {cleanTags.length > 0 && (
-                              <div className="flex flex-wrap gap-2 mt-2">
+                            <div className="flex justify-between items-center mt-2">
+                              <div className="flex flex-wrap gap-2">
                                 {cleanTags.map((tag) => (
                                   <span
                                     key={tag}
@@ -183,7 +184,11 @@ const BlogIndex = () => {
                                   </span>
                                 ))}
                               </div>
-                            )}
+                              <div className="flex items-center text-indigo-600">
+                                <FontAwesomeIcon icon={faThumbsUp} />
+                                <span className="ml-1">{post.likes?.length || 0}</span>
+                              </div>
+                            </div>
                           </div>
                         </a>
                       </Link>

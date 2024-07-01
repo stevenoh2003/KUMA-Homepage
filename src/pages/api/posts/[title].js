@@ -28,6 +28,7 @@ export default async function handler(req, res) {
         owner: post.owner,
         thumbnail_url: post.thumbnail_url,
         isPublic: post.isPublic,
+        likes: post.likes, // Include likes in the response
       })
     } else if (post.s3_key) {
       const { Body } = await s3Client.send(
@@ -53,6 +54,7 @@ export default async function handler(req, res) {
         owner: post.owner,
         thumbnail_url: post.thumbnail_url,
         isPublic: post.isPublic,
+        likes: post.likes, // Include likes in the response
       })
     } else {
       res.status(404).json({ message: "No content available" })

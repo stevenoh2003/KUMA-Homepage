@@ -10,7 +10,8 @@ const blogPostSchema = new mongoose.Schema({
   created_at: { type: Date, default: Date.now },
   owner: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
   isPublic: { type: Boolean, default: false },
-  tags: [{ type: String }], // Add the tags field as an array of strings
+  tags: [{ type: String }],
+  likes: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }], // Add likes field as an array of user IDs
 })
 
 const BlogPost =
