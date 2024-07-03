@@ -9,7 +9,7 @@ import Footer from "src/components/Footer"
 const EditorPage = () => {
   return (
     <div style={{ backgroundColor: "#f2f3ef" }}>
-      <StyledEditor>
+      <StyledEditor> 
         <CreateBlog />
       </StyledEditor>
       <Footer />
