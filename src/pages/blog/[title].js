@@ -461,7 +461,6 @@ const PostPage = () => {
             </div>
           </div>
         </div>
-
         <div className="mt-8">
           {authorLoading ? (
             <></>
