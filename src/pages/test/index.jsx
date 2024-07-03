@@ -1,63 +1,50 @@
-import React from "react"
-import { NotionAPI } from "notion-client"
-import dynamic from "next/dynamic"
-import { NotionRenderer } from "react-notion-x"
-// core styles shared by all of react-notion-x (required)
-import 'react-notion-x/src/styles.css'
+// components/SendMessageButton.js
+import { useState } from "react"
+import axios from "axios"
 
-// used for code syntax highlighting (optional)
-import 'prismjs/themes/prism-tomorrow.css'
+const SendMessageButton = () => {
+  const [loading, setLoading] = useState(false)
+  const [message, setMessage] = useState("")
 
-// used for rendering equations (optional)
-import 'katex/dist/katex.min.css'
-const Code = dynamic(() =>
-  import("react-notion-x/build/third-party/code").then((m) => m.Code)
-)
-const Collection = dynamic(() =>
-  import("react-notion-x/build/third-party/collection").then(
-    (m) => m.Collection
+  const sendMessage = async () => {
+    setLoading(true)
+    try {
+      const response = await axios.post("/api/sendDiscordMessage", {
+        DISCORD_BLOG_CHANNEL_ID:
+          process.env.NEXT_PUBLIC_DISCORD_BLOG_CHANNEL_ID,
+        DISCORD_BOT_TOKEN: process.env.NEXT_PUBLIC_DISCORD_BOT_TOKEN,
+        message: message || "Test message from Next.js",
+      })
+
+      if (response.data.success) {
+        alert("Message sent successfully!")
+      } else {
+        alert("Failed to send message")
+      }
+    } catch (error) {
+      console.error(
+        "Error sending message:",
+        error.response?.data || error.message
+      )
+      alert("Error sending message")
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  return (
+    <div>
+      <input
+        type="text"
+        value={message}
+        onChange={(e) => setMessage(e.target.value)}
+        placeholder="Enter your message"
+      />
+      <button onClick={sendMessage} disabled={loading}>
+        {loading ? "Sending..." : "Send Test Message"}
+      </button>
+    </div>
   )
-)
-const Equation = dynamic(() =>
-  import("react-notion-x/build/third-party/equation").then((m) => m.Equation)
-)
-const Pdf = dynamic(
-  () => import("react-notion-x/build/third-party/pdf").then((m) => m.Pdf),
-  {
-    ssr: false,
-  }
-)
-const Modal = dynamic(
-  () => import("react-notion-x/build/third-party/modal").then((m) => m.Modal),
-  {
-    ssr: false,
-  }
-)
-
-export async function getStaticProps() {
-  const notion = new NotionAPI()
-  const recordMap = await notion.getPage(
-    "FSRCNN-29adb81ef2f444c08daba452fcfbd1bc"
-  )
-
-  return {
-    props: {
-      recordMap,
-    },
-  }
 }
 
-const Index = ({ recordMap }) => (
-  <NotionRenderer
-    recordMap={recordMap}
-    components={{
-      Code,
-      Collection,
-      Equation,
-      Modal,
-      Pdf,
-    }}
-  />
-)
-
-export default Index
+export default SendMessageButton

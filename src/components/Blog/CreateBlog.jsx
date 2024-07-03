@@ -1,28 +1,26 @@
-import React, { useState, useEffect } from "react";
-import { useSession } from "next-auth/react";
-import { useRouter } from "next/router";
-import { EditorProvider, useEditor, EditorContent } from "@tiptap/react";
-import { extensions, content } from "src/components/Blog/editorSettings";
-// import MenuBar from "src/components/Blog/MenuBar";
-import "katex/dist/katex.min.css";
+import React, { useState, useEffect } from "react"
+import { useSession } from "next-auth/react"
+import { useRouter } from "next/router"
+import { useEditor, EditorContent } from "@tiptap/react"
+import { extensions, content } from "src/components/Blog/editorSettings"
 import MenuBar from "src/components/Blog/UpdateMenuBar"
+import "katex/dist/katex.min.css"
 
-const predefinedTags = ["Paper Note", "AI", "Robotics"];
+const predefinedTags = ["Paper Note", "AI", "Robotics"]
 
 const CreateBlog = () => {
-  const { data: session } = useSession();
-  const router = useRouter();
-  const [s3Key, setS3Key] = useState(null);
-  const [thumbnail, setThumbnail] = useState(null);
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [notionLink, setNotionLink] = useState("");
-  const [isPublic, setIsPublic] = useState(false);
-  const [tags, setTags] = useState([]);
-  const [errorMessage, setErrorMessage] = useState("");
-  const [useNotion, setUseNotion] = useState(false);
+  const { data: session } = useSession()
+  const router = useRouter()
+  const [s3Key, setS3Key] = useState(null)
+  const [thumbnail, setThumbnail] = useState(null)
+  const [title, setTitle] = useState("")
+  const [description, setDescription] = useState("")
+  const [notionLink, setNotionLink] = useState("")
+  const [isPublic, setIsPublic] = useState(false)
+  const [tags, setTags] = useState([])
+  const [errorMessage, setErrorMessage] = useState("")
+  const [useNotion, setUseNotion] = useState(false)
   const [editable, setEditable] = useState(true)
-
 
   const editor = useEditor({
     extensions,
@@ -30,75 +28,108 @@ const CreateBlog = () => {
     editable: true,
   })
 
+  useEffect(() => {
+    const canEdit = editable === null ? false : editable
 
-    useEffect(() => {
-      const canEdit = editable === null ? false : editable
-
-      if (editor) {
-        editor.setEditable(canEdit)
-      }
-    }, [editor, editable])
+    if (editor) {
+      editor.setEditable(canEdit)
+    }
+  }, [editor, editable])
 
   const handleThumbnailChange = (event) => {
-    setThumbnail(event.target.files[0]);
-  };
+    setThumbnail(event.target.files[0])
+  }
 
   const handleTagChange = (event) => {
-    const { value, checked } = event.target;
+    const { value, checked } = event.target
     setTags((prevTags) =>
       checked ? [...prevTags, value] : prevTags.filter((tag) => tag !== value)
-    );
-  };
+    )
+  }
 
   const validateForm = async () => {
     if (!title.trim()) {
-      setErrorMessage("Title is required.");
-      return false;
+      setErrorMessage("Title is required.")
+      return false
     }
 
     const response = await fetch(
       `/api/posts/checkTitle?title=${encodeURIComponent(title)}`
-    );
-    const result = await response.json();
+    )
+    const result = await response.json()
 
     if (response.ok && result.exists) {
-      setErrorMessage("The title has already been used.");
-      return false;
+      setErrorMessage("The title has already been used.")
+      return false
     }
 
-    return true;
-  };
+    return true
+  }
 
   const extractNotionId = (url) => {
-    const regex = /https:\/\/(?:\S+\.)?notion\.site\/(\S+)\??/;
-    const match = url.match(regex);
-    return match ? match[1] : "";
-  };
+    const regex = /https:\/\/(?:\S+\.)?notion\.site\/(\S+)\??/
+    const match = url.match(regex)
+    return match ? match[1] : ""
+  }
+
+  const sendDiscordMessage = async (title, username, postUrl, description) => {
+    console.log("Sending message to Discord")
+    console.log("Channel ID:", process.env.NEXT_PUBLIC_DISCORD_BLOG_CHANNEL_ID)
+    console.log("Bot Token:", process.env.NEXT_PUBLIC_DISCORD_BOT_TOKEN)
+
+    const messageDescription = description
+      ? `Description: ${description}`
+      : "Find out more by going to the link"
+
+    try {
+      const response = await fetch("/api/sendDiscordMessage", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          DISCORD_BLOG_CHANNEL_ID:
+            process.env.NEXT_PUBLIC_DISCORD_BLOG_CHANNEL_ID,
+          DISCORD_BOT_TOKEN: process.env.NEXT_PUBLIC_DISCORD_BOT_TOKEN,
+          message: `New blog post published by ${username}: "${title}"\n${messageDescription}\nRead more at: ${postUrl}`,
+        }),
+      })
+
+      const data = await response.json()
+      if (!response.ok) {
+        console.error("Error sending message to Discord:", data)
+      } else {
+        console.log("Message sent to Discord successfully:", data)
+      }
+    } catch (error) {
+      console.error("Error during fetch operation:", error)
+    }
+  }
 
   const handlePost = async (isNew) => {
-    const isFormValid = await validateForm();
+    const isFormValid = await validateForm()
     if (!isFormValid || !session) {
-      return;
+      return
     }
 
-    let postContent = null;
+    let postContent = null
     if (useNotion) {
-      postContent = extractNotionId(notionLink);
+      postContent = extractNotionId(notionLink)
       if (!postContent) {
-        setErrorMessage("Invalid Notion link provided.");
-        return;
+        setErrorMessage("Invalid Notion link provided.")
+        return
       }
     } else {
       if (editor) {
-        postContent = editor.getHTML();
+        postContent = editor.getHTML()
         if (postContent.trim() === "") {
-          setErrorMessage("Content or Notion link is required.");
-          return;
+          setErrorMessage("Content or Notion link is required.")
+          return
         }
       }
     }
 
-    let thumbnailUrl = "";
+    let thumbnailUrl = ""
 
     if (thumbnail) {
       try {
@@ -108,32 +139,32 @@ const CreateBlog = () => {
             filename: thumbnail.name,
             filetype: thumbnail.type,
           }),
-        });
+        })
 
-        const presignedData = await presignedResponse.json();
+        const presignedData = await presignedResponse.json()
 
-        const formData = new FormData();
+        const formData = new FormData()
         Object.keys(presignedData.presignedPost.fields).forEach((key) => {
-          formData.append(key, presignedData.presignedPost.fields[key]);
-        });
-        formData.append("file", thumbnail);
+          formData.append(key, presignedData.presignedPost.fields[key])
+        })
+        formData.append("file", thumbnail)
 
         const s3Response = await fetch(presignedData.presignedPost.url, {
           method: "POST",
           body: formData,
-        });
+        })
 
         if (s3Response.ok) {
-          thumbnailUrl = presignedData.thumbnailUrl;
+          thumbnailUrl = presignedData.thumbnailUrl
         } else {
-          console.error("Thumbnail upload failed to S3");
-          setErrorMessage("Thumbnail upload failed");
-          return;
+          console.error("Thumbnail upload failed to S3")
+          setErrorMessage("Thumbnail upload failed")
+          return
         }
       } catch (error) {
-        console.error("Error getting presigned URL or uploading to S3:", error);
-        setErrorMessage("Error getting presigned URL or uploading");
-        return;
+        console.error("Error getting presigned URL or uploading to S3:", error)
+        setErrorMessage("Error getting presigned URL or uploading")
+        return
       }
     }
 
@@ -157,29 +188,42 @@ const CreateBlog = () => {
           isPublic,
           tags,
         }),
-      });
+      })
 
-      const data = await response.json();
+      const data = await response.json()
+
+      console.log("API Response:", data)
 
       if (response.ok) {
-        console.log("Post created successfully:", data);
+        console.log("Post created successfully:", data)
         if (isNew && data.s3_key) {
-          setS3Key(data.s3_key);
+          setS3Key(data.s3_key)
         }
-        setErrorMessage("");
-        router.push("/blog");
+        setErrorMessage("")
+
+        const postUrl = `https://www.kuma2024.tech/blog/${encodeURIComponent(
+          title
+        )}`
+        console.log("Sending message to Discord with:", {
+          title,
+          username: session.user.name,
+          postUrl,
+        })
+        if (isPublic == true) await sendDiscordMessage(title, session.user.name, postUrl, description)
+
+        router.push("/blog")
       } else {
-        console.error("Error creating post:", data);
+        console.error("Error creating post:", data)
         setErrorMessage(
           data.message ||
             "An unexpected error occurred while creating the post."
-        );
+        )
       }
     } catch (error) {
-      console.error("Error during fetch operation:", error);
-      setErrorMessage("An unexpected error occurred while creating the post.");
+      console.error("Error during fetch operation:", error)
+      setErrorMessage("An unexpected error occurred while creating the post.")
     }
-  };
+  }
 
   return (
     <main className="py-8">
@@ -248,22 +292,12 @@ const CreateBlog = () => {
               </div>
             ) : (
               <div>
-                {/* <EditorProvider
-                  slotBefore={editor ? <MenuBar editor={editor} /> : null}
-                  extensions={extensions}
-                  // content={content}
-                  editor={editor}
-                >
-                  <label className="block text-lg font-medium mt-6">
-                    Editor Content
-                  </label> */}
                 {editable && <MenuBar editor={editor} />}
                 <EditorContent
                   editor={editor}
                   content={content}
                   className="mt-2 mb-6 border border-gray-300 rounded-lg p-4 bg-gray-100"
                 />
-                {/* </EditorProvider> */}
               </div>
             )}
             <div>
@@ -309,6 +343,10 @@ const CreateBlog = () => {
                   />
                   Make Public
                 </label>
+                <label className="flex items-center rounded-lg py-1">
+                  By checking this, a notification will be sent to the Discord
+                  channel to announce your post.
+                </label>
               </div>
             </div>
             <div className="text-center">
@@ -324,6 +362,6 @@ const CreateBlog = () => {
       </div>
     </main>
   )
-};
+}
 
-export default CreateBlog;
+export default CreateBlog

@@ -464,7 +464,7 @@ const PostPage = () => {
 
         <div className="mt-8">
           {authorLoading ? (
-            <LoadingPage />
+            <></>
           ) : userInfo ? (
             <div className="flex justify-between items-center mt-4 mb-4 mx-auto max-w-screen-lg px-4 sm:px-0 md:px-14">
               <div className="flex items-center space-x-2 md:space-x-4">

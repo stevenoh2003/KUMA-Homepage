@@ -74,66 +74,73 @@ const BlogIndex = () => {
     new Set(posts.flatMap((post) => post.tags))
   ).filter((tag) => tag)
 
+  const truncateDescription = (description) => {
+    const words = description.split(" ")
+    if (words.length > 15) {
+      return words.slice(0, 15).join(" ") + "..."
+    }
+    return description
+  }
+
   return (
     <div style={{ backgroundColor: "#f2f3ef" }}>
       <MetaConfig {...meta} />
-      <section className="py-12">
+      <section className="py-4">
         <div className="max-w-screen-xl mx-auto px-4 md:px-8">
           {isLoading ? (
             <LoadingPage />
           ) : (
             <div>
-              <div className="flex items-center justify-between sm:max-w-full sm:mx-auto">
+              <div className="flex flex-wrap items-center justify-between sm:max-w-full sm:mx-auto">
                 <div>
-                  <h1 className="text-gray-800 text-3xl font-extrabold sm:text-4xl">
-                    {t("blogIndex.title")}
+                  <h1 className="flex flex-wrap items-center gap-2">
+                    {allTags.map((tag) => (
+                      <button
+                        key={tag}
+                        className={`px-3 py-2 rounded-lg duration-150 ${
+                          selectedTag === tag
+                            ? "bg-indigo-600 text-white"
+                            : "bg-indigo-50 text-indigo-600"
+                        }`}
+                        onClick={() => handleTagClick(tag)}
+                      >
+                        {tag}
+                      </button>
+                    ))}{" "}
                   </h1>
                   {/* <p className="text-gray-600">{t("blogIndex.subtitle")}</p> */}
                 </div>
-                {status === "authenticated" ? (
-                  <button
-                    onClick={() => router.push("/blog/create")}
-                    className="px-3 py-3 text-indigo-600 bg-indigo-50 rounded-lg duration-150 hover:bg-indigo-100 active:bg-indigo-200 flex items-center"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 24 24"
-                      fill="currentColor"
-                      className="w-5 h-5 mr-2"
+                <div className="flex flex-wrap items-center gap-2 ">
+                  {status === "authenticated" ? (
+                    <button
+                      onClick={() => router.push("/blog/create")}
+                      className="px-3 py-3 text-indigo-600 bg-indigo-50 rounded-lg duration-150 hover:bg-indigo-100 active:bg-indigo-200 flex items-center ml-2"
                     >
-                      <path
-                        fillRule="evenodd"
-                        d="M12 5.25a.75.75 0 01.75.75v5.25H18a.75.75 0 010 1.5h-5.25V18a.75.75 0 01-1.5 0v-5.25H6a.75.75 0 010-1.5h5.25V6a.75.75 0 01.75-.75z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
-                    {t("blogIndex.addNewPost")}
-                  </button>
-                ) : (
-                  <button
-                    onClick={() => router.push("/auth/signup")}
-                    className="px-3 py-3 text-indigo-600 rounded-lg duration-150 hover:bg-indigo-100 active:bg-indigo-200 flex items-center"
-                  >
-                    {t("blogIndex.signUp")}
-                  </button>
-                )}
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                        fill="currentColor"
+                        className="w-5 h-5 mr-2"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          d="M12 5.25a.75.75 0 01.75.75v5.25H18a.75.75 0 010 1.5h-5.25V18a.75.75 0 01-1.5 0v-5.25H6a.75.75 0 010-1.5h5.25V6a.75.75 0 01.75-.75z"
+                          clipRule="evenodd"
+                        />
+                      </svg>
+                      {t("blogIndex.addNewPost")}
+                    </button>
+                  ) : (
+                    <button
+                      onClick={() => router.push("/auth/signup")}
+                      className="px-3 py-3 text-indigo-600 rounded-lg duration-150 hover:bg-indigo-100 active:bg-indigo-200 flex items-center ml-2"
+                    >
+                      {t("blogIndex.signUp")}
+                    </button>
+                  )}
+                </div>
               </div>
-              <div className="flex flex-wrap gap-2 mt-8">
-                {allTags.map((tag) => (
-                  <button
-                    key={tag}
-                    className={`px-3 py-2 rounded-lg duration-150 ${
-                      selectedTag === tag
-                        ? "bg-indigo-600 text-white"
-                        : "bg-indigo-50 text-indigo-600"
-                    }`}
-                    onClick={() => handleTagClick(tag)}
-                  >
-                    {tag}
-                  </button>
-                ))}
-              </div>
-              <ul className="grid gap-x-8 gap-y-10 mt-16 sm:grid-cols-2 lg:grid-cols-3">
+              <ul className="grid gap-x-8 gap-y-10 mt-8 sm:grid-cols-2 lg:grid-cols-3">
                 {posts.map((post) => {
                   const cleanTags = (post.tags || [])
                     .map((tag) => tag.trim())
@@ -170,8 +177,10 @@ const BlogIndex = () => {
                               {post.title}
                             </h3>
                             <p className="text-gray-600 text-sm duration-150 group-hover:text-gray-800">
-                              {post.description ||
-                                "Read this blog post to find out more!"}
+                              {truncateDescription(
+                                post.description ||
+                                  "Read this blog post to find out more!"
+                              )}
                             </p>
                             <div className="flex justify-between items-center mt-2">
                               <div className="flex flex-wrap gap-2">
@@ -186,7 +195,9 @@ const BlogIndex = () => {
                               </div>
                               <div className="flex items-center text-indigo-600">
                                 <FontAwesomeIcon icon={faThumbsUp} />
-                                <span className="ml-1">{post.likes?.length || 0}</span>
+                                <span className="ml-1">
+                                  {post.likes?.length || 0}
+                                </span>
                               </div>
                             </div>
                           </div>

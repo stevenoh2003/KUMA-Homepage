@@ -53,11 +53,11 @@ const NavBar = () => {
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
   return (
-    <nav className="bg-transparent w-full pt-4 relative" style={navBarStyle}>
+    <nav className="bg-transparent w-full pt-2 relative" style={navBarStyle}>
       <div className="max-w-screen-xl mx-auto px-4 py-2 md:px-32 flex items-center justify-between relative">
         {/* Logo on the Left Side */}
           <a href="/">
-              <Image src={LogoNew} alt="Logo" width={120} height={150} />
+              <Image src={LogoNew} alt="Logo" width={70} height={70} />
           </a>
 
         {/* Center Spacer */}

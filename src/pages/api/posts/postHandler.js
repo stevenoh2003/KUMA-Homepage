@@ -15,13 +15,16 @@ async function handler(req, res) {
     userId,
     thumbnailUrl,
     isPublic,
-    tags, // Get tags from the request body
+    tags,
   } = req.body
   let s3Key = req.body.s3Key || null
+
+  console.log("Received request body:", req.body)
 
   try {
     const existingPost = await BlogPost.findOne({ title })
     if (existingPost) {
+      console.log("Post with this title already exists")
       return res.status(409).json({
         message:
           "A blog post with this title already exists. Please choose a different title.",
@@ -43,14 +46,15 @@ async function handler(req, res) {
       const newPost = new BlogPost({
         title: title,
         description: description,
-        s3_key: s3Key, // Ensure s3_key is included even if null
+        s3_key: s3Key,
         notion_id: notionLink || null,
         thumbnail_url: thumbnailUrl,
         owner: userId,
         isPublic: isPublic,
-        tags: tags, // Save tags to the database
+        tags: tags,
       })
       await newPost.save()
+      console.log("New post created successfully:", newPost)
       return res.status(201).json(newPost)
     } else {
       // Handle updating posts if required

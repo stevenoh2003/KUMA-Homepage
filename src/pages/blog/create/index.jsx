@@ -10,14 +10,6 @@ const EditorPage = () => {
   return (
     <div style={{ backgroundColor: "#f2f3ef" }}>
       <StyledEditor>
-
-        <hr
-          style={{
-            color: "black",
-            backgroundColor: "black",
-            height: 1,
-          }}
-        />
         <CreateBlog />
       </StyledEditor>
       <Footer />
