@@ -3,6 +3,7 @@ import waseda from "../assets/pictures/waseda.png"
 import imperial from "../assets/pictures/imperial.png"
 import umich from "../assets/pictures/umich.png"
 import Kyoto from "../assets/pictures/Kyoto_University_emblem.svg"
+import Tokyo from "../assets/pictures/tokyo.png"
 
 import Image from "next/image"
 import { useTranslation } from "react-i18next"
@@ -30,6 +31,9 @@ const LogoGrid = () => {
             </li>
             <li>
               <Image alt="Logo" src={Kyoto} className="w-28" priority />
+            </li>
+            <li>
+              <Image alt="Logo" src={Tokyo} className="w-56" priority />
             </li>
             {/* LOGO 2 */}
           </ul>
