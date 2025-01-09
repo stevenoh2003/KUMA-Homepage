@@ -73,7 +73,7 @@ export default () => {
       avatar: ThirdAdvisorPortrait,
       name: t("thirdAdvisorName"),
       title: t("thirdAdvisorTitleText"),
-      bio: t("sthirdAdvisorBio"),
+      bio: t("thirdAdvisorBio"),
       url: "https://example.com", // Add the second advisor's URL
       urlText: t("secondAdvisorUrlText"),
     },
