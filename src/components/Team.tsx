@@ -7,6 +7,8 @@ import MaggiePortrait from "../assets/pictures/maggie.jpg"
 import AdvisorPortrait from "../assets/pictures/omer.jpg" // Add the advisor's picture
 import YoshiPortrait from "../assets/pictures/yoshi.jpeg"
 import SecondAdvisorPortrait from "../assets/pictures/lin.jpg" // Add the second advisor's picture
+import ThirdAdvisorPortrait from "../assets/pictures/Hong.jpg" // Add the second advisor's picture
+
 import { useTranslation } from "react-i18next"
 
 export default () => {
@@ -64,6 +66,14 @@ export default () => {
       name: t("secondAdvisorName"),
       title: t("secondAdvisorTitleText"),
       bio: t("secondAdvisorBio"),
+      url: "https://example.com", // Add the second advisor's URL
+      urlText: t("secondAdvisorUrlText"),
+    },
+    {
+      avatar: ThirdAdvisorPortrait,
+      name: t("thirdAdvisorName"),
+      title: t("thirdAdvisorTitleText"),
+      bio: t("sthirdAdvisorBio"),
       url: "https://example.com", // Add the second advisor's URL
       urlText: t("secondAdvisorUrlText"),
     },
